@@ -33,6 +33,10 @@ class TestSkillMdStructure(unittest.TestCase):
             "## Citation Format Specification",
             "## Script Index",
             "## Invocation Examples",
+            "## References",
+            "## Audience Flag Behavior",
+            "## Failure & Fallback Strategies",
+            "## Parallelization Guidance",
         ]
         for heading in required_headings:
             self.assertIn(heading, self.content, f"Heading '{heading}' missing from SKILL.md")
@@ -41,6 +45,9 @@ class TestSkillMdStructure(unittest.TestCase):
         phases = re.findall(r"^## Phase (\d+):", self.content, re.MULTILINE)
         self.assertEqual(len(phases), 8, f"Expected 8 phases (0-7), found {len(phases)}: {phases}")
         self.assertEqual(sorted([int(p) for p in phases]), list(range(8)))
+
+    def test_no_remaining_todos(self):
+        self.assertNotIn("TODO", self.content, "SKILL.md still contains unfulfilled TODO placeholders")
 
 
 if __name__ == "__main__":
