@@ -59,7 +59,7 @@
 - [x] Step 50 – CLI & worker detection
 - [x] Step 51 – Frontend entrypoints
 - [x] Step 52 – Ranking
-- [ ] Step 53 – Line-numbered evidence
+- [x] Step 53 – Line-numbered evidence
 - [ ] Step 54 – Test
 - [ ] Step 55 – Skeleton
 - [ ] Step 56 – JS/TS import parser
