@@ -1,0 +1,132 @@
+# Build Progress: repo-reverse-engineer
+
+- [x] Step 1 – Create root folder
+- [x] Step 2 – Create subfolders
+- [x] Step 3 – Create progress file
+- [ ] Step 4 – Check runtime tools
+- [ ] Step 5 – Create a shared helper module
+- [ ] Step 6 – Add binary/large-file guard
+- [ ] Step 7 – Add language-by-extension map
+- [ ] Step 8 – Add a tiny test runner
+- [ ] Step 9 – Write frontmatter
+- [ ] Step 10 – Add "When to use / not use" section
+- [ ] Step 11 – Add inputs section
+- [ ] Step 12 – Add safety rules block
+- [ ] Step 13 – Add modes table
+- [ ] Step 14 – Add output folder convention
+- [ ] Step 15 – Add "no hallucination" rules
+- [ ] Step 16 – Add citation format spec
+- [ ] Step 17 – Add script index
+- [ ] Step 18 – Add placeholders for phases 0–7
+- [ ] Step 19 – Add invocation examples
+- [ ] Step 20 – Lint SKILL.md structure
+- [ ] Step 21 – Create script skeleton
+- [ ] Step 22 – Parse and validate input
+- [ ] Step 23 – Local path mode
+- [ ] Step 24 – Size pre-check
+- [ ] Step 25 – Shallow clone
+- [ ] Step 26 – Metadata capture
+- [ ] Step 27 – License detection
+- [ ] Step 28 – Error handling
+- [ ] Step 29 – Skeleton
+- [ ] Step 30 – File counts & LOC by language
+- [ ] Step 31 – Tree summary
+- [ ] Step 32 – Largest files
+- [ ] Step 33 – Churn & age hints
+- [ ] Step 34 – Test/doc/CI presence
+- [ ] Step 35 – Monorepo hint
+- [ ] Step 36 – JSON schema & test
+- [ ] Step 37 – Skeleton
+- [ ] Step 38 – Manifest detection table
+- [ ] Step 39 – Node/TS framework detection
+- [ ] Step 40 – Python framework detection
+- [ ] Step 41 – Go/Rust/Java/others
+- [ ] Step 42 – Infra detection
+- [ ] Step 43 – Database/queue detection
+- [ ] Step 44 – Build/test/run command inference
+- [ ] Step 45 – Output & test
+- [ ] Step 46 – Skeleton
+- [ ] Step 47 – Manifest-declared entrypoints
+- [ ] Step 48 – Server bootstrap patterns
+- [ ] Step 49 – Route definition patterns
+- [ ] Step 50 – CLI & worker detection
+- [ ] Step 51 – Frontend entrypoints
+- [ ] Step 52 – Ranking
+- [ ] Step 53 – Line-numbered evidence
+- [ ] Step 54 – Test
+- [ ] Step 55 – Skeleton
+- [ ] Step 56 – JS/TS import parser
+- [ ] Step 57 – Python import parser
+- [ ] Step 58 – Go/Rust/Java import parsers
+- [ ] Step 59 – Internal vs external split
+- [ ] Step 60 – Module-level aggregation
+- [ ] Step 61 – Centrality & cycles
+- [ ] Step 62 – Mermaid output
+- [ ] Step 63 – Test
+- [ ] Step 64 – Skeleton
+- [ ] Step 65 – HTTP routes (Node)
+- [ ] Step 66 – HTTP routes (Python/Go/Java/Ruby)
+- [ ] Step 67 – OpenAPI/Swagger ingestion
+- [ ] Step 68 – GraphQL / gRPC / tRPC
+- [ ] Step 69 – CLI commands & public exports
+- [ ] Step 70 – Auth hints
+- [ ] Step 71 – Test
+- [ ] Step 72 – Skeleton
+- [ ] Step 73 – SQL/migration parser
+- [ ] Step 74 – Prisma / Sequelize / TypeORM
+- [ ] Step 75 – Mongoose / MongoDB schemas
+- [ ] Step 76 – Python ORMs
+- [ ] Step 77 – Go/Java/Rust types
+- [ ] Step 78 – Mermaid ERD output
+- [ ] Step 79 – Test
+- [ ] Step 80 – Skeleton
+- [ ] Step 81 – Env var usage discovery
+- [ ] Step 82 – Config file keys
+- [ ] Step 83 – Secret pattern detection
+- [ ] Step 84 – Redaction guarantee
+- [ ] Step 85 – Categorize env vars
+- [ ] Step 86 – Test
+- [ ] Step 87 – `analysis-playbook.md` skeleton
+- [ ] Step 88 – Fill Node/TS and Python sections
+- [ ] Step 89 – Fill remaining ecosystems
+- [ ] Step 90 – `output-templates.md` for reports 00–04
+- [ ] Step 91 – Templates for reports 05–09
+- [ ] Step 92 – `large-repo-strategy.md`
+- [ ] Step 93 – `mermaid-cheatsheet.md`
+- [ ] Step 94 – Reference link check
+- [ ] Step 95 – Phase 0 body (Intake & safety)
+- [ ] Step 96 – Phase 1 body (Recon)
+- [ ] Step 97 – Phase 2 body (Architecture mapping)
+- [ ] Step 98 – Phase 3 body (Deep dives)
+- [ ] Step 99 – Phase 4 body (Optional runtime)
+- [ ] Step 100 – Phase 5 body (Synthesis)
+- [ ] Step 101 – Phase 6 body (Verification pass)
+- [ ] Step 102 – Phase 7 body (Handoff)
+- [ ] Step 103 – Audience flag behavior
+- [ ] Step 104 – Failure & fallback section
+- [ ] Step 105 – Parallelization guidance
+- [ ] Step 106 – Re-run SKILL.md lint
+- [ ] Step 107 – Create a tiny demo repo
+- [ ] Step 108 – Run all scripts on the demo
+- [ ] Step 109 – Hand-write sample reports
+- [ ] Step 110 – Sample rebuild blueprint
+- [ ] Step 111 – Pick test repos
+- [ ] Step 112 – Test repo A: clone
+- [ ] Step 113 – Test repo A: scripts
+- [ ] Step 114 – Test repo A: full workflow
+- [ ] Step 115 – Test repo B: clone + scripts
+- [ ] Step 116 – Test repo B: full workflow (deep)
+- [ ] Step 117 – Test repo C: monorepo
+- [ ] Step 118 – Spot-check accuracy
+- [ ] Step 119 – Fix script bugs found
+- [ ] Step 120 – Fix workflow gaps
+- [ ] Step 121 – Safety test
+- [ ] Step 122 – Large-repo test
+- [ ] Step 123 – Script permissions & shebangs
+- [ ] Step 124 – Cross-platform check
+- [ ] Step 125 – Write `README.md`
+- [ ] Step 126 – Add `LICENSE` and `CONTRIBUTING.md`
+- [ ] Step 127 – Token/size audit
+- [ ] Step 128 – Final full test run
+- [ ] Step 129 – Clean up
+- [ ] Step 130 – Final report to me
