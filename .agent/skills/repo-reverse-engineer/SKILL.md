@@ -222,7 +222,14 @@ Perform a rigorous QA verification pass across all generated report markdown fil
 4. **"Not Analyzed" Scope Disclosure**: In large or sampled codebases, verify that the explicit "Scope & Not Analyzed" disclosure list clearly enumerates any skipped directories, unanalyzed tests, or mocked services.
 
 ## Phase 7: Handoff & Next Steps
-TODO
+
+When concluding the reverse-engineering task, provide a clean executive handoff to the user:
+1. **Report Suite Location**: Provide clickable links to all generated reports in `reverse-engineered/<repo-name>/`.
+2. **Top 5 Things to Know**: Deliver an immediate high-impact summary of the 5 most critical insights, architectural patterns, or technical debt findings in the project.
+3. **Actionable Follow-up Offers**: Offer specific next steps based on user intent:
+   - "Would you like me to deep dive into a specific subsystem or trace another execution flow?"
+   - "Would you like me to begin implementing Milestone 1 from the Rebuild Blueprint?"
+   - "Would you like me to draft an ADR (Architecture Decision Record) or security remediation plan?"
 
 ## Invocation Examples
 
