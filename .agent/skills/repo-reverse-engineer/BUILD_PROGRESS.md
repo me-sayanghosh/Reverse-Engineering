@@ -35,7 +35,7 @@
 - [x] Step 26 – Metadata capture
 - [x] Step 27 – License detection
 - [x] Step 28 – Error handling
-- [ ] Step 29 – Skeleton
+- [x] Step 29 – Skeleton
 - [ ] Step 30 – File counts & LOC by language
 - [ ] Step 31 – Tree summary
 - [ ] Step 32 – Largest files
