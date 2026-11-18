@@ -265,3 +265,16 @@ The skill adjusts tone, technical density, and explanatory depth based on the `a
   - **Tone**: Direct, concise, and technically rigorous. Cuts straight to architectural decisions, trade-offs, and critical bottlenecks.
   - **Depth**: Highlights concurrency hazards, state consistency guarantees, latency hot-paths, technical debt, and scalability limits.
   - **Glossary (`09-GLOSSARY-AND-QA.md`)**: Compact glossary focused exclusively on proprietary domain terms and non-obvious internal acronyms. Emphasizes Architecture Decision Records (ADRs).
+
+## Failure & Fallback Strategies
+
+When encountering runtime obstacles, follow these standardized fallback procedures:
+
+1. **Clone Failure (Network / Remote Host Disconnect)**:
+   - Check internet connectivity and proxy settings. If git times out or network connection drops, retry `clone_repo.sh` with a specific shallow branch or inspect local clone caches.
+2. **Private Repository (Authentication Required)**:
+   - If cloning yields an authentication failure, notify the user immediately. Instruct the user to either supply a GitHub Personal Access Token (`https://TOKEN@github.com/...`), configure SSH keys, or clone the repository locally and provide the local directory path as the target.
+3. **Unsupported Language or Niche Framework**:
+   - If an exotic language or unsupported framework is detected where automated scripts return empty results, fall back to manual targeted inspection: use `grep`, `find`, and direct AST/file reading. Follow the general investigative principles documented in `references/analysis-playbook.md`.
+4. **Huge Repository (>50k LOC or Massive Monorepo)**:
+   - When a repository exceeds standard analysis limits, invoke `references/large-repo-strategy.md`: narrow focus using `--subdir` to a specific subfolder, sample top central files using `dep_graph.py`, and explicitly disclose unanalyzed directories in `07-RISKS-AND-DEBT.md`.

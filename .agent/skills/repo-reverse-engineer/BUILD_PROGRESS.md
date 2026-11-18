@@ -110,7 +110,7 @@
 - [x] Step 101 – Phase 6 body (Verification pass)
 - [x] Step 102 – Phase 7 body (Handoff)
 - [x] Step 103 – Audience flag behavior
-- [ ] Step 104 – Failure & fallback section
+- [x] Step 104 – Failure & fallback section
 - [ ] Step 105 – Parallelization guidance
 - [ ] Step 106 – Re-run SKILL.md lint
 - [ ] Step 107 – Create a tiny demo repo
