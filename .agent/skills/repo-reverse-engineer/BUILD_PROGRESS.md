@@ -69,7 +69,7 @@
 - [x] Step 60 – Module-level aggregation
 - [x] Step 61 – Centrality & cycles
 - [x] Step 62 – Mermaid output
-- [ ] Step 63 – Test
+- [x] Step 63 – Test
 - [ ] Step 64 – Skeleton
 - [ ] Step 65 – HTTP routes (Node)
 - [ ] Step 66 – HTTP routes (Python/Go/Java/Ruby)
