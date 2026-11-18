@@ -89,7 +89,7 @@
 - [x] Step 80 – Skeleton
 - [x] Step 81 – Env var usage discovery
 - [x] Step 82 – Config file keys
-- [ ] Step 83 – Secret pattern detection
+- [x] Step 83 – Secret pattern detection
 - [ ] Step 84 – Redaction guarantee
 - [ ] Step 85 – Categorize env vars
 - [ ] Step 86 – Test

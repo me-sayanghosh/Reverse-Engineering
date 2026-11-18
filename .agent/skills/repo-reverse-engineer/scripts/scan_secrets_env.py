@@ -130,6 +130,63 @@ def find_config_keys(root_path: Path):
     return config_keys
 
 
+SECRET_PATTERNS = [
+    (r"\b(AKIA[0-9A-Z]{16})\b", "AWS Access Key ID", 4),
+    (r"\b(gh[pousr]_[a-zA-Z0-9_]{36,})\b", "GitHub Personal Access Token", 4),
+    (r"-----BEGIN (?:[A-Z]+ )?PRIVATE KEY-----", "Private Key Header", 11),
+    (r"\b(xox[baprs]-[0-9a-zA-Z]{10,48})\b", "Slack Token", 5),
+    (r"\b(sk_live_[0-9a-zA-Z]{24,})\b", "Stripe Live Secret Key", 8),
+    (
+        r"""(?i)(?:api_key|apikey|secret|password|auth_token)\s*[:=]\s*['"]([a-zA-Z0-9_\-.~!@#$%^&*+=]{12,})['"]""",
+        "Committed Secret / Token",
+        4,
+    ),
+]
+
+
+def mask_secret(secret_str: str, prefix_len: int = 4) -> str:
+    """Return strictly redacted/masked string (e.g. AKIA****). Never leaks middle or suffix bytes."""
+    prefix = secret_str[:prefix_len] if len(secret_str) >= prefix_len else secret_str[:2]
+    return f"{prefix}****"
+
+
+def detect_potential_secrets(root_path: Path):
+    """Scan committed files for hardcoded secrets, returning findings with masked samples only."""
+    root_path = root_path.resolve()
+    findings = []
+
+    for file_path in _common.walk_repo(root_path):
+        if _common.is_binary(file_path):
+            continue
+        rel = str(file_path.relative_to(root_path))
+        try:
+            with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                for idx, line in enumerate(f, start=1):
+                    for pat, desc, pfx_len in SECRET_PATTERNS:
+                        m = re.search(pat, line)
+                        if m:
+                            raw_val = m.group(1) if m.groups() else m.group(0)
+                            # Ignore obvious placeholder templates
+                            if any(
+                                ph in raw_val.lower()
+                                for ph in ["your_", "insert_", "<token>", "<secret>", "replace_me"]
+                            ):
+                                continue
+                            masked = mask_secret(raw_val, pfx_len)
+                            findings.append(
+                                {
+                                    "file": f"{rel}:{idx}",
+                                    "type": desc,
+                                    "masked_sample": masked,
+                                }
+                            )
+                            break
+        except Exception:
+            pass
+
+    return findings
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Scan repository environment variable usage, config keys, and audit potential secret leaks."
@@ -147,12 +204,13 @@ def main():
 
     env_vars = find_env_vars(root_path)
     config_keys = find_config_keys(root_path)
+    secret_findings = detect_potential_secrets(root_path)
 
     data = {
         "root": str(root_path),
         "env_vars": env_vars,
         "config_keys": config_keys,
-        "secret_findings": [],
+        "secret_findings": secret_findings,
     }
 
     if args.json:
