@@ -85,7 +85,7 @@
 - [x] Step 76 – Python ORMs
 - [x] Step 77 – Go/Java/Rust types
 - [x] Step 78 – Mermaid ERD output
-- [ ] Step 79 – Test
+- [x] Step 79 – Test
 - [ ] Step 80 – Skeleton
 - [ ] Step 81 – Env var usage discovery
 - [ ] Step 82 – Config file keys
