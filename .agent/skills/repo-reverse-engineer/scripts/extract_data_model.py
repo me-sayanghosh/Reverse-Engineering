@@ -490,6 +490,48 @@ def parse_other_data_models(root_path: Path):
     return list(entities.values())
 
 
+def render_mermaid_erd(entities: list, relations: list, max_entities: int = 25) -> str:
+    """Render Mermaid erDiagram markup capped at max_entities."""
+    lines = ["erDiagram"]
+
+    if not entities:
+        lines.append("  EMPTY_SCHEMA {\n    string note\n  }")
+        return "\n".join(lines)
+
+    # Cap entities at max_entities
+    selected_entities = entities[:max_entities]
+    selected_names = {e["name"] for e in selected_entities}
+
+    # Render relationships for selected entities
+    rendered_relations = set()
+    for rel in relations:
+        src = rel.get("from")
+        tgt = rel.get("to")
+        if src in selected_names and tgt in selected_names:
+            rel_key = (src, tgt)
+            if rel_key not in rendered_relations:
+                rendered_relations.add(rel_key)
+                # Mermaid ERD syntax: A ||--o{ B : "references"
+                lines.append(f'  {src} ||--o{{ {tgt} : "references"')
+
+    # Render entity field blocks
+    for ent in selected_entities:
+        name = ent["name"]
+        cols = ent.get("columns", [])
+        if cols:
+            lines.append(f"  {name} {{")
+            for c in cols[:12]:  # cap columns per entity to keep readable
+                c_name = re.sub(r"[^a-zA-Z0-9_]", "_", c["name"])
+                c_type = re.sub(r"[^a-zA-Z0-9_]", "_", c.get("type", "string"))
+                pk_marker = " PK" if c.get("primary_key") else ""
+                lines.append(f"    {c_type} {c_name}{pk_marker}")
+            lines.append("  }")
+        else:
+            lines.append(f"  {name} {{\n    string id PK\n  }}")
+
+    return "\n".join(lines)
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Extract data models, database entities, foreign keys, and generate Mermaid ER diagrams."
@@ -535,9 +577,16 @@ def main():
     if args.json:
         _common.output_json(data)
     elif args.mermaid:
-        print("erDiagram\n  ENTITY ||--o{ OTHER : has")
+        print(render_mermaid_erd(all_entities, all_relations, max_entities=25))
     else:
         print(f"Data Model Extraction for: {root_path}")
+        print(f"Entities discovered: {len(all_entities)}")
+        print(f"Relationships discovered: {len(all_relations)}")
+        for ent in all_entities:
+            print(f"\n[{ent['source']}] {ent['name']} ({len(ent.get('columns', []))} columns) - {ent['file']}")
+            for c in ent.get("columns", [])[:5]:
+                pk = " [PK]" if c.get("primary_key") else ""
+                print(f"  - {c['name']}: {c['type']}{pk}")
 
 
 if __name__ == "__main__":
