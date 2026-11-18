@@ -25,7 +25,7 @@
 - [x] Step 16 – Add citation format spec
 - [x] Step 17 – Add script index
 - [x] Step 18 – Add placeholders for phases 0–7
-- [ ] Step 19 – Add invocation examples
+- [x] Step 19 – Add invocation examples
 - [ ] Step 20 – Lint SKILL.md structure
 - [ ] Step 21 – Create script skeleton
 - [ ] Step 22 – Parse and validate input

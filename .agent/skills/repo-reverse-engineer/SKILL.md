@@ -128,3 +128,16 @@ TODO
 
 ## Phase 7: Handoff & Next Steps
 TODO
+
+## Invocation Examples
+
+1. **Remote GitHub Repository (Standard Mode)**:
+   > "Reverse engineer this repository: https://github.com/expressjs/express and document how its middleware routing system works."
+2. **Local Codebase Path**:
+   > "Explain how this local project works: `/path/to/my-backend-repo`. Generate an architectural map and data model report."
+3. **Monorepo Subfolder Focus**:
+   > "Map the architecture of `https://github.com/trpc/trpc` focusing only on the `packages/server` subfolder."
+4. **Deep Mode with Rebuild Blueprint**:
+   > "Reverse engineer `https://github.com/fastify/fastify` in deep mode. I want a complete rebuild blueprint and implementation prompts to recreate it from scratch."
+5. **Beginner Audience Orientation**:
+   > "Explain how this GitHub project works for a junior developer: `https://github.com/pallets/flask`. Keep explanations accessible and provide an expanded glossary."
