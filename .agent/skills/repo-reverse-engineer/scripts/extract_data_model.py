@@ -220,6 +220,91 @@ def parse_prisma_and_orm_entities(root_path: Path):
     return list(entities.values()), relations
 
 
+def parse_mongoose_schemas(root_path: Path):
+    """Parse Mongoose new Schema({...}) declarations, fields, and ref relations."""
+    root_path = root_path.resolve()
+    entities = {}
+    relations = []
+
+    for file_path in _common.walk_repo(root_path):
+        if _common.is_binary(file_path):
+            continue
+        ext = file_path.suffix.lower()
+        if ext not in (".js", ".ts", ".mjs"):
+            continue
+
+        rel = str(file_path.relative_to(root_path))
+        try:
+            content = file_path.read_text(encoding="utf-8", errors="ignore")
+            if "Schema(" in content:
+                # Find model name if declared: mongoose.model('User', ...)
+                m_model = re.search(r"""mongoose\.model\s*\(\s*['"]([a-zA-Z0-9_]+)['"]""", content)
+                model_name = m_model.group(1) if m_model else file_path.stem
+
+                # Find Schema body using balanced brace matching
+                schema_idx = content.find("Schema(")
+                brace_start = content.find("{", schema_idx) if schema_idx != -1 else -1
+                if brace_start != -1:
+                    depth = 0
+                    brace_end = -1
+                    for i in range(brace_start, len(content)):
+                        if content[i] == "{":
+                            depth += 1
+                        elif content[i] == "}":
+                            depth -= 1
+                            if depth == 0:
+                                brace_end = i
+                                break
+
+                    if brace_end != -1:
+                        body = content[brace_start + 1 : brace_end]
+                        columns = []
+                        # Parse field declarations line by line or pattern
+                        for line in body.splitlines():
+                            line = line.strip().rstrip(",")
+                            if not line or line.startswith("//"):
+                                continue
+                            f_match = re.match(r"""['"]?([a-zA-Z0-9_]+)['"]?\s*:\s*(.*)""", line)
+                            if f_match:
+                                f_name = f_match.group(1)
+                                f_def = f_match.group(2)
+
+                                # Extract ref: e.g. { type: Schema.Types.ObjectId, ref: 'User' }
+                                ref_m = re.search(r"""ref\s*:\s*['"]([a-zA-Z0-9_]+)['"]""", f_def)
+                                if ref_m:
+                                    target_ref = ref_m.group(1)
+                                    relations.append(
+                                        {
+                                            "from": model_name,
+                                            "to": target_ref,
+                                            "from_column": f_name,
+                                            "type": "mongoose_ref",
+                                        }
+                                    )
+
+                                # Extract type
+                                type_m = re.search(r"""type\s*:\s*([a-zA-Z0-9_.]+)""", f_def)
+                                col_type = type_m.group(1) if type_m else f_def.split()[0].rstrip(",{}")
+                                columns.append(
+                                    {
+                                        "name": f_name,
+                                        "type": col_type,
+                                        "primary_key": f_name in ("_id", "id"),
+                                    }
+                                )
+
+                        entities[model_name] = {
+                            "name": model_name,
+                            "file": rel,
+                            "columns": columns,
+                            "source": "Mongoose",
+                        }
+        except Exception:
+            pass
+
+    return list(entities.values()), relations
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Extract data models, database entities, foreign keys, and generate Mermaid ER diagrams."
@@ -238,9 +323,10 @@ def main():
 
     sql_entities, sql_relations = parse_sql_migrations(root_path)
     prisma_entities, prisma_relations = parse_prisma_and_orm_entities(root_path)
+    mongoose_entities, mongoose_relations = parse_mongoose_schemas(root_path)
 
-    all_entities = sql_entities + prisma_entities
-    all_relations = sql_relations + prisma_relations
+    all_entities = sql_entities + prisma_entities + mongoose_entities
+    all_relations = sql_relations + prisma_relations + mongoose_relations
 
     data = {
         "root": str(root_path),

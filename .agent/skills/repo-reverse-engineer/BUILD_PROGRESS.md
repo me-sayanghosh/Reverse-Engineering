@@ -81,7 +81,7 @@
 - [x] Step 72 – Skeleton
 - [x] Step 73 – SQL/migration parser
 - [x] Step 74 – Prisma / Sequelize / TypeORM
-- [ ] Step 75 – Mongoose / MongoDB schemas
+- [x] Step 75 – Mongoose / MongoDB schemas
 - [ ] Step 76 – Python ORMs
 - [ ] Step 77 – Go/Java/Rust types
 - [ ] Step 78 – Mermaid ERD output
