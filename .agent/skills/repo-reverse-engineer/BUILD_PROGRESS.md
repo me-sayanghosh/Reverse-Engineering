@@ -33,7 +33,7 @@
 - [x] Step 24 – Size pre-check
 - [x] Step 25 – Shallow clone
 - [x] Step 26 – Metadata capture
-- [ ] Step 27 – License detection
+- [x] Step 27 – License detection
 - [ ] Step 28 – Error handling
 - [ ] Step 29 – Skeleton
 - [ ] Step 30 – File counts & LOC by language
