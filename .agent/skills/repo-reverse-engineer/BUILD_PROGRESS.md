@@ -47,7 +47,7 @@
 - [x] Step 38 – Manifest detection table
 - [x] Step 39 – Node/TS framework detection
 - [x] Step 40 – Python framework detection
-- [ ] Step 41 – Go/Rust/Java/others
+- [x] Step 41 – Go/Rust/Java/others
 - [ ] Step 42 – Infra detection
 - [ ] Step 43 – Database/queue detection
 - [ ] Step 44 – Build/test/run command inference

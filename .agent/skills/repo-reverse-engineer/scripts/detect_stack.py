@@ -144,6 +144,76 @@ def detect_python_frameworks(root_path: Path):
     return sorted(list(frameworks))
 
 
+OTHER_FRAMEWORKS_MAP = {
+    # Go (go.mod)
+    "go.mod": {
+        "github.com/gin-gonic/gin": "Gin",
+        "github.com/labstack/echo": "Echo",
+        "github.com/gofiber/fiber": "Fiber",
+        "google.golang.org/grpc": "gRPC",
+    },
+    # Rust (Cargo.toml)
+    "Cargo.toml": {
+        "actix-web": "Actix",
+        "axum": "Axum",
+        "tokio": "Tokio",
+        "rocket": "Rocket",
+    },
+    # Ruby (Gemfile)
+    "Gemfile": {
+        "rails": "Rails",
+        "sinatra": "Sinatra",
+    },
+    # PHP (composer.json)
+    "composer.json": {
+        "laravel/framework": "Laravel",
+        "symfony/framework-bundle": "Symfony",
+    },
+}
+
+
+def detect_other_frameworks(root_path: Path):
+    """Detect Go, Rust, Java, Ruby, PHP, .NET frameworks from manifest contents."""
+    root_path = Path(root_path).resolve()
+    frameworks = set()
+
+    for file_path in _common.walk_repo(root_path):
+        name = file_path.name
+        # Go, Rust, Ruby, PHP
+        if name in OTHER_FRAMEWORKS_MAP:
+            try:
+                content = file_path.read_text(encoding="utf-8", errors="ignore")
+                for key, fw in OTHER_FRAMEWORKS_MAP[name].items():
+                    if key in content:
+                        frameworks.add(fw)
+            except Exception:
+                pass
+
+        # Java / Kotlin (pom.xml, build.gradle, build.gradle.kts)
+        if name in ("pom.xml", "build.gradle", "build.gradle.kts"):
+            try:
+                content = file_path.read_text(encoding="utf-8", errors="ignore")
+                if "spring-boot" in content or "org.springframework.boot" in content:
+                    frameworks.add("Spring Boot")
+                if "io.quarkus" in content:
+                    frameworks.add("Quarkus")
+                if "io.micronaut" in content:
+                    frameworks.add("Micronaut")
+            except Exception:
+                pass
+
+        # C# (.csproj)
+        if file_path.suffix == ".csproj":
+            try:
+                content = file_path.read_text(encoding="utf-8", errors="ignore")
+                if "Microsoft.AspNetCore" in content or "Microsoft.NET.Sdk.Web" in content:
+                    frameworks.add("ASP.NET")
+            except Exception:
+                pass
+
+    return sorted(list(frameworks))
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Detect repository technology stack, frameworks, databases, and build/run commands."
@@ -160,7 +230,12 @@ def main():
         _common.die(f"Repository root does not exist: {root_path}")
 
     ecosystems, manifests = detect_manifests(root_path)
-    frameworks = sorted(list(set(detect_node_frameworks(root_path) + detect_python_frameworks(root_path))))
+    all_fws = (
+        detect_node_frameworks(root_path)
+        + detect_python_frameworks(root_path)
+        + detect_other_frameworks(root_path)
+    )
+    frameworks = sorted(list(set(all_fws)))
 
     data = {
         "root": str(root_path),
