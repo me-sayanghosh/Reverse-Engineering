@@ -29,7 +29,7 @@
 - [x] Step 20 – Lint SKILL.md structure
 - [x] Step 21 – Create script skeleton
 - [x] Step 22 – Parse and validate input
-- [ ] Step 23 – Local path mode
+- [x] Step 23 – Local path mode
 - [ ] Step 24 – Size pre-check
 - [ ] Step 25 – Shallow clone
 - [ ] Step 26 – Metadata capture

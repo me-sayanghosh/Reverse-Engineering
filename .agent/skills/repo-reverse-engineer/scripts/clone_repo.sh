@@ -102,3 +102,13 @@ else
 fi
 
 echo "Validated target: type=$TARGET_TYPE, repo=$REPO_NAME"
+
+if [[ -z "$OUT_DIR" ]]; then
+    OUT_DIR="reverse-engineered/$REPO_NAME"
+fi
+mkdir -p "$OUT_DIR"
+
+if [[ "$TARGET_TYPE" == "local" ]]; then
+    echo "Local mode: using repository at $LOCAL_PATH"
+    echo "Output directory: $OUT_DIR"
+fi
