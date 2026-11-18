@@ -74,3 +74,31 @@ if [[ -z "$TARGET" ]]; then
     usage >&2
     exit 1
 fi
+
+TARGET_TYPE=""
+CLONE_URL=""
+LOCAL_PATH=""
+REPO_NAME=""
+
+if [[ -d "$TARGET" ]]; then
+    TARGET_TYPE="local"
+    LOCAL_PATH="$(cd "$TARGET" && pwd)"
+    REPO_NAME="$(basename "$LOCAL_PATH")"
+elif [[ "$TARGET" =~ ^https://github\.com/([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+)(\.git)?$ ]]; then
+    TARGET_TYPE="github_https"
+    CLONE_URL="$TARGET"
+    REPO_NAME="${BASH_REMATCH[2]%.git}"
+elif [[ "$TARGET" =~ ^git@github\.com:([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+)(\.git)?$ ]]; then
+    TARGET_TYPE="github_ssh"
+    CLONE_URL="$TARGET"
+    REPO_NAME="${BASH_REMATCH[2]%.git}"
+elif [[ "$TARGET" =~ ^([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+)$ ]]; then
+    TARGET_TYPE="shorthand"
+    CLONE_URL="https://github.com/$TARGET.git"
+    REPO_NAME="${BASH_REMATCH[2]}"
+else
+    echo "Error: Invalid target '$TARGET'. Must be a GitHub URL, owner/repo shorthand, or existing local directory." >&2
+    exit 1
+fi
+
+echo "Validated target: type=$TARGET_TYPE, repo=$REPO_NAME"

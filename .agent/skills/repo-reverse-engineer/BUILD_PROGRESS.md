@@ -28,7 +28,7 @@
 - [x] Step 19 – Add invocation examples
 - [x] Step 20 – Lint SKILL.md structure
 - [x] Step 21 – Create script skeleton
-- [ ] Step 22 – Parse and validate input
+- [x] Step 22 – Parse and validate input
 - [ ] Step 23 – Local path mode
 - [ ] Step 24 – Size pre-check
 - [ ] Step 25 – Shallow clone
