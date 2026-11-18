@@ -79,7 +79,7 @@
 - [x] Step 70 – Auth hints
 - [x] Step 71 – Test
 - [x] Step 72 – Skeleton
-- [ ] Step 73 – SQL/migration parser
+- [x] Step 73 – SQL/migration parser
 - [ ] Step 74 – Prisma / Sequelize / TypeORM
 - [ ] Step 75 – Mongoose / MongoDB schemas
 - [ ] Step 76 – Python ORMs
