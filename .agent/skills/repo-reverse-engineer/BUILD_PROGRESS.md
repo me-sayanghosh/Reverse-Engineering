@@ -94,7 +94,7 @@
 - [x] Step 85 – Categorize env vars
 - [x] Step 86 – Test
 - [x] Step 87 – `analysis-playbook.md` skeleton
-- [ ] Step 88 – Fill Node/TS and Python sections
+- [x] Step 88 – Fill Node/TS and Python sections
 - [ ] Step 89 – Fill remaining ecosystems
 - [ ] Step 90 – `output-templates.md` for reports 00–04
 - [ ] Step 91 – Templates for reports 05–09
