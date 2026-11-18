@@ -83,7 +83,7 @@
 - [x] Step 74 – Prisma / Sequelize / TypeORM
 - [x] Step 75 – Mongoose / MongoDB schemas
 - [x] Step 76 – Python ORMs
-- [ ] Step 77 – Go/Java/Rust types
+- [x] Step 77 – Go/Java/Rust types
 - [ ] Step 78 – Mermaid ERD output
 - [ ] Step 79 – Test
 - [ ] Step 80 – Skeleton

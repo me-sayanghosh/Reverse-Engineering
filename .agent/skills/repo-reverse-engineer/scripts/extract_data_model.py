@@ -400,6 +400,96 @@ def parse_python_models(root_path: Path):
     return list(entities.values()), relations
 
 
+def parse_other_data_models(root_path: Path):
+    """Parse GORM structs (Go), JPA @Entity (Java), and Diesel/SeaORM (Rust) models."""
+    root_path = root_path.resolve()
+    entities = {}
+
+    for file_path in _common.walk_repo(root_path):
+        if _common.is_binary(file_path):
+            continue
+        ext = file_path.suffix.lower()
+        rel = str(file_path.relative_to(root_path))
+
+        # 1. Go GORM structs
+        if ext == ".go":
+            try:
+                content = file_path.read_text(encoding="utf-8", errors="ignore")
+                for m in re.finditer(r"type\s+([a-zA-Z0-9_]+)\s+struct\s*\{([^}]+)\}", content):
+                    struct_name = m.group(1)
+                    body = m.group(2)
+                    if "gorm:" in body or "gorm.Model" in body:
+                        columns = []
+                        for line in body.splitlines():
+                            parts = line.strip().split()
+                            if len(parts) >= 2 and not parts[0].startswith("//"):
+                                f_name = parts[0]
+                                f_type = parts[1]
+                                is_pk = "primaryKey" in line or f_name in ("ID", "Id")
+                                columns.append({"name": f_name, "type": f_type, "primary_key": is_pk})
+                        entities[struct_name] = {
+                            "name": struct_name,
+                            "file": rel,
+                            "columns": columns,
+                            "source": "GORM",
+                        }
+            except Exception:
+                pass
+
+        # 2. Java / JPA @Entity
+        elif ext in (".java", ".kt"):
+            try:
+                content = file_path.read_text(encoding="utf-8", errors="ignore")
+                if "@Entity" in content:
+                    m_cls = re.search(r"@Entity[^{]*?class\s+([a-zA-Z0-9_]+)", content, re.DOTALL)
+                    if m_cls:
+                        class_name = m_cls.group(1)
+                        columns = []
+                        for line in content.splitlines():
+                            m_field = re.search(r"""(?:private|protected|public)\s+([a-zA-Z0-9_<>]+)\s+([a-zA-Z0-9_]+)\s*;""", line)
+                            if m_field:
+                                f_type = m_field.group(1)
+                                f_name = m_field.group(2)
+                                is_pk = f_name.lower() == "id" or "@Id" in line
+                                columns.append({"name": f_name, "type": f_type, "primary_key": is_pk})
+                        entities[class_name] = {
+                            "name": class_name,
+                            "file": rel,
+                            "columns": columns,
+                            "source": "JPA/Hibernate",
+                        }
+            except Exception:
+                pass
+
+        # 3. Rust Diesel / SeaORM
+        elif ext == ".rs":
+            try:
+                content = file_path.read_text(encoding="utf-8", errors="ignore")
+                if "derive(Queryable" in content or "derive(DeriveEntityModel" in content or "#[table_name" in content:
+                    m_struct = re.search(r"(?:#\[[^\]]+\]\s*)*pub\s+struct\s+([a-zA-Z0-9_]+)\s*\{([^}]+)\}", content)
+                    if m_struct:
+                        struct_name = m_struct.group(1)
+                        body = m_struct.group(2)
+                        columns = []
+                        for line in body.splitlines():
+                            m_f = re.search(r"""(?:pub\s+)?([a-zA-Z0-9_]+)\s*:\s*([^,]+)""", line)
+                            if m_f:
+                                f_name = m_f.group(1)
+                                f_type = m_f.group(2).strip()
+                                is_pk = f_name == "id"
+                                columns.append({"name": f_name, "type": f_type, "primary_key": is_pk})
+                        entities[struct_name] = {
+                            "name": struct_name,
+                            "file": rel,
+                            "columns": columns,
+                            "source": "Diesel/SeaORM",
+                        }
+            except Exception:
+                pass
+
+    return list(entities.values())
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Extract data models, database entities, foreign keys, and generate Mermaid ER diagrams."
@@ -420,9 +510,21 @@ def main():
     prisma_entities, prisma_relations = parse_prisma_and_orm_entities(root_path)
     mongoose_entities, mongoose_relations = parse_mongoose_schemas(root_path)
     python_entities, python_relations = parse_python_models(root_path)
+    other_entities = parse_other_data_models(root_path)
 
-    all_entities = sql_entities + prisma_entities + mongoose_entities + python_entities
-    all_relations = sql_relations + prisma_relations + mongoose_relations + python_relations
+    all_entities = (
+        sql_entities
+        + prisma_entities
+        + mongoose_entities
+        + python_entities
+        + other_entities
+    )
+    all_relations = (
+        sql_relations
+        + prisma_relations
+        + mongoose_relations
+        + python_relations
+    )
 
     data = {
         "root": str(root_path),
