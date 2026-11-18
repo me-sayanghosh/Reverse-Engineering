@@ -104,3 +104,27 @@ The skill provides 8 dedicated automation scripts located in `scripts/`:
    - Usage: `python3 scripts/extract_data_model.py <root> [--json] [--mermaid]`
 8. **`scan_secrets_env.py`**: Discovers environment variables, config keys, and flags potential secrets while strictly redacting values.
    - Usage: `python3 scripts/scan_secrets_env.py <root> [--json]`
+
+## Phase 0: Intake & Safety
+TODO
+
+## Phase 1: Recon & Orientation
+TODO
+
+## Phase 2: Architecture & Topology
+TODO
+
+## Phase 3: Deep Dives & Tracing
+TODO
+
+## Phase 4: Optional Runtime Observation
+TODO
+
+## Phase 5: Synthesis & Report Generation
+TODO
+
+## Phase 6: Verification & Cross-Checking
+TODO
+
+## Phase 7: Handoff & Next Steps
+TODO
