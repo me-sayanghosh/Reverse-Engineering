@@ -1,0 +1,126 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/demo-app",
+  "languages": {
+    "JavaScript": {
+      "files": 6,
+      "lines": 65
+    },
+    "JSON": {
+      "files": 1,
+      "lines": 19
+    },
+    "Markdown": {
+      "files": 1,
+      "lines": 7
+    },
+    "Other": {
+      "files": 1,
+      "lines": 3
+    }
+  },
+  "tree": {
+    ".": {
+      "depth": 0,
+      "files": 3,
+      "subdirs": 1
+    },
+    "src": {
+      "depth": 1,
+      "files": 2,
+      "subdirs": 3
+    },
+    "src/middleware": {
+      "depth": 2,
+      "files": 1,
+      "subdirs": 0
+    },
+    "src/models": {
+      "depth": 2,
+      "files": 1,
+      "subdirs": 0
+    },
+    "src/routes": {
+      "depth": 2,
+      "files": 2,
+      "subdirs": 0
+    }
+  },
+  "largest_files": [
+    {
+      "path": "src/routes/items.js",
+      "lines": 23,
+      "language": "JavaScript"
+    },
+    {
+      "path": "package.json",
+      "lines": 19,
+      "language": "JSON"
+    },
+    {
+      "path": "src/middleware/auth.js",
+      "lines": 18,
+      "language": "JavaScript"
+    },
+    {
+      "path": "src/app.js",
+      "lines": 12,
+      "language": "JavaScript"
+    },
+    {
+      "path": "src/routes/auth.js",
+      "lines": 12,
+      "language": "JavaScript"
+    },
+    {
+      "path": "src/models/item.js",
+      "lines": 11,
+      "language": "JavaScript"
+    },
+    {
+      "path": "README.md",
+      "lines": 9,
+      "language": "Markdown"
+    },
+    {
+      "path": "src/server.js",
+      "lines": 7,
+      "language": "JavaScript"
+    },
+    {
+      "path": ".env.example",
+      "lines": 3,
+      "language": "Other"
+    }
+  ],
+  "recently_modified": [
+    ".agent/skills/repo-reverse-engineer/BUILD_PROGRESS.md",
+    ".agent/skills/repo-reverse-engineer/tests/fixtures/demo-app/.env.example",
+    ".agent/skills/repo-reverse-engineer/tests/fixtures/demo-app/README.md",
+    ".agent/skills/repo-reverse-engineer/tests/fixtures/demo-app/package.json",
+    ".agent/skills/repo-reverse-engineer/tests/fixtures/demo-app/src/app.js",
+    ".agent/skills/repo-reverse-engineer/tests/fixtures/demo-app/src/middleware/auth.js",
+    ".agent/skills/repo-reverse-engineer/tests/fixtures/demo-app/src/models/item.js",
+    ".agent/skills/repo-reverse-engineer/tests/fixtures/demo-app/src/routes/auth.js",
+    ".agent/skills/repo-reverse-engineer/tests/fixtures/demo-app/src/routes/items.js",
+    ".agent/skills/repo-reverse-engineer/tests/fixtures/demo-app/src/server.js"
+  ],
+  "markers": {
+    "tests": {
+      "present": false,
+      "paths": []
+    },
+    "docs": {
+      "present": false,
+      "paths": []
+    },
+    "ci": {
+      "present": false,
+      "paths": []
+    }
+  },
+  "monorepo": {
+    "is_monorepo": false,
+    "signals": [],
+    "packages": []
+  }
+}

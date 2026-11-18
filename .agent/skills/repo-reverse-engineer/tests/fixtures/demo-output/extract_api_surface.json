@@ -1,0 +1,45 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/demo-app",
+  "routes": [
+    {
+      "method": "POST",
+      "path": "/login",
+      "handler": "src/routes/auth.js:4",
+      "framework": "Node/Express/Nest/Fastify",
+      "auth_required": false
+    },
+    {
+      "method": "POST",
+      "path": "/register",
+      "handler": "src/routes/auth.js:8",
+      "framework": "Node/Express/Nest/Fastify",
+      "auth_required": false
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "handler": "src/routes/items.js:7",
+      "framework": "Node/Express/Nest/Fastify",
+      "auth_required": false
+    },
+    {
+      "method": "POST",
+      "path": "/",
+      "handler": "src/routes/items.js:12",
+      "framework": "Node/Express/Nest/Fastify",
+      "auth_required": true
+    },
+    {
+      "method": "DELETE",
+      "path": "/:id",
+      "handler": "src/routes/items.js:18",
+      "framework": "Node/Express/Nest/Fastify",
+      "auth_required": true
+    }
+  ],
+  "openapi": [],
+  "graphql": [],
+  "grpc": [],
+  "cli_commands": [],
+  "public_exports": []
+}

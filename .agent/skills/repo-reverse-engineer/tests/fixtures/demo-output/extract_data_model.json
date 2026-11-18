@@ -1,0 +1,45 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/demo-app",
+  "entities": [
+    {
+      "name": "Item",
+      "file": "src/models/item.js",
+      "columns": [
+        {
+          "name": "title",
+          "type": "String",
+          "primary_key": false
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "primary_key": false
+        },
+        {
+          "name": "price",
+          "type": "Number",
+          "primary_key": false
+        },
+        {
+          "name": "owner",
+          "type": "mongoose.Schema.Types.ObjectId",
+          "primary_key": false
+        },
+        {
+          "name": "createdAt",
+          "type": "Date",
+          "primary_key": false
+        }
+      ],
+      "source": "Mongoose"
+    }
+  ],
+  "relations": [
+    {
+      "from": "Item",
+      "to": "User",
+      "from_column": "owner",
+      "type": "mongoose_ref"
+    }
+  ]
+}
