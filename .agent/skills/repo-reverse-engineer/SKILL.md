@@ -72,3 +72,14 @@ The 10 report filenames are:
 2. **Label `[inferred]` with confidence**: If a conclusion is inferred rather than directly observed in source code, mark it explicitly as `[inferred: high|medium|low]` and explain the deduction logic.
 3. **Say "not found" instead of guessing**: If a pattern, test suite, configuration, or documentation file does not exist in the repository, explicitly state "not found" rather than inventing or assuming standard conventions.
 4. **Prefer code over README**: When code and documentation disagree, treat actual source code implementation as the ground truth, and note the documentation discrepancy in `07-RISKS-AND-DEBT.md`.
+
+## Citation Format Specification
+
+Citations must reference repository files using exact line numbers or line ranges:
+- Single line format: `path/to/file.ext:LINE` (e.g. `src/server.ts:42`)
+- Multi-line range format: `path/to/file.ext:START-END` (e.g. `src/models/user.py:10-25`)
+
+### Citation Examples
+
+- **Valid citation example**: `src/auth/jwt.ts:45-58` references lines 45 through 58 in `src/auth/jwt.ts`.
+- **Invalid citation example**: `User model file (around line 50)` is invalid because it lacks an exact relative file path and concrete line numbers.
