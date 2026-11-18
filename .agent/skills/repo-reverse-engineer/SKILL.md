@@ -197,7 +197,21 @@ Trace 3–5 flows as sequence diagrams in `04-FLOWS.md`:
    - Reconcile differences and document discrepancies in `07-RISKS-AND-DEBT.md`.
 
 ## Phase 5: Synthesis & Report Generation
-TODO
+
+Generate the formal reverse-engineering report suite in `reverse-engineered/<repo-name>/`. Each report maps directly to its designated template in `references/output-templates.md` and is fed by specific automated scripts:
+
+1. **`00-SUMMARY.md`**: Template 00. Fed by `clone_repo.sh` (`repo_meta.json`), `detect_stack.py`, and `repo_stats.py`.
+2. **`01-ARCHITECTURE.md`**: Template 01. Fed by `dep_graph.py` (topology graph) and `find_entrypoints.py`.
+3. **`02-CODE-MAP.md`**: Template 02. Fed by `repo_stats.py` (directory tree, largest files) and `find_entrypoints.py`.
+4. **`03-API-AND-DATA.md`**: Template 03. Fed by `extract_api_surface.py` (routes, schemas) and `extract_data_model.py` (ERD, models).
+5. **`04-FLOWS.md`**: Template 04. Fed by `find_entrypoints.py` and manual code tracing across 3–5 sequences.
+6. **`05-DEPENDENCIES.md`**: Template 05. Fed by `dep_graph.py` (import centrality, cycles) and `detect_stack.py` (manifests).
+7. **`06-CONFIG-AND-OPS.md`**: Template 06. Fed by `scan_secrets_env.py` (env vars, config keys) and `detect_stack.py` (infra).
+8. **`07-RISKS-AND-DEBT.md`**: Template 07. Fed by `scan_secrets_env.py` (secret findings) and `dep_graph.py` (cycles).
+9. **`08-REBUILD-BLUEPRINT.md`**: Template 08. Fed by architectural synthesis (phased milestones and coding agent prompts).
+10. **`09-GLOSSARY-AND-QA.md`**: Template 09. Fed by domain terminology extracted across models and architecture decisions.
+
+*Length constraint*: Cap each generated report file at ~400 lines to avoid fluff and retain maximum actionable density.
 
 ## Phase 6: Verification & Cross-Checking
 TODO
