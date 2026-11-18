@@ -120,7 +120,7 @@
 - [x] Step 111 – Pick test repos
 - [x] Step 112 – Test repo A: clone
 - [x] Step 113 – Test repo A: scripts
-- [ ] Step 114 – Test repo A: full workflow
+- [x] Step 114 – Test repo A: full workflow
 - [ ] Step 115 – Test repo B: clone + scripts
 - [ ] Step 116 – Test repo B: full workflow (deep)
 - [ ] Step 117 – Test repo C: monorepo
