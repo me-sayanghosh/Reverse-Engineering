@@ -65,3 +65,10 @@ The 10 report filenames are:
 8. `07-RISKS-AND-DEBT.md` - Technical debt, security risks, potential secret leaks, and architectural pitfalls.
 9. `08-REBUILD-BLUEPRINT.md` - Clean-room reimplementation plan, phased milestones, prompts, and pseudocode.
 10. `09-GLOSSARY-AND-QA.md` - Domain glossary, architecture decisions records (ADR) FAQ, and interrogation notes.
+
+## No-Hallucination Rules
+
+1. **Cite `file:line` for claims**: Every architectural, functional, or data model assertion must be backed by an exact file and line reference.
+2. **Label `[inferred]` with confidence**: If a conclusion is inferred rather than directly observed in source code, mark it explicitly as `[inferred: high|medium|low]` and explain the deduction logic.
+3. **Say "not found" instead of guessing**: If a pattern, test suite, configuration, or documentation file does not exist in the repository, explicitly state "not found" rather than inventing or assuming standard conventions.
+4. **Prefer code over README**: When code and documentation disagree, treat actual source code implementation as the ground truth, and note the documentation discrepancy in `07-RISKS-AND-DEBT.md`.

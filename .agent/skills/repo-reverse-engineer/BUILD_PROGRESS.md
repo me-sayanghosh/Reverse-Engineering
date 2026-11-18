@@ -21,7 +21,7 @@
 - [x] Step 12 – Add safety rules block
 - [x] Step 13 – Add modes table
 - [x] Step 14 – Add output folder convention
-- [ ] Step 15 – Add "no hallucination" rules
+- [x] Step 15 – Add "no hallucination" rules
 - [ ] Step 16 – Add citation format spec
 - [ ] Step 17 – Add script index
 - [ ] Step 18 – Add placeholders for phases 0–7
