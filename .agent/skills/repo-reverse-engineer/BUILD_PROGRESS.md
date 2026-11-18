@@ -44,7 +44,7 @@
 - [x] Step 35 – Monorepo hint
 - [x] Step 36 – JSON schema & test
 - [x] Step 37 – Skeleton
-- [ ] Step 38 – Manifest detection table
+- [x] Step 38 – Manifest detection table
 - [ ] Step 39 – Node/TS framework detection
 - [ ] Step 40 – Python framework detection
 - [ ] Step 41 – Go/Rust/Java/others
