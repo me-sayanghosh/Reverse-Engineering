@@ -60,7 +60,7 @@
 - [x] Step 51 – Frontend entrypoints
 - [x] Step 52 – Ranking
 - [x] Step 53 – Line-numbered evidence
-- [ ] Step 54 – Test
+- [x] Step 54 – Test
 - [ ] Step 55 – Skeleton
 - [ ] Step 56 – JS/TS import parser
 - [ ] Step 57 – Python import parser
