@@ -348,6 +348,44 @@ def find_cli_and_workers(root_path: Path):
     return entries
 
 
+def find_frontend_entrypoints(root_path: Path):
+    """Detect frontend SPA, Next.js, and static web entrypoint roots."""
+    root_path = Path(root_path).resolve()
+    entries = []
+
+    frontend_targets = [
+        ("index.html", "Static HTML web entrypoint"),
+        ("src/main.tsx", "React/Vite main TSX root"),
+        ("src/main.jsx", "React/Vite main JSX root"),
+        ("src/index.tsx", "React main TSX root"),
+        ("src/index.jsx", "React main JSX root"),
+        ("src/App.tsx", "Root React App component"),
+        ("src/App.jsx", "Root React App component"),
+        ("src/App.vue", "Root Vue App component"),
+        ("src/App.svelte", "Root Svelte App component"),
+        ("app/layout.tsx", "Next.js App Router root layout"),
+        ("app/page.tsx", "Next.js App Router home page"),
+        ("pages/_app.tsx", "Next.js Pages Router custom app"),
+        ("pages/index.tsx", "Next.js Pages Router index page"),
+        ("vite.config.ts", "Vite build configuration entrypoint"),
+        ("vite.config.js", "Vite build configuration entrypoint"),
+    ]
+
+    for rel_str, desc in frontend_targets:
+        target_file = root_path / rel_str
+        if target_file.exists():
+            entries.append(
+                {
+                    "path": f"{rel_str}:1",
+                    "type": "frontend",
+                    "confidence": 0.85,
+                    "reason": desc,
+                }
+            )
+
+    return entries
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Locate and rank application entrypoints, server bootstraps, routes, and workers with citations."
@@ -367,8 +405,15 @@ def main():
     bootstrap_entries = find_server_bootstraps(root_path)
     route_entries = find_route_definitions(root_path)
     cli_worker_entries = find_cli_and_workers(root_path)
+    frontend_entries = find_frontend_entrypoints(root_path)
 
-    all_entries = manifest_entries + bootstrap_entries + route_entries + cli_worker_entries
+    all_entries = (
+        manifest_entries
+        + bootstrap_entries
+        + route_entries
+        + cli_worker_entries
+        + frontend_entries
+    )
 
     data = {
         "root": str(root_path),
