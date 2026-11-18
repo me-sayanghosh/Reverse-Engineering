@@ -11,7 +11,7 @@
 - [x] Step 2 – Create subfolders
 - [x] Step 3 – Create progress file
 - [x] Step 4 – Check runtime tools
-- [ ] Step 5 – Create a shared helper module
+- [x] Step 5 – Create a shared helper module
 - [ ] Step 6 – Add binary/large-file guard
 - [ ] Step 7 – Add language-by-extension map
 - [ ] Step 8 – Add a tiny test runner
