@@ -92,7 +92,7 @@
 - [x] Step 83 – Secret pattern detection
 - [x] Step 84 – Redaction guarantee
 - [x] Step 85 – Categorize env vars
-- [ ] Step 86 – Test
+- [x] Step 86 – Test
 - [ ] Step 87 – `analysis-playbook.md` skeleton
 - [ ] Step 88 – Fill Node/TS and Python sections
 - [ ] Step 89 – Fill remaining ecosystems
