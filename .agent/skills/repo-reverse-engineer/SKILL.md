@@ -147,7 +147,20 @@ The skill provides 8 dedicated automation scripts located in `scripts/`:
    - **How to Run**: Validated installation, local development bootstrap, and test execution commands.
 
 ## Phase 2: Architecture & Topology
-TODO
+
+1. **Extract Dependency Graph & Topology**:
+   - Run the dependency graph extraction script:
+     ```bash
+     python3 scripts/dep_graph.py "<repo_path>" --json --mermaid
+     ```
+   - Review top central modules, in/out degrees, and any detected circular dependency cycles.
+2. **Identify System Boundaries & Layers**:
+   - Map files to standard architectural tiers: Presentation/API Gateway, Domain Business Logic, Data Access/Persistence, and External Clients/Adapters.
+   - For monorepo workspaces (pnpm/turborepo/lerna/cargo workspaces), analyze package boundaries, public internal APIs, and cross-package dependencies.
+3. **Produce Architectural Component Diagram in Mermaid**:
+   - Generate a clean `graph LR` Mermaid diagram highlighting boundaries, datastores, and inter-service communications for `01-ARCHITECTURE.md`.
+4. **Draft 01-ARCHITECTURE.md and 02-CODE-MAP.md**:
+   - Synthesize architectural topology narrative, cross-cutting concerns, and file index maps citing verified `file:line` locations.
 
 ## Phase 3: Deep Dives & Tracing
 TODO

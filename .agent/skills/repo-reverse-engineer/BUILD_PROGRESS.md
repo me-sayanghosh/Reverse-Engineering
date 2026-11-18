@@ -103,7 +103,7 @@
 - [x] Step 94 – Reference link check
 - [x] Step 95 – Phase 0 body (Intake & safety)
 - [x] Step 96 – Phase 1 body (Recon)
-- [ ] Step 97 – Phase 2 body (Architecture mapping)
+- [x] Step 97 – Phase 2 body (Architecture mapping)
 - [ ] Step 98 – Phase 3 body (Deep dives)
 - [ ] Step 99 – Phase 4 body (Optional runtime)
 - [ ] Step 100 – Phase 5 body (Synthesis)
