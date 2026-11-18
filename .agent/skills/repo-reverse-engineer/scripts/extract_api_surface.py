@@ -199,6 +199,70 @@ def extract_other_routes(root_path: Path):
     return routes
 
 
+def extract_openapi_specs(root_path: Path):
+    """Parse OpenAPI/Swagger specifications from JSON and YAML files using stdlib."""
+    root_path = root_path.resolve()
+    endpoints = []
+    import json
+
+    openapi_names = {
+        "openapi.json",
+        "openapi.yaml",
+        "openapi.yml",
+        "swagger.json",
+        "swagger.yaml",
+        "swagger.yml",
+    }
+
+    for file_path in _common.walk_repo(root_path):
+        name = file_path.name.lower()
+        if name in openapi_names:
+            rel = str(file_path.relative_to(root_path))
+            try:
+                if name.endswith(".json"):
+                    with open(file_path, "r", encoding="utf-8") as f:
+                        doc = json.load(f)
+                    paths = doc.get("paths", {})
+                    for ep_path, methods in paths.items():
+                        if isinstance(methods, dict):
+                            for m, mdata in methods.items():
+                                if m.lower() in ("get", "post", "put", "delete", "patch", "options"):
+                                    summary = mdata.get("summary", "") if isinstance(mdata, dict) else ""
+                                    endpoints.append(
+                                        {
+                                            "spec_file": rel,
+                                            "path": ep_path,
+                                            "method": m.upper(),
+                                            "summary": summary,
+                                        }
+                                    )
+                else:
+                    # YAML parsing via regex
+                    content = file_path.read_text(encoding="utf-8", errors="ignore")
+                    curr_path = None
+                    for line in content.splitlines():
+                        # Match path line: e.g. "  /users:" or "  '/users':"
+                        m_path = re.match(r"""^\s{2}['"]?(/[a-zA-Z0-9_{}/.-]+)['"]?:\s*$""", line)
+                        if m_path:
+                            curr_path = m_path.group(1)
+                            continue
+                        if curr_path:
+                            m_method = re.match(r"""^\s{4}(get|post|put|delete|patch|options):\s*$""", line)
+                            if m_method:
+                                endpoints.append(
+                                    {
+                                        "spec_file": rel,
+                                        "path": curr_path,
+                                        "method": m_method.group(1).upper(),
+                                        "summary": "",
+                                    }
+                                )
+            except Exception:
+                pass
+
+    return endpoints
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Extract public API surface: HTTP routes, OpenAPI endpoints, GraphQL/gRPC, and CLI subcommands."
@@ -217,11 +281,12 @@ def main():
     node_routes = extract_node_routes(root_path)
     other_routes = extract_other_routes(root_path)
     all_routes = node_routes + other_routes
+    openapi_endpoints = extract_openapi_specs(root_path)
 
     data = {
         "root": str(root_path),
         "routes": all_routes,
-        "openapi": [],
+        "openapi": openapi_endpoints,
         "graphql": [],
         "grpc": [],
         "cli_commands": [],
