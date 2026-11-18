@@ -104,6 +104,46 @@ def detect_node_frameworks(root_path: Path):
     return sorted(list(frameworks))
 
 
+PYTHON_PKG_TO_FRAMEWORK: dict[str, str] = {
+    "django": "Django",
+    "flask": "Flask",
+    "fastapi": "FastAPI",
+    "sqlalchemy": "SQLAlchemy",
+    "celery": "Celery",
+    "pydantic": "Pydantic",
+    "torch": "PyTorch",
+    "pytorch": "PyTorch",
+    "tensorflow": "TensorFlow",
+    "pytest": "pytest",
+    "tornado": "Tornado",
+    "sanic": "Sanic",
+    "aiohttp": "aiohttp",
+}
+
+
+def detect_python_frameworks(root_path: Path):
+    """Parse requirements.txt, pyproject.toml, Pipfile for known Python frameworks."""
+    root_path = Path(root_path).resolve()
+    frameworks = set()
+    import re
+
+    for file_path in _common.walk_repo(root_path):
+        name = file_path.name.lower()
+        if name.startswith("requirements") and name.endswith(".txt") or name in ("pyproject.toml", "pipfile", "setup.cfg"):
+            try:
+                with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                    content = f.read().lower()
+                    for pkg, fw in PYTHON_PKG_TO_FRAMEWORK.items():
+                        # Match word boundaries or dependency specifiers (allowing extras like [all])
+                        pattern = rf"(?:^|[\"'\s,\[])({re.escape(pkg)})(?:[=><~!\s\"',\]\[]|$)"
+                        if re.search(pattern, content, re.MULTILINE):
+                            frameworks.add(fw)
+            except Exception:
+                pass
+
+    return sorted(list(frameworks))
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Detect repository technology stack, frameworks, databases, and build/run commands."
@@ -120,7 +160,7 @@ def main():
         _common.die(f"Repository root does not exist: {root_path}")
 
     ecosystems, manifests = detect_manifests(root_path)
-    frameworks = detect_node_frameworks(root_path)
+    frameworks = sorted(list(set(detect_node_frameworks(root_path) + detect_python_frameworks(root_path))))
 
     data = {
         "root": str(root_path),
