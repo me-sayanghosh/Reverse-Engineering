@@ -347,6 +347,70 @@ def extract_schemas_and_rpc(root_path: Path):
     return graphql_ops, grpc_services
 
 
+def extract_cli_and_exports(root_path: Path):
+    """Extract CLI subcommands and library public exports (__all__, index exports)."""
+    root_path = root_path.resolve()
+    cli_commands = []
+    public_exports = []
+
+    for file_path in _common.walk_repo(root_path):
+        if _common.is_binary(file_path):
+            continue
+        rel = str(file_path.relative_to(root_path))
+        name = file_path.name.lower()
+        ext = file_path.suffix.lower()
+
+        # 1. CLI subcommands
+        if ext in (".py", ".js", ".ts", ".go", ".rs"):
+            try:
+                with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                    for idx, line in enumerate(f, start=1):
+                        # Commander: .command('foo')
+                        m_cmd = re.search(r"""\.command\s*\(\s*['"]([^'"]+)['"]""", line)
+                        if m_cmd:
+                            cli_commands.append({"file": f"{rel}:{idx}", "command": m_cmd.group(1)})
+                        # Click / Typer: @cli.command('foo') or @app.command()
+                        m_click = re.search(r"""@(?:cli|app)\.command\s*\(\s*(?:['"]([^'"]+)['"])?""", line)
+                        if m_click:
+                            cmd_name = m_click.group(1) or "inferred"
+                            cli_commands.append({"file": f"{rel}:{idx}", "command": cmd_name})
+                        # Cobra: Use: "foo"
+                        m_cobra = re.search(r"""Use:\s*["']([^"'\s]+)""", line)
+                        if m_cobra and ext == ".go":
+                            cli_commands.append({"file": f"{rel}:{idx}", "command": m_cobra.group(1)})
+            except Exception:
+                pass
+
+        # 2. Public library exports (__all__ or index.ts/js exports)
+        if name in ("__init__.py", "index.ts", "index.js", "mod.rs", "lib.rs"):
+            try:
+                content = file_path.read_text(encoding="utf-8", errors="ignore")
+                if ext == ".py":
+                    # __all__ = ["foo", "bar"]
+                    m_all = re.search(r"""__all__\s*=\s*\[([^\]]+)\]""", content, re.DOTALL)
+                    if m_all:
+                        items = re.findall(r"""['"]([^'"]+)['"]""", m_all.group(1))
+                        for item in items:
+                            public_exports.append({"file": rel, "export": item, "type": "Python __all__"})
+                elif ext in (".ts", ".js"):
+                    # export { a, b } or export const a or export function b
+                    for line in content.splitlines():
+                        if line.strip().startswith("export "):
+                            m_exp = re.search(r"""export\s+(?:const|function|class|type|interface)\s+([a-zA-Z0-9_]+)""", line)
+                            if m_exp:
+                                public_exports.append({"file": rel, "export": m_exp.group(1), "type": "Named export"})
+                            m_named = re.search(r"""export\s*\{([^}]+)\}""", line)
+                            if m_named:
+                                for token in m_named.group(1).split(","):
+                                    clean_tok = token.strip().split(" as ")[0].strip()
+                                    if clean_tok:
+                                        public_exports.append({"file": rel, "export": clean_tok, "type": "Named export"})
+            except Exception:
+                pass
+
+    return cli_commands, public_exports
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Extract public API surface: HTTP routes, OpenAPI endpoints, GraphQL/gRPC, and CLI subcommands."
@@ -367,6 +431,7 @@ def main():
     all_routes = node_routes + other_routes
     openapi_endpoints = extract_openapi_specs(root_path)
     graphql_ops, grpc_services = extract_schemas_and_rpc(root_path)
+    cli_commands, public_exports = extract_cli_and_exports(root_path)
 
     data = {
         "root": str(root_path),
@@ -374,8 +439,8 @@ def main():
         "openapi": openapi_endpoints,
         "graphql": graphql_ops,
         "grpc": grpc_services,
-        "cli_commands": [],
-        "public_exports": [],
+        "cli_commands": cli_commands,
+        "public_exports": public_exports,
     }
 
     if args.json:
