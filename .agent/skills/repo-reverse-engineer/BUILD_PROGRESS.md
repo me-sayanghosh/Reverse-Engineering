@@ -86,7 +86,7 @@
 - [x] Step 77 – Go/Java/Rust types
 - [x] Step 78 – Mermaid ERD output
 - [x] Step 79 – Test
-- [ ] Step 80 – Skeleton
+- [x] Step 80 – Skeleton
 - [ ] Step 81 – Env var usage discovery
 - [ ] Step 82 – Config file keys
 - [ ] Step 83 – Secret pattern detection
