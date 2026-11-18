@@ -123,7 +123,28 @@ The skill provides 8 dedicated automation scripts located in `scripts/`:
    - Ask for explicit user confirmation before any containerized execution in Phase 4. Never execute untrusted scripts, hooks, or tests directly on the host machine.
 
 ## Phase 1: Recon & Orientation
-TODO
+
+1. **Execute Automated Reconnaissance Scripts**:
+   - Run repository statistics analysis:
+     ```bash
+     python3 scripts/repo_stats.py "<repo_path>" --json
+     ```
+   - Detect tech stack, frameworks, datastores, and build commands:
+     ```bash
+     python3 scripts/detect_stack.py "<repo_path>" --json
+     ```
+   - Discover application entrypoints, route registrations, and workers:
+     ```bash
+     python3 scripts/find_entrypoints.py "<repo_path>" --json
+     ```
+2. **Review Core Documentation & Infrastructure Artifacts**:
+   - Read `README.md`, `CONTRIBUTING.md`, architectural docs in `docs/`, CI workflows in `.github/workflows/`, and `Dockerfile` / `docker-compose.yml`.
+   - Contrast stated intentions in documentation against actual findings from code scanning.
+3. **Draft Orientation Summary**:
+   - **What**: Exact system purpose, target problem domain, and functional capabilities.
+   - **Who**: Target end-users, client integrations, or consumer services.
+   - **Stack**: Primary programming languages, web/RPC frameworks, databases, and message queues.
+   - **How to Run**: Validated installation, local development bootstrap, and test execution commands.
 
 ## Phase 2: Architecture & Topology
 TODO
