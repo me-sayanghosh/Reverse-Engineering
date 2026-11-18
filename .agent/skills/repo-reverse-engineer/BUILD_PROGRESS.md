@@ -78,7 +78,7 @@
 - [x] Step 69 – CLI commands & public exports
 - [x] Step 70 – Auth hints
 - [x] Step 71 – Test
-- [ ] Step 72 – Skeleton
+- [x] Step 72 – Skeleton
 - [ ] Step 73 – SQL/migration parser
 - [ ] Step 74 – Prisma / Sequelize / TypeORM
 - [ ] Step 75 – Mongoose / MongoDB schemas
