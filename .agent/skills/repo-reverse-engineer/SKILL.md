@@ -18,3 +18,18 @@ description: Reverse engineer any GitHub repository or local codebase end to end
 - Debugging a single runtime error or isolated stack trace.
 - Running general repository maintenance or routine code formatting/linting tasks.
 - Executing continuous deployment or infrastructure provisioning workflows.
+
+## Inputs
+
+The skill accepts the following parameters:
+
+1. **`target`** (required): GitHub repository URL (HTTPS or SSH), shorthand `owner/repo`, or local filesystem path.
+   - Default: Current workspace if no argument is provided.
+2. **`ref`** (optional): Git branch, tag, or commit SHA to inspect.
+   - Default: Repository default branch (`HEAD` / `main` / `master`).
+3. **`subfolder`** (optional): Subdirectory path within a monorepo or large codebase to focus analysis on.
+   - Default: Repository root (`/`).
+4. **`mode`** (optional): Depth of reverse engineering execution (`quick`, `standard`, or `deep`).
+   - Default: `standard`.
+5. **`audience`** (optional): Target audience style for synthesis (`beginner` or `senior`).
+   - Default: `senior`.

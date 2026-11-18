@@ -17,7 +17,7 @@
 - [x] Step 8 – Add a tiny test runner
 - [x] Step 9 – Write frontmatter
 - [x] Step 10 – Add "When to use / not use" section
-- [ ] Step 11 – Add inputs section
+- [x] Step 11 – Add inputs section
 - [ ] Step 12 – Add safety rules block
 - [ ] Step 13 – Add modes table
 - [ ] Step 14 – Add output folder convention
