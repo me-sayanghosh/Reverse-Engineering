@@ -48,7 +48,11 @@ def find_env_vars(root_path: Path):
                             var_name = line.split("=", 1)[0].strip()
                             if var_name:
                                 if var_name not in env_vars:
-                                    env_vars[var_name] = {"name": var_name, "occurrences": []}
+                                    env_vars[var_name] = {
+                                        "name": var_name,
+                                        "category": categorize_env_var(var_name),
+                                        "occurrences": [],
+                                    }
                                 env_vars[var_name]["occurrences"].append(f"{rel}:{idx}")
             except Exception:
                 pass
@@ -62,7 +66,11 @@ def find_env_vars(root_path: Path):
                             var_name = m.group(1)
                             # Ignore common non-env props like process.env.NODE_ENV handled cleanly
                             if var_name not in env_vars:
-                                env_vars[var_name] = {"name": var_name, "occurrences": []}
+                                env_vars[var_name] = {
+                                    "name": var_name,
+                                    "category": categorize_env_var(var_name),
+                                    "occurrences": [],
+                                }
                             citation = f"{rel}:{idx}"
                             if citation not in env_vars[var_name]["occurrences"]:
                                 env_vars[var_name]["occurrences"].append(citation)
@@ -70,6 +78,48 @@ def find_env_vars(root_path: Path):
             pass
 
     return list(env_vars.values())
+
+
+def categorize_env_var(name: str) -> str:
+    """Categorize an environment variable name into db, auth, third-party, feature-flag, infra, or other."""
+    u = name.upper()
+
+    # Database
+    if any(k in u for k in ["DB", "DATABASE", "POSTGRES", "MYSQL", "MONGO", "REDIS", "SQLITE"]):
+        return "db"
+
+    # Auth
+    if any(k in u for k in ["AUTH", "JWT", "TOKEN", "SECRET", "PASSWORD", "PASSWD", "SESSION", "OAUTH", "CREDENTIAL"]):
+        return "auth"
+
+    # Third-party services
+    if any(
+        k in u
+        for k in [
+            "STRIPE",
+            "AWS",
+            "S3",
+            "SLACK",
+            "GITHUB",
+            "SENDGRID",
+            "TWILIO",
+            "MAIL",
+            "OPENAI",
+            "SENTRY",
+            "DATADOG",
+        ]
+    ):
+        return "third-party"
+
+    # Feature flags
+    if any(k in u for k in ["ENABLE", "DISABLE", "FEATURE", "FLAG", "TOGGLE"]) or u.startswith("IS_"):
+        return "feature-flag"
+
+    # Infrastructure / networking
+    if any(k in u for k in ["PORT", "HOST", "URL", "DOMAIN", "REGION", "ENV", "STAGE", "CORS", "LOG", "TIMEOUT"]):
+        return "infra"
+
+    return "other"
 
 
 def find_config_keys(root_path: Path):

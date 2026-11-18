@@ -91,7 +91,7 @@
 - [x] Step 82 – Config file keys
 - [x] Step 83 – Secret pattern detection
 - [x] Step 84 – Redaction guarantee
-- [ ] Step 85 – Categorize env vars
+- [x] Step 85 – Categorize env vars
 - [ ] Step 86 – Test
 - [ ] Step 87 – `analysis-playbook.md` skeleton
 - [ ] Step 88 – Fill Node/TS and Python sections
