@@ -19,7 +19,7 @@
 - [x] Step 10 – Add "When to use / not use" section
 - [x] Step 11 – Add inputs section
 - [x] Step 12 – Add safety rules block
-- [ ] Step 13 – Add modes table
+- [x] Step 13 – Add modes table
 - [ ] Step 14 – Add output folder convention
 - [ ] Step 15 – Add "no hallucination" rules
 - [ ] Step 16 – Add citation format spec

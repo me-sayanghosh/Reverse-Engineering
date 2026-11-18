@@ -40,3 +40,11 @@ The skill accepts the following parameters:
 2. **Never print secret values**: Only report secret names, environment variable keys, and file locations. Always redact tokens, passwords, and sensitive keys (e.g. mask as `AKIA****`).
 3. **Respect software licenses**: Document the repository's license accurately and flag non-commercial or restrictive copyleft constraints.
 4. **Require explicit user approval before sandbox execution**: If dynamic runtime analysis (Phase 4) is desired, run strictly in an isolated sandbox and obtain explicit user consent before starting containers or processes.
+
+## Modes
+
+| Mode | Target Scope & Depth | Phases Included | Outputs Generated |
+| :--- | :--- | :--- | :--- |
+| `quick` | High-level architectural overview & stack recon | Phases 0–2 | `00-SUMMARY.md`, `01-ARCHITECTURE.md` |
+| `standard` | Full static reverse engineering of architecture, API, data model, and risks | Phases 0–3, 5–7 | Reports `00` through `07`, `09` |
+| `deep` | Comprehensive reverse engineering plus runtime analysis & complete rebuild blueprint | All Phases (0–7) including Rebuild Blueprint | Complete suite: Reports `00` through `09` |
