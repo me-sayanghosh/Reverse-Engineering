@@ -49,7 +49,7 @@
 - [x] Step 40 – Python framework detection
 - [x] Step 41 – Go/Rust/Java/others
 - [x] Step 42 – Infra detection
-- [ ] Step 43 – Database/queue detection
+- [x] Step 43 – Database/queue detection
 - [ ] Step 44 – Build/test/run command inference
 - [ ] Step 45 – Output & test
 - [ ] Step 46 – Skeleton

@@ -260,6 +260,51 @@ def detect_infra(root_path: Path):
     return infra
 
 
+DATASTORE_PATTERNS = {
+    "PostgreSQL": ["postgres", "postgresql", "psycopg2", "asyncpg", '"pg"', "'pg'", "libpq"],
+    "MySQL": ["mysql", "mysql2", "pymysql", "mysqlclient"],
+    "MongoDB": ["mongodb", "mongoose", "pymongo", "motor"],
+    "Redis": ["redis", "ioredis", "aioredis"],
+    "SQLite": ["sqlite", "sqlite3", "better-sqlite3", "rusqlite"],
+    "Kafka": ["kafka", "kafkajs", "confluent-kafka", "aiokafka", "sarama"],
+    "RabbitMQ": ["amqp", "amqplib", "pika", "rabbitmq"],
+    "SQS": ["client-sqs", "sqs"],
+}
+
+
+def detect_datastores_and_queues(root_path: Path):
+    """Detect databases and message queues from dependencies and config files."""
+    root_path = Path(root_path).resolve()
+    detected = set()
+
+    # Scan manifest files and compose files
+    candidate_names = {
+        "package.json",
+        "requirements.txt",
+        "pyproject.toml",
+        "pipfile",
+        "go.mod",
+        "cargo.toml",
+        "docker-compose.yml",
+        "docker-compose.yaml",
+        "compose.yml",
+    }
+
+    for file_path in _common.walk_repo(root_path):
+        if file_path.name.lower() in candidate_names:
+            try:
+                content = file_path.read_text(encoding="utf-8", errors="ignore").lower()
+                for store, patterns in DATASTORE_PATTERNS.items():
+                    for pat in patterns:
+                        if pat.lower() in content:
+                            detected.add(store)
+                            break
+            except Exception:
+                pass
+
+    return sorted(list(detected))
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Detect repository technology stack, frameworks, databases, and build/run commands."
@@ -283,13 +328,14 @@ def main():
     )
     frameworks = sorted(list(set(all_fws)))
     infra = detect_infra(root_path)
+    datastores = detect_datastores_and_queues(root_path)
 
     data = {
         "root": str(root_path),
         "ecosystems": ecosystems,
         "manifests": manifests,
         "frameworks": frameworks,
-        "datastores": [],
+        "datastores": datastores,
         "infra": infra,
         "commands": {},
         "confidence": "high",
