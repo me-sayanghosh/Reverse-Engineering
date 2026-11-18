@@ -199,6 +199,120 @@ def parse_python_imports(file_path: Path, root_path: Path):
     return edges
 
 
+def parse_go_imports(file_path: Path, root_path: Path, go_module: str = ""):
+    """Parse Go imports and resolve to internal if matching the module path."""
+    edges = []
+    source_rel = str(file_path.resolve().relative_to(root_path))
+    content = file_path.read_text(encoding="utf-8", errors="ignore")
+
+    # Match single line or block imports
+    single_imports = re.findall(r'import\s+"([^"]+)"', content)
+    block_matches = re.findall(r"import\s*\(\s*(.*?)\s*\)", content, re.DOTALL)
+    all_imports = list(single_imports)
+    for block in block_matches:
+        for line in block.splitlines():
+            m = re.search(r'"([^"]+)"', line)
+            if m:
+                all_imports.append(m.group(1))
+
+    for imp in all_imports:
+        if go_module and imp.startswith(go_module):
+            subpath = imp[len(go_module) :].lstrip("/")
+            edges.append(
+                {
+                    "source": source_rel,
+                    "target": subpath or imp,
+                    "type": "internal",
+                    "specifier": imp,
+                }
+            )
+        elif "/" not in imp:
+            edges.append(
+                {
+                    "source": source_rel,
+                    "target": imp,
+                    "type": "stdlib",
+                    "specifier": imp,
+                }
+            )
+        else:
+            edges.append(
+                {
+                    "source": source_rel,
+                    "target": imp,
+                    "type": "external",
+                    "specifier": imp,
+                }
+            )
+    return edges
+
+
+def parse_rust_imports(file_path: Path, root_path: Path):
+    """Parse Rust use statements and resolve crate::/super:: to internal."""
+    edges = []
+    source_rel = str(file_path.resolve().relative_to(root_path))
+    content = file_path.read_text(encoding="utf-8", errors="ignore")
+
+    matches = re.findall(r"use\s+([^;]+);", content)
+    for m in matches:
+        raw = m.strip()
+        if raw.startswith("crate::") or raw.startswith("super::"):
+            # Internal
+            sub = raw.replace("crate::", "").replace("super::", "").split("::")[0]
+            edges.append(
+                {
+                    "source": source_rel,
+                    "target": f"src/{sub}",
+                    "type": "internal",
+                    "specifier": raw,
+                }
+            )
+        elif raw.startswith("std::") or raw.startswith("core::"):
+            edges.append(
+                {
+                    "source": source_rel,
+                    "target": raw.split("::")[0],
+                    "type": "stdlib",
+                    "specifier": raw,
+                }
+            )
+        else:
+            edges.append(
+                {
+                    "source": source_rel,
+                    "target": raw.split("::")[0],
+                    "type": "external",
+                    "specifier": raw,
+                }
+            )
+    return edges
+
+
+def parse_java_imports(file_path: Path, root_path: Path, pkg_prefix: str = ""):
+    """Parse Java/Kotlin imports and mark internal if matching local package prefix."""
+    edges = []
+    source_rel = str(file_path.resolve().relative_to(root_path))
+    content = file_path.read_text(encoding="utf-8", errors="ignore")
+
+    matches = re.findall(r"import\s+([a-zA-Z0-9_.]+);", content)
+    for raw in matches:
+        if raw.startswith("java.") or raw.startswith("javax."):
+            imp_type = "stdlib"
+        elif pkg_prefix and raw.startswith(pkg_prefix):
+            imp_type = "internal"
+        else:
+            imp_type = "external"
+        edges.append(
+            {
+                "source": source_rel,
+                "target": raw,
+                "type": imp_type,
+                "specifier": raw,
+            }
+        )
+    return edges
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Extract dependency graph, module relationships, cycle detection, and Mermaid diagrams."
