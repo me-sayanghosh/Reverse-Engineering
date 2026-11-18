@@ -388,6 +388,68 @@ def aggregate_module_edges(edges: list, depth: int = 2):
     return sorted(list(modules)), result_edges
 
 
+def compute_centrality_and_cycles(modules: list, edges: list):
+    """Compute in/out degrees, top central modules, and detect circular dependency cycles."""
+    in_degrees = {m: 0 for m in modules}
+    out_degrees = {m: 0 for m in modules}
+    adj = {m: [] for m in modules}
+
+    for edge in edges:
+        src = edge["source"]
+        tgt = edge["target"]
+        if src in out_degrees:
+            out_degrees[src] += 1
+        if tgt in in_degrees:
+            in_degrees[tgt] += 1
+        if src in adj and tgt in adj:
+            adj[src].append(tgt)
+
+    centrality = []
+    for m in modules:
+        in_d = in_degrees.get(m, 0)
+        out_d = out_degrees.get(m, 0)
+        centrality.append(
+            {
+                "module": m,
+                "in_degree": in_d,
+                "out_degree": out_d,
+                "total_degree": in_d + out_d,
+            }
+        )
+    centrality.sort(key=lambda x: x["total_degree"], reverse=True)
+    top_central = centrality[:10]
+
+    # Cycle detection via DFS
+    visited = {}  # 0: unvisited, 1: visiting (in stack), 2: finished
+    for m in modules:
+        visited[m] = 0
+
+    cycles = []
+    path = []
+
+    def dfs(curr):
+        visited[curr] = 1
+        path.append(curr)
+
+        for neighbor in adj.get(curr, []):
+            if visited.get(neighbor) == 1:
+                # Cycle found!
+                cycle_start_idx = path.index(neighbor)
+                cycle_path = path[cycle_start_idx:] + [neighbor]
+                cycles.append(cycle_path)
+            elif visited.get(neighbor) == 0:
+                dfs(neighbor)
+
+        path.pop()
+        visited[curr] = 2
+
+    for m in modules:
+        if visited[m] == 0:
+            dfs(m)
+
+    return top_central, cycles
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Extract dependency graph, module relationships, cycle detection, and Mermaid diagrams."

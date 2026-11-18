@@ -67,7 +67,7 @@
 - [x] Step 58 – Go/Rust/Java import parsers
 - [x] Step 59 – Internal vs external split
 - [x] Step 60 – Module-level aggregation
-- [ ] Step 61 – Centrality & cycles
+- [x] Step 61 – Centrality & cycles
 - [ ] Step 62 – Mermaid output
 - [ ] Step 63 – Test
 - [ ] Step 64 – Skeleton
