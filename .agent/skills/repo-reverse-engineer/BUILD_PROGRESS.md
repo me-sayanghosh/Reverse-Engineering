@@ -101,7 +101,7 @@
 - [x] Step 92 – `large-repo-strategy.md`
 - [x] Step 93 – `mermaid-cheatsheet.md`
 - [x] Step 94 – Reference link check
-- [ ] Step 95 – Phase 0 body (Intake & safety)
+- [x] Step 95 – Phase 0 body (Intake & safety)
 - [ ] Step 96 – Phase 1 body (Recon)
 - [ ] Step 97 – Phase 2 body (Architecture mapping)
 - [ ] Step 98 – Phase 3 body (Deep dives)

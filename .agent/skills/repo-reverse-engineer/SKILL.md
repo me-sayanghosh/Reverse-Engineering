@@ -106,7 +106,21 @@ The skill provides 8 dedicated automation scripts located in `scripts/`:
    - Usage: `python3 scripts/scan_secrets_env.py <root> [--json]`
 
 ## Phase 0: Intake & Safety
-TODO
+
+1. **Confirm Inputs & Modes**:
+   - Determine target repository (`target`), branch/ref (`ref`), subfolder focus (`subfolder`), depth mode (`quick|standard|deep`), and target audience (`beginner|senior`).
+2. **Execute Ingestion**:
+   - Run the preparation script:
+     ```bash
+     bash scripts/clone_repo.sh "<target>" [--branch "<ref>"] [--subdir "<subfolder>"] [--out "reverse-engineered/<repo-name>"]
+     ```
+   - For remote repositories, this executes a shallow clone (`--depth 1`) with automated size pre-checks. For local workspaces, it inspects metadata in-place without copying.
+3. **Inspect Captured Metadata**:
+   - Read `reverse-engineered/<repo-name>/repo_meta.json` to extract exact commit SHA, active branch, and detected license.
+   - Note license constraints in `00-SUMMARY.md` (e.g. AGPL/GPL copyleft or commercial suitability).
+4. **Enforce Zero-Host-Execution Safety**:
+   - Default strictly to static code inspection and script-based parsing.
+   - Ask for explicit user confirmation before any containerized execution in Phase 4. Never execute untrusted scripts, hooks, or tests directly on the host machine.
 
 ## Phase 1: Recon & Orientation
 TODO
