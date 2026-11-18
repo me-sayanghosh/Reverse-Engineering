@@ -55,6 +55,55 @@ def detect_manifests(root_path: Path):
     return sorted(list(ecosystems)), found_manifests
 
 
+NODE_PKG_TO_FRAMEWORK: dict[str, str] = {
+    "react": "React",
+    "next": "Next.js",
+    "vue": "Vue",
+    "nuxt": "Nuxt",
+    "svelte": "Svelte",
+    "@angular/core": "Angular",
+    "express": "Express",
+    "fastify": "Fastify",
+    "@nestjs/core": "NestJS",
+    "@nestjs/common": "NestJS",
+    "koa": "Koa",
+    "hono": "Hono",
+    "prisma": "Prisma",
+    "@prisma/client": "Prisma",
+    "mongoose": "Mongoose",
+    "socket.io": "Socket.IO",
+    "vite": "Vite",
+    "webpack": "Webpack",
+    "jest": "Jest",
+    "vitest": "Vitest",
+    "tailwindcss": "Tailwind CSS",
+    "@trpc/server": "tRPC",
+}
+
+
+def detect_node_frameworks(root_path: Path):
+    """Parse all package.json files for known Node/TS frameworks and libraries."""
+    root_path = Path(root_path).resolve()
+    frameworks = set()
+    import json
+
+    for file_path in _common.walk_repo(root_path):
+        if file_path.name == "package.json":
+            try:
+                with open(file_path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    deps = {}
+                    deps.update(data.get("dependencies", {}))
+                    deps.update(data.get("devDependencies", {}))
+                    deps.update(data.get("peerDependencies", {}))
+                    for dep in deps:
+                        if dep in NODE_PKG_TO_FRAMEWORK:
+                            frameworks.add(NODE_PKG_TO_FRAMEWORK[dep])
+            except Exception:
+                pass
+    return sorted(list(frameworks))
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Detect repository technology stack, frameworks, databases, and build/run commands."
@@ -71,12 +120,13 @@ def main():
         _common.die(f"Repository root does not exist: {root_path}")
 
     ecosystems, manifests = detect_manifests(root_path)
+    frameworks = detect_node_frameworks(root_path)
 
     data = {
         "root": str(root_path),
         "ecosystems": ecosystems,
         "manifests": manifests,
-        "frameworks": [],
+        "frameworks": frameworks,
         "datastores": [],
         "infra": [],
         "commands": {},
