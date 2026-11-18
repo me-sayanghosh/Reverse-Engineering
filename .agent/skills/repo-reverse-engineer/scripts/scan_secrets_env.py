@@ -187,6 +187,25 @@ def detect_potential_secrets(root_path: Path):
     return findings
 
 
+def redact_all_secrets_filter(data):
+    """Recursively traverse data structures and redact any string matching secret patterns."""
+    if isinstance(data, str):
+        cleaned = data
+        for pat, _, pfx_len in SECRET_PATTERNS:
+            # Replace any unmasked secrets with masked representation
+            def repl(match):
+                raw = match.group(1) if match.groups() else match.group(0)
+                return mask_secret(raw, pfx_len)
+
+            cleaned = re.sub(pat, repl, cleaned)
+        return cleaned
+    elif isinstance(data, dict):
+        return {k: redact_all_secrets_filter(v) for k, v in data.items()}
+    elif isinstance(data, list):
+        return [redact_all_secrets_filter(item) for item in data]
+    return data
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Scan repository environment variable usage, config keys, and audit potential secret leaks."
@@ -213,10 +232,25 @@ def main():
         "secret_findings": secret_findings,
     }
 
+    # Final guarantee redaction pass
+    sanitized_data = redact_all_secrets_filter(data)
+
     if args.json:
-        _common.output_json(data)
+        _common.output_json(sanitized_data)
     else:
         print(f"Secret and Env Scanner for: {root_path}")
+        print(f"Environment variables discovered: {len(sanitized_data['env_vars'])}")
+        for ev in sanitized_data["env_vars"][:10]:
+            print(f"  - {ev['name']} (cited in {len(ev['occurrences'])} locations)")
+        print(f"\nConfiguration keys discovered: {len(sanitized_data['config_keys'])}")
+        for ck in sanitized_data["config_keys"][:10]:
+            print(f"  - {ck['key']} ({ck['file']})")
+        if sanitized_data["secret_findings"]:
+            print(f"\nSECURITY ALERT: Potential secrets detected ({len(sanitized_data['secret_findings'])}):")
+            for sf in sanitized_data["secret_findings"]:
+                print(f"  [{sf['type']}] {sf['file']} -> {sf['masked_sample']}")
+        else:
+            print("\nPotential secrets: None detected")
 
 
 if __name__ == "__main__":
