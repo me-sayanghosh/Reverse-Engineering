@@ -128,7 +128,7 @@
 - [x] Step 119 – Fix script bugs found
 - [x] Step 120 – Fix workflow gaps
 - [x] Step 121 – Safety test
-- [ ] Step 122 – Large-repo test
+- [x] Step 122 – Large-repo test
 - [ ] Step 123 – Script permissions & shebangs
 - [ ] Step 124 – Cross-platform check
 - [ ] Step 125 – Write `README.md`
