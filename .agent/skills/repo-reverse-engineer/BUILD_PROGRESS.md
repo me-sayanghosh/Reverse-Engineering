@@ -16,7 +16,7 @@
 - [x] Step 7 – Add language-by-extension map
 - [x] Step 8 – Add a tiny test runner
 - [x] Step 9 – Write frontmatter
-- [ ] Step 10 – Add "When to use / not use" section
+- [x] Step 10 – Add "When to use / not use" section
 - [ ] Step 11 – Add inputs section
 - [ ] Step 12 – Add safety rules block
 - [ ] Step 13 – Add modes table
