@@ -278,3 +278,13 @@ When encountering runtime obstacles, follow these standardized fallback procedur
    - If an exotic language or unsupported framework is detected where automated scripts return empty results, fall back to manual targeted inspection: use `grep`, `find`, and direct AST/file reading. Follow the general investigative principles documented in `references/analysis-playbook.md`.
 4. **Huge Repository (>50k LOC or Massive Monorepo)**:
    - When a repository exceeds standard analysis limits, invoke `references/large-repo-strategy.md`: narrow focus using `--subdir` to a specific subfolder, sample top central files using `dep_graph.py`, and explicitly disclose unanalyzed directories in `07-RISKS-AND-DEBT.md`.
+
+## Parallelization Guidance
+
+When subagent delegation or parallel worker execution is supported in the host agent environment:
+1. **Parallel Package Mapping**: In monorepos, spawn parallel subagents per distinct package (e.g. `apps/web`, `apps/api`, `packages/core`). Each subagent analyzes its assigned package independently and generates localized findings.
+2. **Parallel Deep-Dive Tasks**: In large single-application repositories, spawn parallel workers across independent Phase 3 deep-dive domains:
+   - Worker A: API Surface & Route Handlers (`extract_api_surface.py`)
+   - Worker B: Data Models & Migrations (`extract_data_model.py`)
+   - Worker C: Configuration, Secrets & Infrastructure (`scan_secrets_env.py`)
+3. **Synthesis & Convergence**: The primary coordinator agent aggregates parallel subagent findings, reconciles cross-package dependency edges, resolves shared citations, and compiles the final unified 10-report suite in `reverse-engineered/<repo-name>/`.

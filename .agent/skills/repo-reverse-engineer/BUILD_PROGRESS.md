@@ -111,7 +111,7 @@
 - [x] Step 102 – Phase 7 body (Handoff)
 - [x] Step 103 – Audience flag behavior
 - [x] Step 104 – Failure & fallback section
-- [ ] Step 105 – Parallelization guidance
+- [x] Step 105 – Parallelization guidance
 - [ ] Step 106 – Re-run SKILL.md lint
 - [ ] Step 107 – Create a tiny demo repo
 - [ ] Step 108 – Run all scripts on the demo
