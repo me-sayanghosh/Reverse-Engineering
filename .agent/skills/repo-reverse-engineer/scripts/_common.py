@@ -51,6 +51,28 @@ LOCKFILES = {
 }
 
 
+def is_too_large(path: str | Path, limit_bytes: int = 1024 * 1024) -> bool:
+    """Return True if file size exceeds limit_bytes (default 1MB)."""
+    try:
+        return os.path.getsize(path) > limit_bytes
+    except OSError:
+        return True
+
+
+def is_binary(path: str | Path) -> bool:
+    """Return True if file appears to be binary based on null bytes or decoding."""
+    try:
+        with open(path, "rb") as f:
+            chunk = f.read(1024)
+            if b"\x00" in chunk:
+                return True
+            # Try decoding as utf-8
+            chunk.decode("utf-8")
+            return False
+    except (UnicodeDecodeError, OSError):
+        return True
+
+
 def is_lockfile(filename: str) -> bool:
     return filename in LOCKFILES
 
