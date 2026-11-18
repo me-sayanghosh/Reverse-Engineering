@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Shared helper module for repo-reverse-engineer scripts."""
 
 import json
