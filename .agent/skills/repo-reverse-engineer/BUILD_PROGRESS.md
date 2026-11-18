@@ -68,7 +68,7 @@
 - [x] Step 59 – Internal vs external split
 - [x] Step 60 – Module-level aggregation
 - [x] Step 61 – Centrality & cycles
-- [ ] Step 62 – Mermaid output
+- [x] Step 62 – Mermaid output
 - [ ] Step 63 – Test
 - [ ] Step 64 – Skeleton
 - [ ] Step 65 – HTTP routes (Node)

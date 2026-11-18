@@ -450,6 +450,62 @@ def compute_centrality_and_cycles(modules: list, edges: list):
     return top_central, cycles
 
 
+def sanitize_mermaid_id(name: str) -> str:
+    """Create a safe alphanumeric identifier for Mermaid node IDs."""
+    import re
+
+    safe = re.sub(r"[^a-zA-Z0-9_]", "_", name).strip("_")
+    return safe or "root"
+
+
+def render_mermaid_graph(modules: list, edges: list, max_nodes: int = 40) -> str:
+    """Emit graph LR Mermaid markup capped at max_nodes."""
+    lines = ["graph LR"]
+
+    if not modules:
+        lines.append("  Empty[No internal modules detected]")
+        return "\n".join(lines)
+
+    # If modules exceed max_nodes, pick top modules and bucket rest into 'other'
+    top_modules = set(modules[: max_nodes - 1]) if len(modules) > max_nodes else set(modules)
+    has_other = len(modules) > len(top_modules)
+
+    node_ids = {}
+    for idx, m in enumerate(sorted(list(top_modules))):
+        nid = f"m_{idx}"
+        node_ids[m] = nid
+        lines.append(f'  {nid}["{m}"]')
+
+    if has_other:
+        node_ids["other"] = "m_other"
+        lines.append('  m_other["(other modules)"]')
+
+    # Deduplicate aggregated edges
+    seen_edges = set()
+    for e in edges:
+        s = e["source"]
+        t = e["target"]
+        mod_s = s if s in top_modules else "other"
+        mod_t = t if t in top_modules else "other"
+
+        if mod_s == mod_t:
+            continue
+
+        nid_s = node_ids.get(mod_s, "m_other")
+        nid_t = node_ids.get(mod_t, "m_other")
+
+        edge_key = (nid_s, nid_t)
+        if edge_key not in seen_edges:
+            seen_edges.add(edge_key)
+            w = e.get("weight")
+            if w and w > 1:
+                lines.append(f"  {nid_s} -->|{w}| {nid_t}")
+            else:
+                lines.append(f"  {nid_s} --> {nid_t}")
+
+    return "\n".join(lines)
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Extract dependency graph, module relationships, cycle detection, and Mermaid diagrams."
@@ -467,19 +523,37 @@ def main():
     if not root_path.exists():
         _common.die(f"Repository root does not exist: {root_path}")
 
+    all_edges = collect_all_imports(root_path)
+    modules, module_edges = aggregate_module_edges(all_edges, depth=args.depth)
+    centrality, cycles = compute_centrality_and_cycles(modules, module_edges)
+
     data = {
         "root": str(root_path),
-        "edges": [],
-        "modules": [],
-        "cycles": [],
+        "total_file_imports": len(all_edges),
+        "modules": modules,
+        "module_edges": module_edges,
+        "centrality": centrality,
+        "cycles": cycles,
+        "raw_edges": all_edges,
     }
 
     if args.json:
         _common.output_json(data)
     elif args.mermaid:
-        print("graph LR\n  A --> B")
+        print(render_mermaid_graph(modules, module_edges, max_nodes=40))
     else:
         print(f"Dependency Graph for: {root_path}")
+        print(f"Modules discovered: {len(modules)}")
+        print(f"Inter-module dependencies: {len(module_edges)}")
+        if cycles:
+            print(f"WARNING: Circular dependencies detected ({len(cycles)}):")
+            for c in cycles:
+                print(f"  {' -> '.join(c)}")
+        else:
+            print("Circular dependencies: None detected")
+        print("\nTop Central Modules:")
+        for c in centrality[:5]:
+            print(f"  {c['module']}: in={c['in_degree']}, out={c['out_degree']}, total={c['total_degree']}")
 
 
 if __name__ == "__main__":
