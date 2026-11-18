@@ -43,7 +43,7 @@
 - [x] Step 34 – Test/doc/CI presence
 - [x] Step 35 – Monorepo hint
 - [x] Step 36 – JSON schema & test
-- [ ] Step 37 – Skeleton
+- [x] Step 37 – Skeleton
 - [ ] Step 38 – Manifest detection table
 - [ ] Step 39 – Node/TS framework detection
 - [ ] Step 40 – Python framework detection
