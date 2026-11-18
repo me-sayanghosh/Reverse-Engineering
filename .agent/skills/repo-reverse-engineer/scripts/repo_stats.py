@@ -56,6 +56,46 @@ def get_tree_summary(root_path: Path, max_depth: int = 3):
     return tree
 
 
+def detect_repo_markers(root_path: Path):
+    """Detect presence and paths of test directories, documentation, and CI configurations."""
+    test_dirs = []
+    doc_dirs = []
+    ci_paths = []
+
+    # Check common test directory names
+    for name in ["tests", "test", "__tests__", "spec", "specs"]:
+        p = root_path / name
+        if p.exists() and p.is_dir():
+            test_dirs.append(name)
+
+    # Check common doc directory names
+    for name in ["docs", "doc", "documentation", "wiki"]:
+        p = root_path / name
+        if p.exists() and p.is_dir():
+            doc_dirs.append(name)
+
+    # Check CI configs
+    ci_candidates = [
+        ".github/workflows",
+        ".gitlab-ci.yml",
+        ".circleci",
+        "Jenkinsfile",
+        "azure-pipelines.yml",
+        ".travis.yml",
+        "bitbucket-pipelines.yml",
+    ]
+    for ci in ci_candidates:
+        p = root_path / ci
+        if p.exists():
+            ci_paths.append(ci)
+
+    return {
+        "tests": {"present": len(test_dirs) > 0, "paths": test_dirs},
+        "docs": {"present": len(doc_dirs) > 0, "paths": doc_dirs},
+        "ci": {"present": len(ci_paths) > 0, "paths": ci_paths},
+    }
+
+
 def get_git_churn_hints(root_path: Path, top_n: int = 10):
     """If .git has history, return most recently modified files from git log, else empty list."""
     try:
@@ -138,6 +178,7 @@ def main():
     tree_summary = get_tree_summary(root_path, max_depth=3)
     largest_files = get_largest_files(root_path, top_n=15)
     recent_files = get_git_churn_hints(root_path, top_n=10)
+    markers = detect_repo_markers(root_path)
 
     data = {
         "root": str(root_path),
@@ -145,6 +186,7 @@ def main():
         "tree": tree_summary,
         "largest_files": largest_files,
         "recently_modified": recent_files,
+        "markers": markers,
     }
 
     if args.json:
