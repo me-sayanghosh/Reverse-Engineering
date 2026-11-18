@@ -263,6 +263,90 @@ def extract_openapi_specs(root_path: Path):
     return endpoints
 
 
+def extract_schemas_and_rpc(root_path: Path):
+    """Extract GraphQL queries/mutations, gRPC services, and tRPC routers."""
+    root_path = root_path.resolve()
+    graphql_ops = []
+    grpc_services = []
+
+    for file_path in _common.walk_repo(root_path):
+        if _common.is_binary(file_path):
+            continue
+        ext = file_path.suffix.lower()
+        rel = str(file_path.relative_to(root_path))
+
+        # 1. GraphQL (.graphql, .gql)
+        if ext in (".graphql", ".gql"):
+            try:
+                content = file_path.read_text(encoding="utf-8", errors="ignore")
+                # Find queries and mutations
+                for m in re.finditer(r"(?:type\s+(Query|Mutation|Subscription)\s*\{([^}]+)\})", content):
+                    op_type = m.group(1)
+                    body = m.group(2)
+                    for line in body.splitlines():
+                        field_m = re.match(r"\s*([a-zA-Z0-9_]+)\s*(\(.*?\))?\s*:\s*([a-zA-Z0-9_!\[\]]+)", line)
+                        if field_m:
+                            field_name = field_m.group(1)
+                            return_type = field_m.group(3)
+                            graphql_ops.append(
+                                {
+                                    "file": rel,
+                                    "operation": op_type,
+                                    "name": field_name,
+                                    "return_type": return_type,
+                                }
+                            )
+            except Exception:
+                pass
+
+        # 2. gRPC (.proto)
+        elif ext == ".proto":
+            try:
+                content = file_path.read_text(encoding="utf-8", errors="ignore")
+                for s_match in re.finditer(r"service\s+([a-zA-Z0-9_]+)\s*\{([^}]+)\}", content):
+                    service_name = s_match.group(1)
+                    body = s_match.group(2)
+                    for rpc_m in re.finditer(
+                        r"rpc\s+([a-zA-Z0-9_]+)\s*\(\s*([a-zA-Z0-9_.]+)\s*\)\s*returns\s*\(\s*([a-zA-Z0-9_.]+)\s*\)",
+                        body,
+                    ):
+                        rpc_name = rpc_m.group(1)
+                        req_type = rpc_m.group(2)
+                        res_type = rpc_m.group(3)
+                        grpc_services.append(
+                            {
+                                "file": rel,
+                                "service": service_name,
+                                "rpc": rpc_name,
+                                "request": req_type,
+                                "response": res_type,
+                            }
+                        )
+            except Exception:
+                pass
+
+        # 3. tRPC (.ts/.js)
+        elif ext in (".ts", ".js"):
+            try:
+                with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                    for idx, line in enumerate(f, start=1):
+                        if "publicProcedure" in line or "createTRPCRouter" in line or "router({" in line:
+                            trpc_m = re.search(r"([a-zA-Z0-9_]+)\s*:\s*(?:publicProcedure|procedure)\.(query|mutation)", line)
+                            if trpc_m:
+                                graphql_ops.append(
+                                    {
+                                        "file": f"{rel}:{idx}",
+                                        "operation": f"tRPC-{trpc_m.group(2).upper()}",
+                                        "name": trpc_m.group(1),
+                                        "return_type": "inferred",
+                                    }
+                                )
+            except Exception:
+                pass
+
+    return graphql_ops, grpc_services
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Extract public API surface: HTTP routes, OpenAPI endpoints, GraphQL/gRPC, and CLI subcommands."
@@ -282,13 +366,14 @@ def main():
     other_routes = extract_other_routes(root_path)
     all_routes = node_routes + other_routes
     openapi_endpoints = extract_openapi_specs(root_path)
+    graphql_ops, grpc_services = extract_schemas_and_rpc(root_path)
 
     data = {
         "root": str(root_path),
         "routes": all_routes,
         "openapi": openapi_endpoints,
-        "graphql": [],
-        "grpc": [],
+        "graphql": graphql_ops,
+        "grpc": grpc_services,
         "cli_commands": [],
         "public_exports": [],
     }
