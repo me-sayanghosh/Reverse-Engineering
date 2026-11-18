@@ -124,7 +124,7 @@
 - [x] Step 115 – Test repo B: clone + scripts
 - [x] Step 116 – Test repo B: full workflow (deep)
 - [x] Step 117 – Test repo C: monorepo
-- [ ] Step 118 – Spot-check accuracy
+- [x] Step 118 – Spot-check accuracy
 - [ ] Step 119 – Fix script bugs found
 - [ ] Step 120 – Fix workflow gaps
 - [ ] Step 121 – Safety test

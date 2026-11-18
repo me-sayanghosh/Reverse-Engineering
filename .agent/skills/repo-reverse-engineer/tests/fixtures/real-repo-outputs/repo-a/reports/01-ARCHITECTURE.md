@@ -3,8 +3,8 @@
 ## Component Overview
 Commander is organized around five primary core classes exposed at root:
 1. **Command** (`lib/command.js:25`): Central orchestrator managing options, arguments, actions, and subcommand dispatch.
-2. **Option** (`lib/option.js:25`): Definition and validation model for flags and switches.
-3. **Argument** (`lib/argument.js:18`): Positional argument parsing, default values, and variadic capture.
+2. **Option** (`lib/option.js:3`): Definition and validation model for flags and switches.
+3. **Argument** (`lib/argument.js:3`): Positional argument parsing, default values, and variadic capture.
 4. **Help** (`lib/help.js:22`): Terminal output formatter generating styled manual pages.
 5. **CommanderError** (`lib/error.js:12`): Structured exit codes and error encapsulation.
 
