@@ -66,7 +66,7 @@
 - [x] Step 57 – Python import parser
 - [x] Step 58 – Go/Rust/Java import parsers
 - [x] Step 59 – Internal vs external split
-- [ ] Step 60 – Module-level aggregation
+- [x] Step 60 – Module-level aggregation
 - [ ] Step 61 – Centrality & cycles
 - [ ] Step 62 – Mermaid output
 - [ ] Step 63 – Test

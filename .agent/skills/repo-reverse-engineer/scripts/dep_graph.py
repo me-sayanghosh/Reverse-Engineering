@@ -352,6 +352,42 @@ def collect_all_imports(root_path: Path):
     return all_edges
 
 
+def get_module_name(file_rel: str, depth: int = 2) -> str:
+    """Map a file path to its module directory at given depth."""
+    parts = Path(file_rel).parts
+    if len(parts) <= 1:
+        return "."
+    mod_parts = parts[: min(depth, len(parts) - 1)]
+    return "/".join(mod_parts) if mod_parts else "."
+
+
+def aggregate_module_edges(edges: list, depth: int = 2):
+    """Collapse internal file-level edges to directory/package-level modules."""
+    module_edges = {}
+    modules = set()
+
+    for edge in edges:
+        if edge["type"] != "internal":
+            continue
+        src = edge["source"]
+        tgt = edge["target"]
+        mod_src = get_module_name(src, depth)
+        mod_tgt = get_module_name(tgt, depth)
+
+        modules.add(mod_src)
+        modules.add(mod_tgt)
+
+        if mod_src != mod_tgt:
+            key = (mod_src, mod_tgt)
+            module_edges[key] = module_edges.get(key, 0) + 1
+
+    result_edges = [
+        {"source": src, "target": tgt, "weight": weight}
+        for (src, tgt), weight in module_edges.items()
+    ]
+    return sorted(list(modules)), result_edges
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Extract dependency graph, module relationships, cycle detection, and Mermaid diagrams."
