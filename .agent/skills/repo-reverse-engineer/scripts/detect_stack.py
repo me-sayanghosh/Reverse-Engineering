@@ -305,6 +305,72 @@ def detect_datastores_and_queues(root_path: Path):
     return sorted(list(detected))
 
 
+def infer_commands(root_path: Path, ecosystems: list):
+    """Infer install, build, test, and start commands from package scripts, Makefiles, and manifests."""
+    root_path = Path(root_path).resolve()
+    commands = {}
+
+    # Check Node / package.json
+    pkg_json = root_path / "package.json"
+    if pkg_json.exists():
+        try:
+            import json
+
+            with open(pkg_json, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                scripts = data.get("scripts", {})
+                pm = "npm"
+                if (root_path / "pnpm-lock.yaml").exists():
+                    pm = "pnpm"
+                elif (root_path / "yarn.lock").exists():
+                    pm = "yarn"
+
+                commands["install"] = f"{pm} install"
+                if "build" in scripts:
+                    commands["build"] = f"{pm} run build"
+                if "test" in scripts:
+                    commands["test"] = f"{pm} test"
+                if "start" in scripts:
+                    commands["start"] = f"{pm} start"
+                elif "dev" in scripts:
+                    commands["start"] = f"{pm} run dev"
+        except Exception:
+            pass
+
+    # Check Makefile
+    makefile = root_path / "Makefile"
+    if makefile.exists():
+        try:
+            content = makefile.read_text(encoding="utf-8", errors="ignore")
+            import re
+
+            targets = set(re.findall(r"^([a-zA-Z0-9_-]+):", content, re.MULTILINE))
+            if "build" in targets and "build" not in commands:
+                commands["build"] = "make build"
+            if "test" in targets and "test" not in commands:
+                commands["test"] = "make test"
+            if "run" in targets and "start" not in commands:
+                commands["start"] = "make run"
+        except Exception:
+            pass
+
+    # Fallback by ecosystem if not already discovered
+    if "Python" in ecosystems or any("Python" in e for e in ecosystems):
+        commands.setdefault("install", "pip install -r requirements.txt")
+        commands.setdefault("test", "pytest")
+        commands.setdefault("start", "python main.py")
+    elif "Go" in ecosystems:
+        commands.setdefault("build", "go build ./...")
+        commands.setdefault("test", "go test ./...")
+        commands.setdefault("start", "go run main.go")
+    elif "Rust" in ecosystems:
+        commands.setdefault("build", "cargo build")
+        commands.setdefault("test", "cargo test")
+        commands.setdefault("start", "cargo run")
+
+    return commands
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Detect repository technology stack, frameworks, databases, and build/run commands."
@@ -329,6 +395,7 @@ def main():
     frameworks = sorted(list(set(all_fws)))
     infra = detect_infra(root_path)
     datastores = detect_datastores_and_queues(root_path)
+    commands = infer_commands(root_path, ecosystems)
 
     data = {
         "root": str(root_path),
@@ -337,8 +404,8 @@ def main():
         "frameworks": frameworks,
         "datastores": datastores,
         "infra": infra,
-        "commands": {},
-        "confidence": "high",
+        "commands": commands,
+        "confidence": "high" if (ecosystems or frameworks) else "medium",
     }
 
     if args.json:

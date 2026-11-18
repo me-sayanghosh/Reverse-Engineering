@@ -50,7 +50,7 @@
 - [x] Step 41 – Go/Rust/Java/others
 - [x] Step 42 – Infra detection
 - [x] Step 43 – Database/queue detection
-- [ ] Step 44 – Build/test/run command inference
+- [x] Step 44 – Build/test/run command inference
 - [ ] Step 45 – Output & test
 - [ ] Step 46 – Skeleton
 - [ ] Step 47 – Manifest-declared entrypoints
