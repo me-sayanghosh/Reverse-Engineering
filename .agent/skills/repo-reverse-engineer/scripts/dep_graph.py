@@ -313,6 +313,45 @@ def parse_java_imports(file_path: Path, root_path: Path, pkg_prefix: str = ""):
     return edges
 
 
+def collect_all_imports(root_path: Path):
+    """Walk repository and collect all dependency edges across all supported languages."""
+    root_path = root_path.resolve()
+    all_edges = []
+
+    # Detect Go module name if present
+    go_module = ""
+    go_mod_file = root_path / "go.mod"
+    if go_mod_file.exists():
+        try:
+            m = re.search(
+                r"^module\s+([^\s]+)",
+                go_mod_file.read_text(encoding="utf-8", errors="ignore"),
+                re.MULTILINE,
+            )
+            if m:
+                go_module = m.group(1).strip()
+        except Exception:
+            pass
+
+    for file_path in _common.walk_repo(root_path):
+        if _common.is_binary(file_path):
+            continue
+        ext = file_path.suffix.lower()
+
+        if ext in (".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs"):
+            all_edges.extend(parse_js_ts_imports(file_path, root_path))
+        elif ext in (".py", ".pyi"):
+            all_edges.extend(parse_python_imports(file_path, root_path))
+        elif ext == ".go":
+            all_edges.extend(parse_go_imports(file_path, root_path, go_module))
+        elif ext == ".rs":
+            all_edges.extend(parse_rust_imports(file_path, root_path))
+        elif ext in (".java", ".kt"):
+            all_edges.extend(parse_java_imports(file_path, root_path))
+
+    return all_edges
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Extract dependency graph, module relationships, cycle detection, and Mermaid diagrams."
