@@ -10,7 +10,7 @@ class TestSampleCitations(unittest.TestCase):
         self.citation_re = re.compile(r"([a-zA-Z0-9_\-\.\/]+\.[a-zA-Z0-9]+):(\d+)")
 
     def test_sample_citations_resolve(self):
-        reports = ["00-SUMMARY.md", "01-ARCHITECTURE.md", "03-API-AND-DATA.md"]
+        reports = ["00-SUMMARY.md", "01-ARCHITECTURE.md", "03-API-AND-DATA.md", "08-REBUILD-BLUEPRINT.md"]
         total_checked = 0
         for report in reports:
             file_path = self.sample_dir / report

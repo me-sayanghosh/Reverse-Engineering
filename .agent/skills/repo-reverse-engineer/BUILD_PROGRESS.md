@@ -116,7 +116,7 @@
 - [x] Step 107 – Create a tiny demo repo
 - [x] Step 108 – Run all scripts on the demo
 - [x] Step 109 – Hand-write sample reports
-- [ ] Step 110 – Sample rebuild blueprint
+- [x] Step 110 – Sample rebuild blueprint
 - [ ] Step 111 – Pick test repos
 - [ ] Step 112 – Test repo A: clone
 - [ ] Step 113 – Test repo A: scripts
