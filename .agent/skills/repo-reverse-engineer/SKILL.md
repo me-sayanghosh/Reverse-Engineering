@@ -33,3 +33,10 @@ The skill accepts the following parameters:
    - Default: `standard`.
 5. **`audience`** (optional): Target audience style for synthesis (`beginner` or `senior`).
    - Default: `senior`.
+
+## Safety Rules
+
+1. **Never execute untrusted repo code on host**: Default to static code analysis and parsing. Never run build scripts, test runners, install scripts, or hooks from an untrusted repository on the host machine.
+2. **Never print secret values**: Only report secret names, environment variable keys, and file locations. Always redact tokens, passwords, and sensitive keys (e.g. mask as `AKIA****`).
+3. **Respect software licenses**: Document the repository's license accurately and flag non-commercial or restrictive copyleft constraints.
+4. **Require explicit user approval before sandbox execution**: If dynamic runtime analysis (Phase 4) is desired, run strictly in an isolated sandbox and obtain explicit user consent before starting containers or processes.
