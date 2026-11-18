@@ -24,6 +24,38 @@ def parse_args():
     return parser.parse_args()
 
 
+def get_tree_summary(root_path: Path, max_depth: int = 3):
+    """Summarize directory tree up to max_depth with file counts per directory."""
+    tree = {}
+    for dirpath, dirnames, filenames in os.walk(root_path):
+        # Prune ignored directories
+        dirnames[:] = [
+            d
+            for d in dirnames
+            if d not in _common.DEFAULT_IGNORED_DIRS and not d.startswith(".")
+        ]
+
+        rel = Path(dirpath).relative_to(root_path)
+        depth = 0 if str(rel) == "." else len(rel.parts)
+        if depth > max_depth:
+            continue
+
+        valid_files = [
+            f
+            for f in filenames
+            if not _common.is_lockfile(f) and not _common.is_minified(f)
+        ]
+
+        rel_str = "." if str(rel) == "." else str(rel)
+        tree[rel_str] = {
+            "depth": depth,
+            "files": len(valid_files),
+            "subdirs": len(dirnames),
+        }
+
+    return tree
+
+
 def count_languages(root_path: Path):
     """Count files and non-blank lines per language."""
     stats = {}
@@ -60,10 +92,12 @@ def main():
         _common.die(f"Repository root does not exist: {root_path}")
 
     languages = count_languages(root_path)
+    tree_summary = get_tree_summary(root_path, max_depth=3)
 
     data = {
         "root": str(root_path),
         "languages": languages,
+        "tree": tree_summary,
     }
 
     if args.json:
@@ -75,6 +109,12 @@ def main():
         print("-" * 40)
         for lang, s in languages.items():
             print(f"{lang:<20} {s['files']:>8} {s['lines']:>10}")
+
+        print("\nDirectory Tree (Depth <= 3):")
+        for d, s in tree_summary.items():
+            indent = "  " * s["depth"]
+            name = d if s["depth"] == 0 else Path(d).name
+            print(f"{indent}- {name}/ ({s['files']} files, {s['subdirs']} subdirs)")
 
 
 if __name__ == "__main__":
