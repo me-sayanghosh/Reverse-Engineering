@@ -15,7 +15,9 @@
     "Jest",
     "Prisma"
   ],
-  "datastores": [],
+  "datastores": [
+    "PostgreSQL"
+  ],
   "infra": [
     {
       "type": "Docker",

@@ -72,6 +72,22 @@ class TestDetectStack(unittest.TestCase):
         self.assertEqual(cmds.get("test"), "npm test")
         self.assertEqual(cmds.get("start"), "npm start")
 
+    def test_regression_prisma_datastore_detection(self):
+        """Step 119 Regression: ensure schema.prisma datasource provider is detected in datastores."""
+        with tempfile.TemporaryDirectory() as td:
+            r = Path(td).resolve()
+            (r / "package.json").write_text(json.dumps({"name": "test-prisma"}))
+            prisma_dir = r / "prisma"
+            prisma_dir.mkdir()
+            (prisma_dir / "schema.prisma").write_text(
+                'datasource db {\n  provider = "postgresql"\n  url = env("DATABASE_URL")\n}\n'
+            )
+            cmd = ["python3", str(DETECT_STACK_PY), str(r), "--json"]
+            res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            self.assertEqual(res.returncode, 0)
+            data = json.loads(res.stdout)
+            self.assertIn("PostgreSQL", data["datastores"])
+
 
 if __name__ == "__main__":
     unittest.main()

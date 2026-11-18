@@ -288,10 +288,15 @@ def detect_datastores_and_queues(root_path: Path):
         "docker-compose.yml",
         "docker-compose.yaml",
         "compose.yml",
+        "schema.prisma",
+        "settings.py",
+        "application.properties",
+        "application.yml",
+        "application.yaml",
     }
 
     for file_path in _common.walk_repo(root_path):
-        if file_path.name.lower() in candidate_names:
+        if file_path.name.lower() in candidate_names or file_path.suffix.lower() == ".prisma":
             try:
                 content = file_path.read_text(encoding="utf-8", errors="ignore").lower()
                 for store, patterns in DATASTORE_PATTERNS.items():
