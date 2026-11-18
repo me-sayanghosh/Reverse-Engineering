@@ -1,9 +1,16 @@
 # Build Progress: repo-reverse-engineer
 
+
+## Runtime Environment
+- Python: Python 3.15.2
+- Git: git version 2.54.0 (Apple Git-157)
+- Bash: GNU bash, version 3.2.57(1)-release (arm64-apple-darwin26)
+- Node: v24.19.0
+
 - [x] Step 1 – Create root folder
 - [x] Step 2 – Create subfolders
 - [x] Step 3 – Create progress file
-- [ ] Step 4 – Check runtime tools
+- [x] Step 4 – Check runtime tools
 - [ ] Step 5 – Create a shared helper module
 - [ ] Step 6 – Add binary/large-file guard
 - [ ] Step 7 – Add language-by-extension map
