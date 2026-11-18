@@ -93,7 +93,7 @@
 - [x] Step 84 – Redaction guarantee
 - [x] Step 85 – Categorize env vars
 - [x] Step 86 – Test
-- [ ] Step 87 – `analysis-playbook.md` skeleton
+- [x] Step 87 – `analysis-playbook.md` skeleton
 - [ ] Step 88 – Fill Node/TS and Python sections
 - [ ] Step 89 – Fill remaining ecosystems
 - [ ] Step 90 – `output-templates.md` for reports 00–04
