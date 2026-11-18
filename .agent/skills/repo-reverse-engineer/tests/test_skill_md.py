@@ -49,6 +49,19 @@ class TestSkillMdStructure(unittest.TestCase):
     def test_no_remaining_todos(self):
         self.assertNotIn("TODO", self.content, "SKILL.md still contains unfulfilled TODO placeholders")
 
+    def test_references_and_modes(self):
+        references = [
+            "analysis-playbook.md",
+            "output-templates.md",
+            "large-repo-strategy.md",
+            "mermaid-cheatsheet.md",
+        ]
+        for ref in references:
+            self.assertIn(ref, self.content, f"Reference '{ref}' missing from SKILL.md")
+
+        for mode in ["quick", "standard", "deep"]:
+            self.assertIn(mode, self.content, f"Mode '{mode}' missing from SKILL.md")
+
 
 if __name__ == "__main__":
     unittest.main()
