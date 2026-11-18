@@ -99,7 +99,7 @@
 - [x] Step 90 – `output-templates.md` for reports 00–04
 - [x] Step 91 – Templates for reports 05–09
 - [x] Step 92 – `large-repo-strategy.md`
-- [ ] Step 93 – `mermaid-cheatsheet.md`
+- [x] Step 93 – `mermaid-cheatsheet.md`
 - [ ] Step 94 – Reference link check
 - [ ] Step 95 – Phase 0 body (Intake & safety)
 - [ ] Step 96 – Phase 1 body (Recon)
