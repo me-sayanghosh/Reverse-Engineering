@@ -32,7 +32,7 @@
 - [x] Step 23 – Local path mode
 - [x] Step 24 – Size pre-check
 - [x] Step 25 – Shallow clone
-- [ ] Step 26 – Metadata capture
+- [x] Step 26 – Metadata capture
 - [ ] Step 27 – License detection
 - [ ] Step 28 – Error handling
 - [ ] Step 29 – Skeleton

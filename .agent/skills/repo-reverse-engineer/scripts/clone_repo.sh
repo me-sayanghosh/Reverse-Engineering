@@ -188,3 +188,70 @@ else
     fi
     echo "Cloned into $OUT_DIR (depth 1)"
 fi
+
+detect_license() {
+    local target_dir="$1"
+    python3 - << PYEOF
+import os, sys, glob, re
+
+target_dir = "$target_dir"
+candidates = glob.glob(os.path.join(target_dir, "LICENSE*")) + glob.glob(os.path.join(target_dir, "COPYING*"))
+if not candidates:
+    print("none\tnone")
+    sys.exit(0)
+
+lic_file = os.path.basename(candidates[0])
+spdx = "none"
+try:
+    with open(candidates[0], "r", encoding="utf-8", errors="ignore") as f:
+        head = "".join([f.readline() for _ in range(30)])
+        if "MIT License" in head or "Permission is hereby granted, free of charge" in head:
+            spdx = "MIT"
+        elif "Apache License" in head and "2.0" in head:
+            spdx = "Apache-2.0"
+        elif "GNU GENERAL PUBLIC LICENSE" in head or "GNU General Public License" in head:
+            spdx = "GPL"
+        elif "BSD 3-Clause" in head or "BSD-3-Clause" in head or "Redistribution and use in source and binary forms" in head:
+            spdx = "BSD"
+        elif "Mozilla Public License" in head:
+            spdx = "MPL-2.0"
+        else:
+            spdx = "Custom"
+except Exception:
+    spdx = "none"
+
+print(f"{lic_file}\t{spdx}")
+PYEOF
+}
+
+LIC_INFO=$(detect_license "$REPO_DIR")
+LIC_FILE=$(echo "$LIC_INFO" | cut -f1)
+LIC_SPDX=$(echo "$LIC_INFO" | cut -f2)
+
+COMMIT_SHA=$(git -C "$REPO_DIR" rev-parse HEAD 2>/dev/null || echo "unknown")
+DETECTED_BRANCH=$(git -C "$REPO_DIR" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
+DEFAULT_BRANCH=$(git -C "$REPO_DIR" symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "$DETECTED_BRANCH")
+
+if [[ -z "$DEFAULT_BRANCH" || "$DEFAULT_BRANCH" == "unknown" ]]; then
+    DEFAULT_BRANCH="$DETECTED_BRANCH"
+fi
+
+CLONE_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+python3 - << PYEOF
+import json
+
+meta = {
+    "url": "${CLONE_URL:-$LOCAL_PATH}",
+    "commit_sha": "$COMMIT_SHA",
+    "branch": "${BRANCH:-$DETECTED_BRANCH}",
+    "clone_date": "$CLONE_DATE",
+    "license_file_detected": "$LIC_FILE" if "$LIC_FILE" != "none" else None,
+    "license_spdx": "$LIC_SPDX",
+    "default_branch": "$DEFAULT_BRANCH"
+}
+
+with open("$OUT_DIR/repo_meta.json", "w", encoding="utf-8") as f:
+    json.dump(meta, f, indent=2)
+print("Wrote metadata to $OUT_DIR/repo_meta.json")
+PYEOF
