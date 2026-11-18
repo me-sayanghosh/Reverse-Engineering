@@ -17,13 +17,17 @@ import re
 ENV_PATTERNS = [
     r"""process\.env\.([A-Za-z0-9_]+)""",
     r"""process\.env\[['"]([A-Za-z0-9_]+)['"]\]""",
+    r"""import\.meta\.env\.([A-Za-z0-9_]+)""",
+    r"""import\.meta\.env\[['"]([A-Za-z0-9_]+)['"]\]""",
     r"""os\.environ\[['"]([A-Za-z0-9_]+)['"]\]""",
     r"""os\.environ\.get\(['"]([A-Za-z0-9_]+)['"]""",
     r"""os\.getenv\(['"]([A-Za-z0-9_]+)['"]""",
     r"""System\.getenv\(['"]([A-Za-z0-9_]+)['"]""",
     r"""os\.Getenv\(['"]([A-Za-z0-9_]+)['"]""",
+    r"""os\.LookupEnv\(['"]([A-Za-z0-9_]+)['"]\)""",
     r"""std::env::var\(['"]([A-Za-z0-9_]+)['"]""",
     r"""ENV\[['"]([A-Za-z0-9_]+)['"]\]""",
+    r"""ENV\.fetch\(['"]([A-Za-z0-9_]+)['"]\)""",
 ]
 
 
@@ -250,7 +254,7 @@ def redact_all_secrets_filter(data):
             cleaned = re.sub(pat, repl, cleaned)
         return cleaned
     elif isinstance(data, dict):
-        return {k: redact_all_secrets_filter(v) for k, v in data.items()}
+        return {redact_all_secrets_filter(k): redact_all_secrets_filter(v) for k, v in data.items()}
     elif isinstance(data, list):
         return [redact_all_secrets_filter(item) for item in data]
     return data

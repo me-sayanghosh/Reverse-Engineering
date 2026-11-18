@@ -16,9 +16,9 @@ import re
 
 NODE_ROUTE_PATTERNS = [
     # (app|router).get('/path', ...)
-    r"""(?:app|router|fastify|server)\.(get|post|put|delete|patch|options|head)\s*\(\s*['"]([^'"]+)['"]""",
+    r"""(?:app|router|fastify|server)\.(get|post|put|delete|patch|options|head)\s*\(\s*['"`]([^'"`]+)['"`]""",
     # @Get('/path') in NestJS
-    r"""@(Get|Post|Put|Delete|Patch)\s*\(\s*['"]?([^'"]*)['"]?\s*\)""",
+    r"""@(Get|Post|Put|Delete|Patch)\s*\(\s*['"`]?([^'"`]*)['"`]?\s*\)""",
 ]
 
 
@@ -114,13 +114,19 @@ def extract_other_routes(root_path: Path):
                         )
                         continue
 
-                    # Flask: @app.route('/path', methods=['GET', 'POST'])
-                    m_flask = re.search(r"""@(?:app|api)\.route\s*\(\s*['"]([^'"]+)['"]""", line)
+                    # Flask: @app.route('/path', methods=['GET', 'POST']) or @bp.route(...)
+                    m_flask = re.search(r"""@(?:[a-zA-Z0-9_]+)\.route\s*\(\s*['"`]([^'"`]+)['"`](?:.*?methods\s*=\s*\[(.*?)\])?""", line)
                     if m_flask:
                         route_path = m_flask.group(1)
+                        methods_raw = m_flask.group(2)
+                        if methods_raw:
+                            methods_list = [m.strip("'\" ") for m in methods_raw.split(",") if m.strip("'\" ")]
+                            method_str = "/".join(methods_list).upper() if methods_list else "GET"
+                        else:
+                            method_str = "GET"
                         routes.append(
                             {
-                                "method": "GET/POST",
+                                "method": method_str,
                                 "path": route_path,
                                 "handler": f"{rel}:{idx}",
                                 "framework": "Flask",
@@ -447,6 +453,39 @@ def main():
         _common.output_json(data)
     else:
         print(f"API Surface Extraction for: {root_path}")
+        print(f"\nHTTP Routes Discovered ({len(all_routes)}):")
+        print(f"{'Method':<10} {'Path':<30} {'Auth':<6} {'Handler':<30}")
+        print("-" * 78)
+        for r in all_routes[:25]:
+            auth = "yes" if r["auth_required"] else "no"
+            print(f"{r['method']:<10} {r['path']:<30} {auth:<6} {r['handler']:<30}")
+        if len(all_routes) > 25:
+            print(f"  ... and {len(all_routes) - 25} more routes")
+
+        if openapi_endpoints:
+            print(f"\nOpenAPI Endpoints Discovered ({len(openapi_endpoints)}):")
+            for ep in openapi_endpoints[:10]:
+                print(f"  [{ep['method']}] {ep['path']} ({ep['spec_file']})")
+
+        if graphql_ops:
+            print(f"\nGraphQL / tRPC Operations Discovered ({len(graphql_ops)}):")
+            for op in graphql_ops[:10]:
+                print(f"  [{op['operation']}] {op['name']} -> {op['return_type']} ({op['file']})")
+
+        if grpc_services:
+            print(f"\ngRPC Services Discovered ({len(grpc_services)}):")
+            for s in grpc_services[:10]:
+                print(f"  {s['service']}.{s['rpc']}({s['request']}) -> {s['response']} ({s['file']})")
+
+        if cli_commands:
+            print(f"\nCLI Commands Discovered ({len(cli_commands)}):")
+            for c in cli_commands[:10]:
+                print(f"  - {c['command']} ({c['file']})")
+
+        if public_exports:
+            print(f"\nPublic Library Exports Discovered ({len(public_exports)}):")
+            for exp in public_exports[:10]:
+                print(f"  - {exp['export']} [{exp['type']}] ({exp['file']})")
 
 
 if __name__ == "__main__":

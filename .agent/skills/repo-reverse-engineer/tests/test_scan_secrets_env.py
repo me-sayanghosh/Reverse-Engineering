@@ -69,6 +69,20 @@ class TestScanSecretsEnv(unittest.TestCase):
         self.assertNotIn("AKIA1122334455667788", res.stdout)
         self.assertNotIn("1122334455667788", res.stdout)
 
+    def test_modern_env_patterns(self):
+        """Step 81: Verify import.meta.env and Go os.LookupEnv patterns."""
+        with tempfile.TemporaryDirectory() as td:
+            r = Path(td).resolve()
+            (r / "client.ts").write_text("const url = import.meta.env.VITE_BACKEND_URL;\n")
+            (r / "server.go").write_text('val, ok := os.LookupEnv("DATABASE_PORT")\n')
+            cmd = ["python3", str(SCAN_SECRETS_PY), str(r), "--json"]
+            res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            self.assertEqual(res.returncode, 0)
+            data = json.loads(res.stdout)
+            env_names = {e["name"] for e in data["env_vars"]}
+            self.assertIn("VITE_BACKEND_URL", env_names)
+            self.assertIn("DATABASE_PORT", env_names)
+
 
 if __name__ == "__main__":
     unittest.main()

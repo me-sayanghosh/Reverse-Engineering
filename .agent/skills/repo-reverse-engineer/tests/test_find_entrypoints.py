@@ -67,6 +67,21 @@ class TestFindEntrypoints(unittest.TestCase):
             self.assertIn("confidence", ep)
             self.assertIn("reason", ep)
 
+    def test_scripts_start_declared_entrypoint(self):
+        """Step 47: Verify package.json scripts.start detection."""
+        with tempfile.TemporaryDirectory() as td:
+            r = Path(td).resolve()
+            pj = {"scripts": {"start": "node dist/server.js"}}
+            (r / "package.json").write_text(json.dumps(pj))
+            (r / "dist").mkdir()
+            (r / "dist" / "server.js").write_text("console.log('started');\n")
+            cmd = ["python3", str(FIND_ENTRYPOINTS_PY), str(r), "--json"]
+            res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            self.assertEqual(res.returncode, 0)
+            data = json.loads(res.stdout)
+            paths = [e["path"] for e in data["entrypoints"]]
+            self.assertTrue(any("dist/server.js:1" in p for p in paths))
+
 
 if __name__ == "__main__":
     unittest.main()

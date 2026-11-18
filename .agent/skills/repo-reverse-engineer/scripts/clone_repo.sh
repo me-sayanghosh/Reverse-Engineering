@@ -75,6 +75,9 @@ if [[ -z "$TARGET" ]]; then
     exit 1
 fi
 
+# Normalize target by stripping trailing slash
+TARGET="${TARGET%/}"
+
 TARGET_TYPE=""
 CLONE_URL=""
 LOCAL_PATH=""
@@ -84,18 +87,18 @@ if [[ -d "$TARGET" ]]; then
     TARGET_TYPE="local"
     LOCAL_PATH="$(cd "$TARGET" && pwd)"
     REPO_NAME="$(basename "$LOCAL_PATH")"
-elif [[ "$TARGET" =~ ^https://github\.com/([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+)(\.git)?$ ]]; then
+elif [[ "$TARGET" =~ ^https?://github\.com/([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+)$ ]]; then
     TARGET_TYPE="github_https"
-    CLONE_URL="$TARGET"
     REPO_NAME="${BASH_REMATCH[2]%.git}"
-elif [[ "$TARGET" =~ ^git@github\.com:([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+)(\.git)?$ ]]; then
+    CLONE_URL="https://github.com/${BASH_REMATCH[1]}/${REPO_NAME}.git"
+elif [[ "$TARGET" =~ ^git@github\.com:([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+)$ ]]; then
     TARGET_TYPE="github_ssh"
-    CLONE_URL="$TARGET"
     REPO_NAME="${BASH_REMATCH[2]%.git}"
+    CLONE_URL="git@github.com:${BASH_REMATCH[1]}/${REPO_NAME}.git"
 elif [[ "$TARGET" =~ ^([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+)$ ]]; then
     TARGET_TYPE="shorthand"
-    CLONE_URL="https://github.com/$TARGET.git"
-    REPO_NAME="${BASH_REMATCH[2]}"
+    REPO_NAME="${BASH_REMATCH[2]%.git}"
+    CLONE_URL="https://github.com/${BASH_REMATCH[1]}/${REPO_NAME}.git"
 else
     echo "Error: Invalid target '$TARGET'. Must be a GitHub URL, owner/repo shorthand, or existing local directory." >&2
     exit 1

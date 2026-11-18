@@ -283,6 +283,33 @@ def main():
             name = d if s["depth"] == 0 else Path(d).name
             print(f"{indent}- {name}/ ({s['files']} files, {s['subdirs']} subdirs)")
 
+        if largest_files:
+            print("\nLargest Source Files (by lines):")
+            print(f"{'Lines':>8}  {'Language':<15} {'Path'}")
+            print("-" * 60)
+            for lf in largest_files:
+                print(f"{lf['lines']:>8}  {lf['language']:<15} {lf['path']}")
+
+        print("\nRepository Markers:")
+        t_stat = "Yes (" + ", ".join(markers['tests']['paths']) + ")" if markers['tests']['present'] else "No"
+        d_stat = "Yes (" + ", ".join(markers['docs']['paths']) + ")" if markers['docs']['present'] else "No"
+        c_stat = "Yes (" + ", ".join(markers['ci']['paths']) + ")" if markers['ci']['present'] else "No"
+        print(f"  Tests: {t_stat}")
+        print(f"  Docs:  {d_stat}")
+        print(f"  CI:    {c_stat}")
+
+        if monorepo["is_monorepo"]:
+            print(f"\nMonorepo Detected: Yes ({len(monorepo['packages'])} packages)")
+            for sig in monorepo["signals"]:
+                print(f"  - {sig}")
+        else:
+            print("\nMonorepo: No")
+
+        if recent_files:
+            print(f"\nRecently Modified Files (Git Churn, top {len(recent_files)}):")
+            for rf in recent_files:
+                print(f"  - {rf}")
+
 
 if __name__ == "__main__":
     main()

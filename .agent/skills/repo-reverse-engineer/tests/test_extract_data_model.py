@@ -69,6 +69,42 @@ class TestExtractDataModel(unittest.TestCase):
         self.assertIn("customers", res.stdout)
         self.assertIn("invoices", res.stdout)
 
+    def test_mysql_table_options_and_mongoose_generics(self):
+        """Step 73 & 75: Verify MySQL ENGINE=InnoDB and TypeScript Mongoose generic schemas."""
+        with tempfile.TemporaryDirectory() as td:
+            r = Path(td).resolve()
+            # MySQL with ENGINE and KEY constraints
+            (r / "mysql.sql").write_text(
+                "CREATE TABLE orders (\n"
+                "    id INT PRIMARY KEY,\n"
+                "    user_id INT,\n"
+                "    total DECIMAL(10,2),\n"
+                "    KEY idx_user (user_id)\n"
+                ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;\n"
+            )
+            # TypeScript Mongoose generic
+            (r / "user.ts").write_text(
+                "import { Schema, model } from 'mongoose';\n"
+                "interface IUser { name: string; }\n"
+                "const userSchema = new Schema<IUser>({\n"
+                "    name: { type: String, required: true }\n"
+                "});\n"
+                "export const User = model('User', userSchema);\n"
+            )
+            cmd = ["python3", str(EXTRACT_DATA_MODEL_PY), str(r), "--json"]
+            res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            self.assertEqual(res.returncode, 0)
+            data = json.loads(res.stdout)
+            names = {e["name"] for e in data["entities"]}
+            self.assertIn("orders", names)
+            self.assertIn("User", names)
+
+            # Check that KEY was NOT parsed as a column
+            orders_ent = next(e for e in data["entities"] if e["name"] == "orders")
+            col_names = [c["name"] for c in orders_ent["columns"]]
+            self.assertNotIn("KEY", col_names)
+            self.assertIn("total", col_names)
+
 
 if __name__ == "__main__":
     unittest.main()

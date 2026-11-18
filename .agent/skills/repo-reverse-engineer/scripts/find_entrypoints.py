@@ -68,6 +68,24 @@ def find_manifest_entrypoints(root_path: Path):
                                             "reason": f'CLI command "{bname}" in {file_path.relative_to(root_path)}',
                                         }
                                     )
+
+                    # scripts.start field per Step 47
+                    scripts = pj.get("scripts", {})
+                    if "start" in scripts and isinstance(scripts["start"], str):
+                        start_cmd = scripts["start"]
+                        for token in start_cmd.split():
+                            clean_tok = token.strip("'\"")
+                            cand = (base_dir / clean_tok).resolve()
+                            if cand.exists() and cand.is_file() and cand.suffix in (".js", ".ts", ".mjs", ".cjs"):
+                                entries.append(
+                                    {
+                                        "path": f"{cand.relative_to(root_path)}:1",
+                                        "type": "server",
+                                        "confidence": 1.0,
+                                        "reason": f'Declared as "scripts.start" ({start_cmd}) in {file_path.relative_to(root_path)}',
+                                    }
+                                )
+                                break
             except Exception:
                 pass
 

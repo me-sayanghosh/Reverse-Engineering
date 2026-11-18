@@ -55,7 +55,9 @@ def resolve_js_ts_target(source_file: Path, specifier: str, root_path: Path):
             target_path.with_suffix(".js"),
             target_path.with_suffix(".jsx"),
             target_path / "index.ts",
+            target_path / "index.tsx",
             target_path / "index.js",
+            target_path / "index.jsx",
         ]
         for c in candidates:
             c_resolved = c.resolve()
@@ -79,13 +81,13 @@ def parse_js_ts_imports(file_path: Path, root_path: Path):
         content = file_path.read_text(encoding="utf-8", errors="ignore")
         # import ... from '...' or export ... from '...'
         patterns = [
-            r"""(?:import|export)\s+(?:.*?from\s+)?['"]([^'"]+)['"]""",
+            r"""(?:import|export)\s+(?:(?:(?!\b(?:import|export)\b).)*?\bfrom\s+)?['"]([^'"]+)['"]""",
             r"""require\s*\(\s*['"]([^'"]+)['"]\s*\)""",
             r"""import\s*\(\s*['"]([^'"]+)['"]\s*\)""",
         ]
         found_specifiers = set()
         for pat in patterns:
-            for m in re.finditer(pat, content):
+            for m in re.finditer(pat, content, re.DOTALL):
                 found_specifiers.add(m.group(1))
 
         for spec in sorted(list(found_specifiers)):
@@ -158,6 +160,33 @@ def parse_python_imports(file_path: Path, root_path: Path):
                 for _ in range(level - 1):
                     curr = curr.parent
 
+                if not mod:
+                    # from . import foo, bar
+                    for alias in node.names:
+                        sub_cand = curr / alias.name
+                        resolved = None
+                        if sub_cand.with_suffix(".py").exists():
+                            resolved = sub_cand.with_suffix(".py")
+                        elif (sub_cand / "__init__.py").exists():
+                            resolved = sub_cand / "__init__.py"
+                        elif sub_cand.is_dir():
+                            resolved = sub_cand
+
+                        if resolved and resolved.resolve().is_relative_to(root_path):
+                            target_rel = str(resolved.resolve().relative_to(root_path))
+                        else:
+                            target_rel = f"{'.' * level}{alias.name}"
+
+                        edges.append(
+                            {
+                                "source": source_rel,
+                                "target": target_rel,
+                                "type": imp_type,
+                                "specifier": f"{'.' * level}{alias.name}",
+                            }
+                        )
+                    continue
+
                 rel_parts = mod.split(".") if mod else []
                 target_cand = curr
                 for p in rel_parts:
@@ -205,8 +234,8 @@ def parse_go_imports(file_path: Path, root_path: Path, go_module: str = ""):
     source_rel = str(file_path.resolve().relative_to(root_path))
     content = file_path.read_text(encoding="utf-8", errors="ignore")
 
-    # Match single line or block imports
-    single_imports = re.findall(r'import\s+"([^"]+)"', content)
+    # Match single line or block imports (including aliased imports)
+    single_imports = re.findall(r'import\s+(?:[a-zA-Z0-9_.]+\s+)?"([^"]+)"', content)
     block_matches = re.findall(r"import\s*\(\s*(.*?)\s*\)", content, re.DOTALL)
     all_imports = list(single_imports)
     for block in block_matches:

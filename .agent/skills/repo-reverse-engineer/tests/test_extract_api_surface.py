@@ -91,6 +91,24 @@ class TestExtractApiSurface(unittest.TestCase):
         self.assertIn("build", cmd_names)
         self.assertIn("test", cmd_names)
 
+    def test_flask_and_human_readable_output(self):
+        """Rule 8 & Step 66: Verify Flask blueprint routes and human-readable output."""
+        with tempfile.TemporaryDirectory() as td:
+            r = Path(td).resolve()
+            (r / "api.py").write_text(
+                "from flask import Blueprint\n"
+                "bp = Blueprint('api', __name__)\n"
+                "@bp.route('/items', methods=['POST', 'PUT'])\n"
+                "def save_item(): pass\n"
+            )
+            # Test human readable (no --json)
+            cmd = ["python3", str(EXTRACT_API_PY), str(r)]
+            res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            self.assertEqual(res.returncode, 0)
+            self.assertIn("HTTP Routes Discovered", res.stdout)
+            self.assertIn("/items", res.stdout)
+            self.assertIn("POST/PUT", res.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

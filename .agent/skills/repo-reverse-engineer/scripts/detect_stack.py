@@ -46,6 +46,11 @@ def detect_manifests(root_path: Path):
             found_manifests.append({"path": rel_path, "manifest": name, "ecosystem": eco})
             ecosystems.add(eco)
             matched = True
+        elif name.startswith("requirements") and name.endswith(".txt"):
+            eco = MANIFEST_TO_ECOSYSTEM["requirements.txt"]
+            found_manifests.append({"path": rel_path, "manifest": name, "ecosystem": eco})
+            ecosystems.add(eco)
+            matched = True
         elif file_path.suffix == ".csproj":
             eco = MANIFEST_TO_ECOSYSTEM[".csproj"]
             found_manifests.append({"path": rel_path, "manifest": name, "ecosystem": eco})
@@ -358,6 +363,31 @@ def infer_commands(root_path: Path, ecosystems: list):
                 commands["start"] = "make run"
         except Exception:
             pass
+
+    # Check README code blocks per Step 44
+    readme_candidates = [root_path / "README.md", root_path / "readme.md", root_path / "README.rst"]
+    for rmp in readme_candidates:
+        if rmp.exists():
+            try:
+                import re
+                rm_text = rmp.read_text(encoding="utf-8", errors="ignore")
+                code_blocks = re.findall(r"```(?:bash|sh|shell|console)?\s*\n(.*?)\n```", rm_text, re.DOTALL)
+                for block in code_blocks:
+                    for raw_l in block.splitlines():
+                        line = raw_l.strip().lstrip("$ ").strip()
+                        if not line or line.startswith("#"):
+                            continue
+                        if "install" not in commands and any(line.startswith(c) for c in ["npm install", "yarn install", "pnpm install", "pip install", "poetry install"]):
+                            commands["install"] = line
+                        if "start" not in commands and any(line.startswith(c) for c in ["npm start", "npm run dev", "yarn start", "python ", "python3 ", "node ", "cargo run", "go run"]):
+                            commands["start"] = line
+                        if "test" not in commands and any(line.startswith(c) for c in ["npm test", "pytest", "cargo test", "go test"]):
+                            commands["test"] = line
+                        if "build" not in commands and any(line.startswith(c) for c in ["npm run build", "yarn build", "cargo build", "go build"]):
+                            commands["build"] = line
+            except Exception:
+                pass
+            break
 
     # Fallback by ecosystem if not already discovered
     if "Python" in ecosystems or any("Python" in e for e in ecosystems):

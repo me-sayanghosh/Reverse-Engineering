@@ -70,6 +70,27 @@ class TestRepoStats(unittest.TestCase):
         self.assertIn("path", top_file)
         self.assertIn("lines", top_file)
 
+    def test_human_readable_output_and_utf8_boundary(self):
+        """Rule 8 & Step 6: Verify human-readable output and UTF-8 split character handling."""
+        # Test human-readable output (no --json)
+        cmd = ["python3", str(REPO_STATS_PY), str(self.root)]
+        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        self.assertEqual(res.returncode, 0)
+        self.assertIn("Repository Stats for:", res.stdout)
+        self.assertIn("Largest Source Files", res.stdout)
+        self.assertIn("Repository Markers:", res.stdout)
+
+        # Test UTF-8 multi-byte split boundary in _common.is_binary
+        import _common
+        with tempfile.NamedTemporaryFile(delete=False) as tf:
+            # 1023 ascii bytes + 2-byte UTF-8 char 'é' (0xc3, 0xa9) crossing 1024-byte boundary
+            tf.write(b"a" * 1023 + "\u00e9".encode("utf-8") + b"\nhello world\n")
+            tf_path = Path(tf.name)
+        try:
+            self.assertFalse(_common.is_binary(tf_path), "Valid UTF-8 text file falsely flagged as binary")
+        finally:
+            tf_path.unlink()
+
 
 if __name__ == "__main__":
     unittest.main()

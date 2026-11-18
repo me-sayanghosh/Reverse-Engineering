@@ -31,9 +31,9 @@ def parse_sql_migrations(root_path: Path):
         rel = str(file_path.relative_to(root_path))
         try:
             content = file_path.read_text(encoding="utf-8", errors="ignore")
-            # Match CREATE TABLE statements
+            # Match CREATE TABLE statements (handling optional table options like ENGINE=InnoDB)
             create_table_matches = re.finditer(
-                r"""CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?(?:['"`]?\w+['"`]?\.)?['"`]?(\w+)['"`]?\s*\((.*?)\);""",
+                r"""CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?(?:['"`]?\w+['"`]?\.)?['"`]?(\w+)['"`]?\s*\((.*?)\)(?:\s*[^;]*)?;""",
                 content,
                 re.IGNORECASE | re.DOTALL,
             )
@@ -69,12 +69,15 @@ def parse_sql_migrations(root_path: Path):
                         )
                         continue
 
-                    # Check PRIMARY KEY constraint
-                    if re.match(r"""PRIMARY\s+KEY\s*\((\w+)\)""", line, re.IGNORECASE):
+                    # Check table-level constraint keywords
+                    col_parts = line.split()
+                    if not col_parts:
+                        continue
+                    first_token = col_parts[0].strip('"`\'[]').upper()
+                    if first_token in ("CONSTRAINT", "PRIMARY", "FOREIGN", "INDEX", "KEY", "UNIQUE", "CHECK"):
                         continue
 
                     # Column definition: name type ...
-                    col_parts = line.split()
                     if len(col_parts) >= 2:
                         col_name = col_parts[0].strip('"`\'[]')
                         col_type = col_parts[1].upper()
@@ -236,69 +239,84 @@ def parse_mongoose_schemas(root_path: Path):
         rel = str(file_path.relative_to(root_path))
         try:
             content = file_path.read_text(encoding="utf-8", errors="ignore")
-            if "Schema(" in content:
-                # Find model name if declared: mongoose.model('User', ...)
-                m_model = re.search(r"""mongoose\.model\s*\(\s*['"]([a-zA-Z0-9_]+)['"]""", content)
-                model_name = m_model.group(1) if m_model else file_path.stem
+            # Match all Schema definitions: const XSchema = new Schema<Type>({ ... })
+            schema_pattern = re.compile(
+                r"""(?:(?:const|let|var)\s+([a-zA-Z0-9_]+)\s*=\s*)?new\s+(?:mongoose\.)?Schema(?:<[^>]+>)?\s*\(""",
+                re.MULTILINE,
+            )
 
-                # Find Schema body using balanced brace matching
-                schema_idx = content.find("Schema(")
-                brace_start = content.find("{", schema_idx) if schema_idx != -1 else -1
-                if brace_start != -1:
-                    depth = 0
-                    brace_end = -1
-                    for i in range(brace_start, len(content)):
-                        if content[i] == "{":
-                            depth += 1
-                        elif content[i] == "}":
-                            depth -= 1
-                            if depth == 0:
-                                brace_end = i
-                                break
+            for sm in schema_pattern.finditer(content):
+                var_name = sm.group(1)
+                # Find model name if declared: mongoose.model('User', ...) or model('User', ...)
+                m_model = re.search(r"""(?:mongoose\.)?model\s*\(\s*['"]([a-zA-Z0-9_]+)['"]""", content)
+                if m_model:
+                    model_name = m_model.group(1)
+                elif var_name:
+                    model_name = re.sub(r"[sS]chema$", "", var_name) or var_name
+                else:
+                    model_name = file_path.stem
 
-                    if brace_end != -1:
-                        body = content[brace_start + 1 : brace_end]
-                        columns = []
-                        # Parse field declarations line by line or pattern
-                        for line in body.splitlines():
-                            line = line.strip().rstrip(",")
-                            if not line or line.startswith("//"):
-                                continue
-                            f_match = re.match(r"""['"]?([a-zA-Z0-9_]+)['"]?\s*:\s*(.*)""", line)
-                            if f_match:
-                                f_name = f_match.group(1)
-                                f_def = f_match.group(2)
+                start_pos = sm.end()
+                brace_start = content.find("{", start_pos)
+                if brace_start == -1 or (brace_start - start_pos > 20):
+                    continue
 
-                                # Extract ref: e.g. { type: Schema.Types.ObjectId, ref: 'User' }
-                                ref_m = re.search(r"""ref\s*:\s*['"]([a-zA-Z0-9_]+)['"]""", f_def)
-                                if ref_m:
-                                    target_ref = ref_m.group(1)
-                                    relations.append(
-                                        {
-                                            "from": model_name,
-                                            "to": target_ref,
-                                            "from_column": f_name,
-                                            "type": "mongoose_ref",
-                                        }
-                                    )
+                depth = 0
+                brace_end = -1
+                for i in range(brace_start, len(content)):
+                    if content[i] == "{":
+                        depth += 1
+                    elif content[i] == "}":
+                        depth -= 1
+                        if depth == 0:
+                            brace_end = i
+                            break
 
-                                # Extract type
-                                type_m = re.search(r"""type\s*:\s*([a-zA-Z0-9_.]+)""", f_def)
-                                col_type = type_m.group(1) if type_m else f_def.split()[0].rstrip(",{}")
-                                columns.append(
-                                    {
-                                        "name": f_name,
-                                        "type": col_type,
-                                        "primary_key": f_name in ("_id", "id"),
-                                    }
-                                )
+                if brace_end == -1:
+                    continue
 
-                        entities[model_name] = {
-                            "name": model_name,
-                            "file": rel,
-                            "columns": columns,
-                            "source": "Mongoose",
-                        }
+                body = content[brace_start + 1 : brace_end]
+                columns = []
+                # Parse field declarations line by line or pattern
+                for line in body.splitlines():
+                    line = line.strip().rstrip(",")
+                    if not line or line.startswith("//"):
+                        continue
+                    f_match = re.match(r"""['"]?([a-zA-Z0-9_]+)['"]?\s*:\s*(.*)""", line)
+                    if f_match:
+                        f_name = f_match.group(1)
+                        f_def = f_match.group(2)
+
+                        # Extract ref: e.g. { type: Schema.Types.ObjectId, ref: 'User' }
+                        ref_m = re.search(r"""ref\s*:\s*['"]([a-zA-Z0-9_]+)['"]""", f_def)
+                        if ref_m:
+                            target_ref = ref_m.group(1)
+                            relations.append(
+                                {
+                                    "from": model_name,
+                                    "to": target_ref,
+                                    "from_column": f_name,
+                                    "type": "mongoose_ref",
+                                }
+                            )
+
+                        # Extract type
+                        type_m = re.search(r"""type\s*:\s*([a-zA-Z0-9_.]+)""", f_def)
+                        col_type = type_m.group(1) if type_m else f_def.split()[0].rstrip(",{}")
+                        columns.append(
+                            {
+                                "name": f_name,
+                                "type": col_type,
+                                "primary_key": f_name in ("_id", "id"),
+                            }
+                        )
+
+                entities[model_name] = {
+                    "name": model_name,
+                    "file": rel,
+                    "columns": columns,
+                    "source": "Mongoose",
+                }
         except Exception:
             pass
 

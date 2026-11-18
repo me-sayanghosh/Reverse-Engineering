@@ -88,6 +88,22 @@ class TestDetectStack(unittest.TestCase):
             data = json.loads(res.stdout)
             self.assertIn("PostgreSQL", data["datastores"])
 
+    def test_readme_code_block_command_inference(self):
+        """Step 44: Verify command inference from README code blocks."""
+        with tempfile.TemporaryDirectory() as td:
+            r = Path(td).resolve()
+            (r / "requirements-dev.txt").write_text("pytest>=7.0.0\n")
+            (r / "README.md").write_text(
+                "# My Project\n\n```bash\npip install -r requirements.txt\npython app.py\n```\n"
+            )
+            cmd = ["python3", str(DETECT_STACK_PY), str(r), "--json"]
+            res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            self.assertEqual(res.returncode, 0)
+            data = json.loads(res.stdout)
+            self.assertIn("Python", data["ecosystems"])
+            self.assertEqual(data["commands"].get("install"), "pip install -r requirements.txt")
+            self.assertEqual(data["commands"].get("start"), "python app.py")
+
 
 if __name__ == "__main__":
     unittest.main()

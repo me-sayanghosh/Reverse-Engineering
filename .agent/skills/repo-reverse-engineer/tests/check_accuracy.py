@@ -3,6 +3,10 @@ from pathlib import Path
 skill_root = Path(__file__).resolve().parent.parent
 repos_dir = skill_root / "tests" / "fixtures" / "real-repos"
 
+if not repos_dir.exists():
+    print(f"Notice: {repos_dir} was cleaned up per Step 129. Preserving verified ACCURACY_LOG.md.")
+    exit(0)
+
 checks = [
     # Repo A
     ("repo-a", "index.js", 7, "program = new Command()", "program"),

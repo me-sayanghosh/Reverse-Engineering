@@ -64,6 +64,36 @@ class TestDepGraph(unittest.TestCase):
         self.assertTrue(res.stdout.startswith("graph LR"))
         self.assertIn("-->", res.stdout)
 
+    def test_multiline_and_python_relative_imports(self):
+        """Step 56 & 57: Verify multiline JS/TS imports and Python from . import submodule."""
+        with tempfile.TemporaryDirectory() as td:
+            r = Path(td).resolve()
+            # JS multiline
+            (r / "utils.ts").write_text("export const util = 1;\n")
+            (r / "app.ts").write_text("import {\n  util\n} from './utils';\nconsole.log(util);\n")
+
+            # Python relative submodule
+            pkg = r / "mypkg"
+            pkg.mkdir()
+            (pkg / "submod.py").write_text("def run(): pass\n")
+            (pkg / "caller.py").write_text("from . import submod\n")
+
+            cmd = ["python3", str(DEP_GRAPH_PY), str(r), "--json"]
+            res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            self.assertEqual(res.returncode, 0)
+            data = json.loads(res.stdout)
+            raw_edges = data.get("raw_edges", [])
+
+            # Check JS multiline
+            js_edge = next((e for e in raw_edges if e["source"] == "app.ts"), None)
+            self.assertIsNotNone(js_edge, "Multiline JS import was not captured")
+            self.assertIn("utils.ts", js_edge["target"])
+
+            # Check Python relative submodule
+            py_edge = next((e for e in raw_edges if e["source"] == "mypkg/caller.py"), None)
+            self.assertIsNotNone(py_edge, "Python relative submodule import was not captured")
+            self.assertIn("mypkg/submod.py", py_edge["target"])
+
 
 if __name__ == "__main__":
     unittest.main()

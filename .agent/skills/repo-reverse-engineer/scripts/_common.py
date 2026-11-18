@@ -67,8 +67,10 @@ def is_binary(path: str | Path) -> bool:
             chunk = f.read(1024)
             if b"\x00" in chunk:
                 return True
-            # Try decoding as utf-8
-            chunk.decode("utf-8")
+            # Try decoding as utf-8, handling split multi-byte characters at chunk boundary
+            import codecs
+            decoder = codecs.getincrementaldecoder("utf-8")(errors="strict")
+            decoder.decode(chunk, final=False)
             return False
     except (UnicodeDecodeError, OSError):
         return True
@@ -169,8 +171,13 @@ def walk_repo(root: str | Path) -> Generator[Path, None, None]:
         return
 
     for dirpath, dirnames, filenames in os.walk(root_path):
-        # Prune ignored directories in-place
-        dirnames[:] = [d for d in dirnames if d not in DEFAULT_IGNORED_DIRS and not d.startswith(".")]
+        # Prune ignored directories in-place (allow .github and .circleci for CI configs)
+        dirnames[:] = [
+            d
+            for d in dirnames
+            if d not in DEFAULT_IGNORED_DIRS
+            and (not d.startswith(".") or d in (".github", ".circleci"))
+        ]
 
         for f in filenames:
             if is_lockfile(f) or is_minified(f):
