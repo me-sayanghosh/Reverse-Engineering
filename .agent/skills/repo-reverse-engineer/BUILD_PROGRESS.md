@@ -62,7 +62,7 @@
 - [x] Step 53 – Line-numbered evidence
 - [x] Step 54 – Test
 - [x] Step 55 – Skeleton
-- [ ] Step 56 – JS/TS import parser
+- [x] Step 56 – JS/TS import parser
 - [ ] Step 57 – Python import parser
 - [ ] Step 58 – Go/Rust/Java import parsers
 - [ ] Step 59 – Internal vs external split
