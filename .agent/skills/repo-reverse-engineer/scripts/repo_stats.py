@@ -56,6 +56,82 @@ def get_tree_summary(root_path: Path, max_depth: int = 3):
     return tree
 
 
+def detect_monorepo(root_path: Path):
+    """Detect if the repository is a monorepo via workspace configs or multiple manifests."""
+    signals = []
+    packages = []
+
+    # 1. Workspace config files
+    workspace_files = {
+        "pnpm-workspace.yaml": "pnpm workspaces",
+        "lerna.json": "Lerna",
+        "nx.json": "Nx",
+        "turbo.json": "Turborepo",
+        "go.work": "Go workspaces",
+    }
+    for wf, name in workspace_files.items():
+        if (root_path / wf).exists():
+            signals.append(f"{name} config detected ({wf})")
+
+    # 2. Root manifest checks (package.json workspaces, Cargo.toml [workspace])
+    pkg_json = root_path / "package.json"
+    if pkg_json.exists():
+        try:
+            import json
+
+            with open(pkg_json, "r", encoding="utf-8") as f:
+                pj = json.load(f)
+                if "workspaces" in pj:
+                    signals.append("npm/yarn/pnpm workspaces in package.json")
+        except Exception:
+            pass
+
+    cargo_toml = root_path / "Cargo.toml"
+    if cargo_toml.exists():
+        try:
+            with open(cargo_toml, "r", encoding="utf-8") as f:
+                if "[workspace]" in f.read():
+                    signals.append("Cargo workspace in Cargo.toml")
+        except Exception:
+            pass
+
+    # 3. Subfolder manifests
+    manifest_names = {
+        "package.json",
+        "Cargo.toml",
+        "pyproject.toml",
+        "go.mod",
+        "pom.xml",
+        "build.gradle",
+    }
+    subfolder_manifests = []
+    for dirpath, dirnames, filenames in os.walk(root_path):
+        dirnames[:] = [
+            d
+            for d in dirnames
+            if d not in _common.DEFAULT_IGNORED_DIRS and not d.startswith(".")
+        ]
+        if Path(dirpath) == root_path:
+            continue
+        for f in filenames:
+            if f in manifest_names:
+                rel = Path(dirpath).relative_to(root_path)
+                subfolder_manifests.append(str(rel / f))
+                packages.append(str(rel))
+
+    if len(subfolder_manifests) >= 2:
+        signals.append(
+            f"Multiple package manifests found in subdirectories ({len(subfolder_manifests)})"
+        )
+
+    is_monorepo = len(signals) > 0
+    return {
+        "is_monorepo": is_monorepo,
+        "signals": signals,
+        "packages": sorted(list(set(packages))),
+    }
+
+
 def detect_repo_markers(root_path: Path):
     """Detect presence and paths of test directories, documentation, and CI configurations."""
     test_dirs = []
@@ -179,6 +255,7 @@ def main():
     largest_files = get_largest_files(root_path, top_n=15)
     recent_files = get_git_churn_hints(root_path, top_n=10)
     markers = detect_repo_markers(root_path)
+    monorepo = detect_monorepo(root_path)
 
     data = {
         "root": str(root_path),
@@ -187,6 +264,7 @@ def main():
         "largest_files": largest_files,
         "recently_modified": recent_files,
         "markers": markers,
+        "monorepo": monorepo,
     }
 
     if args.json:
