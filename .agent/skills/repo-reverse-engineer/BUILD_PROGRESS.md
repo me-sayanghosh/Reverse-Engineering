@@ -61,7 +61,7 @@
 - [x] Step 52 – Ranking
 - [x] Step 53 – Line-numbered evidence
 - [x] Step 54 – Test
-- [ ] Step 55 – Skeleton
+- [x] Step 55 – Skeleton
 - [ ] Step 56 – JS/TS import parser
 - [ ] Step 57 – Python import parser
 - [ ] Step 58 – Go/Rust/Java import parsers
