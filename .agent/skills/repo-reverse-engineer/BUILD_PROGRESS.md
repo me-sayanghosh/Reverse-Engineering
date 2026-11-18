@@ -80,7 +80,7 @@
 - [x] Step 71 – Test
 - [x] Step 72 – Skeleton
 - [x] Step 73 – SQL/migration parser
-- [ ] Step 74 – Prisma / Sequelize / TypeORM
+- [x] Step 74 – Prisma / Sequelize / TypeORM
 - [ ] Step 75 – Mongoose / MongoDB schemas
 - [ ] Step 76 – Python ORMs
 - [ ] Step 77 – Go/Java/Rust types

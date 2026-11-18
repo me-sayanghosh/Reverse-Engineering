@@ -121,6 +121,105 @@ def parse_sql_migrations(root_path: Path):
     return list(entities.values()), relations
 
 
+def parse_prisma_and_orm_entities(root_path: Path):
+    """Parse schema.prisma and TypeORM/Sequelize decorator-based models."""
+    root_path = root_path.resolve()
+    entities = {}
+    relations = []
+
+    for file_path in _common.walk_repo(root_path):
+        if _common.is_binary(file_path):
+            continue
+        rel = str(file_path.relative_to(root_path))
+        name = file_path.name.lower()
+        ext = file_path.suffix.lower()
+
+        # 1. Prisma schema
+        if name == "schema.prisma" or ext == ".prisma":
+            try:
+                content = file_path.read_text(encoding="utf-8", errors="ignore")
+                for m in re.finditer(r"model\s+([a-zA-Z0-9_]+)\s*\{([^}]+)\}", content):
+                    model_name = m.group(1)
+                    body = m.group(2)
+                    columns = []
+
+                    for raw_line in body.splitlines():
+                        line = raw_line.strip()
+                        if not line or line.startswith("//"):
+                            continue
+                        parts = line.split()
+                        if len(parts) >= 2:
+                            f_name = parts[0]
+                            f_type = parts[1]
+                            is_pk = "@id" in line
+
+                            # Check relation: e.g. author User @relation(fields: [authorId], references: [id])
+                            rel_m = re.search(r"@relation\s*\((.*?)\)", line)
+                            if rel_m:
+                                target_model = f_type.rstrip("?[]")
+                                relations.append(
+                                    {
+                                        "from": model_name,
+                                        "to": target_model,
+                                        "from_column": f_name,
+                                        "to_column": "id",
+                                        "type": "prisma_relation",
+                                    }
+                                )
+
+                            columns.append(
+                                {
+                                    "name": f_name,
+                                    "type": f_type,
+                                    "primary_key": is_pk,
+                                }
+                            )
+
+                    entities[model_name] = {
+                        "name": model_name,
+                        "file": rel,
+                        "columns": columns,
+                        "source": "Prisma",
+                    }
+            except Exception:
+                pass
+
+        # 2. TypeORM decorators (@Entity, @Column, @ManyToOne, etc.)
+        elif ext in (".ts", ".js"):
+            try:
+                content = file_path.read_text(encoding="utf-8", errors="ignore")
+                if "@Entity" in content:
+                    m_entity = re.search(r"@Entity\s*\([^\)]*\)\s*(?:export\s+)?class\s+([a-zA-Z0-9_]+)", content)
+                    if m_entity:
+                        entity_name = m_entity.group(1)
+                        columns = []
+                        # Detect columns
+                        for col_m in re.finditer(r"@(Column|PrimaryGeneratedColumn)\s*\([^\)]*\)\s*([a-zA-Z0-9_]+)(?:\s*[:=]\s*([a-zA-Z0-9_]+))?", content):
+                            col_type = col_m.group(3) or "any"
+                            is_pk = col_m.group(1) == "PrimaryGeneratedColumn"
+                            columns.append({"name": col_m.group(2), "type": col_type, "primary_key": is_pk})
+
+                        # Detect relations
+                        for rel_m in re.finditer(r"@(ManyToOne|OneToMany|OneToOne|ManyToMany)\s*\(\s*\(\)\s*=>\s*([a-zA-Z0-9_]+)", content):
+                            target_entity = rel_m.group(2)
+                            relations.append({
+                                "from": entity_name,
+                                "to": target_entity,
+                                "type": rel_m.group(1),
+                            })
+
+                        entities[entity_name] = {
+                            "name": entity_name,
+                            "file": rel,
+                            "columns": columns,
+                            "source": "TypeORM",
+                        }
+            except Exception:
+                pass
+
+    return list(entities.values()), relations
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Extract data models, database entities, foreign keys, and generate Mermaid ER diagrams."
@@ -138,11 +237,15 @@ def main():
         _common.die(f"Repository root does not exist: {root_path}")
 
     sql_entities, sql_relations = parse_sql_migrations(root_path)
+    prisma_entities, prisma_relations = parse_prisma_and_orm_entities(root_path)
+
+    all_entities = sql_entities + prisma_entities
+    all_relations = sql_relations + prisma_relations
 
     data = {
         "root": str(root_path),
-        "entities": sql_entities,
-        "relations": sql_relations,
+        "entities": all_entities,
+        "relations": all_relations,
     }
 
     if args.json:
