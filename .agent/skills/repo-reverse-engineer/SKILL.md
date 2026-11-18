@@ -251,3 +251,17 @@ Detailed guides, templates, and reference documentation:
 - [Output Templates](references/output-templates.md): Fill-in templates for reports 00 through 09.
 - [Large Repository Strategy](references/large-repo-strategy.md): Sampling, ranking by import centrality, and disclosure of unanalyzed scope.
 - [Mermaid Cheatsheet](references/mermaid-cheatsheet.md): Diagram syntax and examples for architecture, sequences, and ERDs.
+
+## Audience Flag Behavior
+
+The skill adjusts tone, technical density, and explanatory depth based on the `audience` parameter:
+
+- **`beginner` (or `junior`)**:
+  - **Tone**: Educational, supportive, and accessible. Explains underlying industry paradigms (e.g. why dependency injection is used, what an ORM migration accomplishes).
+  - **Depth**: Focuses on high-level operational concepts before diving into complex metaprogramming or low-level optimizations. Avoids assumed jargon.
+  - **Glossary (`09-GLOSSARY-AND-QA.md`)**: Expanded glossary containing fundamental terminology, library names, acronyms, and step-by-step FAQ entries answering "why" questions.
+
+- **`senior` (or `lead`)**:
+  - **Tone**: Direct, concise, and technically rigorous. Cuts straight to architectural decisions, trade-offs, and critical bottlenecks.
+  - **Depth**: Highlights concurrency hazards, state consistency guarantees, latency hot-paths, technical debt, and scalability limits.
+  - **Glossary (`09-GLOSSARY-AND-QA.md`)**: Compact glossary focused exclusively on proprietary domain terms and non-obvious internal acronyms. Emphasizes Architecture Decision Records (ADRs).
