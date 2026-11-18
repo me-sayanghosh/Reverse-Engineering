@@ -71,7 +71,7 @@
 - [x] Step 62 – Mermaid output
 - [x] Step 63 – Test
 - [x] Step 64 – Skeleton
-- [ ] Step 65 – HTTP routes (Node)
+- [x] Step 65 – HTTP routes (Node)
 - [ ] Step 66 – HTTP routes (Python/Go/Java/Ruby)
 - [ ] Step 67 – OpenAPI/Swagger ingestion
 - [ ] Step 68 – GraphQL / gRPC / tRPC
