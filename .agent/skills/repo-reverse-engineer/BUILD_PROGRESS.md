@@ -27,7 +27,7 @@
 - [x] Step 18 – Add placeholders for phases 0–7
 - [x] Step 19 – Add invocation examples
 - [x] Step 20 – Lint SKILL.md structure
-- [ ] Step 21 – Create script skeleton
+- [x] Step 21 – Create script skeleton
 - [ ] Step 22 – Parse and validate input
 - [ ] Step 23 – Local path mode
 - [ ] Step 24 – Size pre-check
