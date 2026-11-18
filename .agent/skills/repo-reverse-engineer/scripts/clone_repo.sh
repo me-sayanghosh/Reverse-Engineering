@@ -112,3 +112,42 @@ if [[ "$TARGET_TYPE" == "local" ]]; then
     echo "Local mode: using repository at $LOCAL_PATH"
     echo "Output directory: $OUT_DIR"
 fi
+
+check_repo_size() {
+    if [[ "$TARGET_TYPE" != "local" ]]; then
+        python3 - << PYEOF
+import sys, urllib.request, json, re
+
+clone_url = "$CLONE_URL"
+max_mb = float("$MAX_MB")
+skip_confirm = int("$YES")
+
+match = re.search(r"github\.com[:/]([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+?)(?:\.git)?$", clone_url)
+if not match:
+    sys.exit(0)
+
+owner, repo = match.group(1), match.group(2)
+api_url = f"https://api.github.com/repos/{owner}/{repo}"
+
+try:
+    req = urllib.request.Request(api_url, headers={"User-Agent": "repo-reverse-engineer"})
+    with urllib.request.urlopen(req, timeout=10) as resp:
+        data = json.load(resp)
+        size_kb = data.get("size", 0)
+        size_mb = size_kb / 1024.0
+        if size_mb > max_mb and not skip_confirm:
+            print(f"Error: Repository {owner}/{repo} size (~{size_mb:.1f} MB) exceeds limit of {max_mb:.0f} MB.", file=sys.stderr)
+            print("To proceed anyway, re-run with --yes.", file=sys.stderr)
+            sys.exit(2)
+        elif size_mb > max_mb and skip_confirm:
+            print(f"Notice: Repository size (~{size_mb:.1f} MB) exceeds {max_mb:.0f} MB, continuing due to --yes.")
+except urllib.error.HTTPError as e:
+    # 404/403: might be private or rate limited; let git clone attempt and report auth error
+    pass
+except Exception:
+    pass
+PYEOF
+    fi
+}
+
+check_repo_size
