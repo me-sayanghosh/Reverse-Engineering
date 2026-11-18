@@ -104,6 +104,101 @@ def parse_js_ts_imports(file_path: Path, root_path: Path):
     return edges
 
 
+import ast
+
+
+def parse_python_imports(file_path: Path, root_path: Path):
+    """Use Python AST to parse import and import-from nodes, resolving relative and internal modules."""
+    root_path = root_path.resolve()
+    file_path = file_path.resolve()
+    source_rel = str(file_path.relative_to(root_path))
+    edges = []
+
+    try:
+        content = file_path.read_text(encoding="utf-8", errors="ignore")
+        tree = ast.parse(content, filename=str(file_path))
+    except Exception:
+        return edges
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                mod = alias.name
+                top_pkg = mod.split(".")[0]
+                target_rel = mod
+                imp_type = "external"
+
+                if hasattr(sys, "stdlib_module_names") and top_pkg in sys.stdlib_module_names:
+                    imp_type = "stdlib"
+                else:
+                    # Check if internal to root
+                    possible_pkg = root_path / top_pkg
+                    if possible_pkg.exists():
+                        target_rel = str(possible_pkg.relative_to(root_path))
+                        imp_type = "internal"
+
+                edges.append(
+                    {
+                        "source": source_rel,
+                        "target": target_rel,
+                        "type": imp_type,
+                        "specifier": mod,
+                    }
+                )
+
+        elif isinstance(node, ast.ImportFrom):
+            level = node.level
+            mod = node.module or ""
+            specifier = ("." * level) + mod
+
+            if level > 0:
+                # Relative import
+                imp_type = "internal"
+                curr = file_path.parent
+                for _ in range(level - 1):
+                    curr = curr.parent
+
+                rel_parts = mod.split(".") if mod else []
+                target_cand = curr
+                for p in rel_parts:
+                    target_cand = target_cand / p
+
+                resolved = None
+                if target_cand.with_suffix(".py").exists():
+                    resolved = target_cand.with_suffix(".py")
+                elif (target_cand / "__init__.py").exists():
+                    resolved = target_cand / "__init__.py"
+                elif target_cand.is_dir():
+                    resolved = target_cand
+
+                if resolved and resolved.resolve().is_relative_to(root_path):
+                    target_rel = str(resolved.resolve().relative_to(root_path))
+                else:
+                    target_rel = specifier
+            else:
+                top_pkg = mod.split(".")[0]
+                target_rel = mod
+                imp_type = "external"
+                if hasattr(sys, "stdlib_module_names") and top_pkg in sys.stdlib_module_names:
+                    imp_type = "stdlib"
+                else:
+                    possible_pkg = root_path / top_pkg
+                    if possible_pkg.exists():
+                        target_rel = str(possible_pkg.relative_to(root_path))
+                        imp_type = "internal"
+
+            edges.append(
+                {
+                    "source": source_rel,
+                    "target": target_rel,
+                    "type": imp_type,
+                    "specifier": specifier,
+                }
+            )
+
+    return edges
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Extract dependency graph, module relationships, cycle detection, and Mermaid diagrams."

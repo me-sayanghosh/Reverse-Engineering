@@ -63,7 +63,7 @@
 - [x] Step 54 – Test
 - [x] Step 55 – Skeleton
 - [x] Step 56 – JS/TS import parser
-- [ ] Step 57 – Python import parser
+- [x] Step 57 – Python import parser
 - [ ] Step 58 – Go/Rust/Java import parsers
 - [ ] Step 59 – Internal vs external split
 - [ ] Step 60 – Module-level aggregation
