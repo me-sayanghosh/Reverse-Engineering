@@ -187,7 +187,14 @@ Trace 3–5 flows as sequence diagrams in `04-FLOWS.md`:
 - Core business logic calculation or transaction processing flow.
 
 ## Phase 4: Optional Runtime Observation
-TODO
+
+1. **User Approval Requirement**:
+   - Dynamic execution is strictly optional and only activated in `deep` mode when authorized by the user. Explicit user approval is required before building images, spinning up containers, or executing test suites.
+2. **Sandbox-Only Isolation**:
+   - Never run untrusted code on the host machine. All runtime probes must occur inside an ephemeral Docker container or VM sandbox with restricted network and filesystem access.
+3. **Compare Observed Behavior with Static Findings**:
+   - Compare dynamic runtime behavior (e.g. startup logs, bound ports, actual HTTP responses, SQL query logs) with conclusions drawn from static code analysis.
+   - Reconcile differences and document discrepancies in `07-RISKS-AND-DEBT.md`.
 
 ## Phase 5: Synthesis & Report Generation
 TODO
