@@ -1,0 +1,510 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/real-repos/repo-b",
+  "entities": [
+    {
+      "name": "Article",
+      "file": "src/prisma/migrations/20210924225358_initial/migration.sql",
+      "columns": [
+        {
+          "name": "id",
+          "type": "SERIAL",
+          "primary_key": false
+        },
+        {
+          "name": "slug",
+          "type": "TEXT",
+          "primary_key": false
+        },
+        {
+          "name": "title",
+          "type": "TEXT",
+          "primary_key": false
+        },
+        {
+          "name": "description",
+          "type": "TEXT",
+          "primary_key": false
+        },
+        {
+          "name": "body",
+          "type": "TEXT",
+          "primary_key": false
+        },
+        {
+          "name": "createdAt",
+          "type": "TIMESTAMP(3)",
+          "primary_key": false
+        },
+        {
+          "name": "updatedAt",
+          "type": "TIMESTAMP(3)",
+          "primary_key": false
+        },
+        {
+          "name": "authorId",
+          "type": "INTEGER",
+          "primary_key": false
+        },
+        {
+          "name": "PRIMARY",
+          "type": "KEY",
+          "primary_key": true
+        }
+      ],
+      "foreign_keys": [],
+      "source": "SQL/Migration"
+    },
+    {
+      "name": "ArticleTags",
+      "file": "src/prisma/migrations/20210924225358_initial/migration.sql",
+      "columns": [
+        {
+          "name": "articleId",
+          "type": "INTEGER",
+          "primary_key": false
+        },
+        {
+          "name": "tagId",
+          "type": "INTEGER",
+          "primary_key": false
+        },
+        {
+          "name": "PRIMARY",
+          "type": "KEY",
+          "primary_key": true
+        }
+      ],
+      "foreign_keys": [],
+      "source": "SQL/Migration"
+    },
+    {
+      "name": "Comment",
+      "file": "src/prisma/migrations/20210924225358_initial/migration.sql",
+      "columns": [
+        {
+          "name": "id",
+          "type": "SERIAL",
+          "primary_key": false
+        },
+        {
+          "name": "createdAt",
+          "type": "TIMESTAMP(3)",
+          "primary_key": false
+        },
+        {
+          "name": "updatedAt",
+          "type": "TIMESTAMP(3)",
+          "primary_key": false
+        },
+        {
+          "name": "body",
+          "type": "TEXT",
+          "primary_key": false
+        },
+        {
+          "name": "articleId",
+          "type": "INTEGER",
+          "primary_key": false
+        },
+        {
+          "name": "authorId",
+          "type": "INTEGER",
+          "primary_key": false
+        },
+        {
+          "name": "PRIMARY",
+          "type": "KEY",
+          "primary_key": true
+        }
+      ],
+      "foreign_keys": [],
+      "source": "SQL/Migration"
+    },
+    {
+      "name": "Tag",
+      "file": "src/prisma/migrations/20210924225358_initial/migration.sql",
+      "columns": [
+        {
+          "name": "id",
+          "type": "SERIAL",
+          "primary_key": false
+        },
+        {
+          "name": "name",
+          "type": "TEXT",
+          "primary_key": false
+        },
+        {
+          "name": "PRIMARY",
+          "type": "KEY",
+          "primary_key": true
+        }
+      ],
+      "foreign_keys": [],
+      "source": "SQL/Migration"
+    },
+    {
+      "name": "User",
+      "file": "src/prisma/migrations/20210924225358_initial/migration.sql",
+      "columns": [
+        {
+          "name": "id",
+          "type": "SERIAL",
+          "primary_key": false
+        },
+        {
+          "name": "email",
+          "type": "TEXT",
+          "primary_key": false
+        },
+        {
+          "name": "username",
+          "type": "TEXT",
+          "primary_key": false
+        },
+        {
+          "name": "password",
+          "type": "TEXT",
+          "primary_key": false
+        },
+        {
+          "name": "image",
+          "type": "TEXT",
+          "primary_key": false
+        },
+        {
+          "name": "bio",
+          "type": "TEXT",
+          "primary_key": false
+        },
+        {
+          "name": "demo",
+          "type": "BOOLEAN",
+          "primary_key": false
+        },
+        {
+          "name": "PRIMARY",
+          "type": "KEY",
+          "primary_key": true
+        }
+      ],
+      "foreign_keys": [],
+      "source": "SQL/Migration"
+    },
+    {
+      "name": "_UserFavorites",
+      "file": "src/prisma/migrations/20210924225358_initial/migration.sql",
+      "columns": [
+        {
+          "name": "A",
+          "type": "INTEGER",
+          "primary_key": false
+        },
+        {
+          "name": "B",
+          "type": "INTEGER",
+          "primary_key": false
+        }
+      ],
+      "foreign_keys": [],
+      "source": "SQL/Migration"
+    },
+    {
+      "name": "_UserFollows",
+      "file": "src/prisma/migrations/20210924225358_initial/migration.sql",
+      "columns": [
+        {
+          "name": "A",
+          "type": "INTEGER",
+          "primary_key": false
+        },
+        {
+          "name": "B",
+          "type": "INTEGER",
+          "primary_key": false
+        }
+      ],
+      "foreign_keys": [],
+      "source": "SQL/Migration"
+    },
+    {
+      "name": "_ArticleToTag",
+      "file": "src/prisma/migrations/20211001143221_implicit_tags/migration.sql",
+      "columns": [
+        {
+          "name": "A",
+          "type": "INTEGER",
+          "primary_key": false
+        },
+        {
+          "name": "B",
+          "type": "INTEGER",
+          "primary_key": false
+        }
+      ],
+      "foreign_keys": [],
+      "source": "SQL/Migration"
+    },
+    {
+      "name": "Article",
+      "file": "src/prisma/schema.prisma",
+      "columns": [
+        {
+          "name": "id",
+          "type": "Int",
+          "primary_key": true
+        },
+        {
+          "name": "slug",
+          "type": "String",
+          "primary_key": false
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "primary_key": false
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "primary_key": false
+        },
+        {
+          "name": "body",
+          "type": "String",
+          "primary_key": false
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "primary_key": false
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "primary_key": false
+        },
+        {
+          "name": "tagList",
+          "type": "Tag[]",
+          "primary_key": false
+        },
+        {
+          "name": "author",
+          "type": "User",
+          "primary_key": false
+        },
+        {
+          "name": "authorId",
+          "type": "Int",
+          "primary_key": false
+        },
+        {
+          "name": "favoritedBy",
+          "type": "User[]",
+          "primary_key": false
+        },
+        {
+          "name": "comments",
+          "type": "Comment[]",
+          "primary_key": false
+        }
+      ],
+      "source": "Prisma"
+    },
+    {
+      "name": "Comment",
+      "file": "src/prisma/schema.prisma",
+      "columns": [
+        {
+          "name": "id",
+          "type": "Int",
+          "primary_key": true
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "primary_key": false
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "primary_key": false
+        },
+        {
+          "name": "body",
+          "type": "String",
+          "primary_key": false
+        },
+        {
+          "name": "article",
+          "type": "Article",
+          "primary_key": false
+        },
+        {
+          "name": "articleId",
+          "type": "Int",
+          "primary_key": false
+        },
+        {
+          "name": "author",
+          "type": "User",
+          "primary_key": false
+        },
+        {
+          "name": "authorId",
+          "type": "Int",
+          "primary_key": false
+        }
+      ],
+      "source": "Prisma"
+    },
+    {
+      "name": "Tag",
+      "file": "src/prisma/schema.prisma",
+      "columns": [
+        {
+          "name": "id",
+          "type": "Int",
+          "primary_key": true
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "primary_key": false
+        },
+        {
+          "name": "articles",
+          "type": "Article[]",
+          "primary_key": false
+        }
+      ],
+      "source": "Prisma"
+    },
+    {
+      "name": "User",
+      "file": "src/prisma/schema.prisma",
+      "columns": [
+        {
+          "name": "id",
+          "type": "Int",
+          "primary_key": true
+        },
+        {
+          "name": "email",
+          "type": "String",
+          "primary_key": false
+        },
+        {
+          "name": "username",
+          "type": "String",
+          "primary_key": false
+        },
+        {
+          "name": "password",
+          "type": "String",
+          "primary_key": false
+        },
+        {
+          "name": "image",
+          "type": "String?",
+          "primary_key": false
+        },
+        {
+          "name": "bio",
+          "type": "String?",
+          "primary_key": false
+        },
+        {
+          "name": "articles",
+          "type": "Article[]",
+          "primary_key": false
+        },
+        {
+          "name": "favorites",
+          "type": "Article[]",
+          "primary_key": false
+        },
+        {
+          "name": "followedBy",
+          "type": "User[]",
+          "primary_key": false
+        },
+        {
+          "name": "following",
+          "type": "User[]",
+          "primary_key": false
+        },
+        {
+          "name": "comments",
+          "type": "Comment[]",
+          "primary_key": false
+        },
+        {
+          "name": "demo",
+          "type": "Boolean",
+          "primary_key": false
+        }
+      ],
+      "source": "Prisma"
+    }
+  ],
+  "relations": [
+    {
+      "from": "Article",
+      "to": "User",
+      "from_column": "author",
+      "to_column": "id",
+      "type": "prisma_relation"
+    },
+    {
+      "from": "Article",
+      "to": "User",
+      "from_column": "favoritedBy",
+      "to_column": "id",
+      "type": "prisma_relation"
+    },
+    {
+      "from": "Comment",
+      "to": "Article",
+      "from_column": "article",
+      "to_column": "id",
+      "type": "prisma_relation"
+    },
+    {
+      "from": "Comment",
+      "to": "User",
+      "from_column": "author",
+      "to_column": "id",
+      "type": "prisma_relation"
+    },
+    {
+      "from": "User",
+      "to": "Article",
+      "from_column": "articles",
+      "to_column": "id",
+      "type": "prisma_relation"
+    },
+    {
+      "from": "User",
+      "to": "Article",
+      "from_column": "favorites",
+      "to_column": "id",
+      "type": "prisma_relation"
+    },
+    {
+      "from": "User",
+      "to": "User",
+      "from_column": "followedBy",
+      "to_column": "id",
+      "type": "prisma_relation"
+    },
+    {
+      "from": "User",
+      "to": "User",
+      "from_column": "following",
+      "to_column": "id",
+      "type": "prisma_relation"
+    }
+  ]
+}

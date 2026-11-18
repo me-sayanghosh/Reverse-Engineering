@@ -1,0 +1,46 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/real-repos/repo-b",
+  "entrypoints": [
+    {
+      "path": "src/main.ts:55",
+      "type": "server",
+      "confidence": 0.9,
+      "reason": "Express/Node app.listen bootstrap"
+    },
+    {
+      "path": "src/main.ts:21",
+      "type": "route",
+      "confidence": 0.85,
+      "route_count": 1,
+      "reason": "Defines 1 HTTP route handler(s)"
+    },
+    {
+      "path": "src/app/routes/tag/tag.controller.ts:13",
+      "type": "route",
+      "confidence": 0.85,
+      "route_count": 1,
+      "reason": "Defines 1 HTTP route handler(s)"
+    },
+    {
+      "path": "src/app/routes/profile/profile.controller.ts:14",
+      "type": "route",
+      "confidence": 0.85,
+      "route_count": 3,
+      "reason": "Defines 3 HTTP route handler(s)"
+    },
+    {
+      "path": "src/app/routes/auth/auth.controller.ts:14",
+      "type": "route",
+      "confidence": 0.85,
+      "route_count": 4,
+      "reason": "Defines 4 HTTP route handler(s)"
+    },
+    {
+      "path": "src/app/routes/article/article.controller.ts:30",
+      "type": "route",
+      "confidence": 0.85,
+      "route_count": 11,
+      "reason": "Defines 11 HTTP route handler(s)"
+    }
+  ]
+}

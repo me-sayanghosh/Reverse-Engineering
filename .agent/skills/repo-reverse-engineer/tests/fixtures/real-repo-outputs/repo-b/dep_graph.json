@@ -1,0 +1,587 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/real-repos/repo-b",
+  "total_file_imports": 68,
+  "modules": [
+    ".",
+    "../..",
+    "../app",
+    "../article",
+    "../auth",
+    "../profile",
+    "../tag",
+    "app/models",
+    "article",
+    "profile",
+    "src",
+    "src/app",
+    "src/prisma",
+    "src/tests",
+    "tag"
+  ],
+  "module_edges": [
+    {
+      "source": "src",
+      "target": "app/models",
+      "weight": 1
+    },
+    {
+      "source": "src",
+      "target": "src/app",
+      "weight": 1
+    },
+    {
+      "source": "src/app",
+      "target": "article",
+      "weight": 1
+    },
+    {
+      "source": "src/app",
+      "target": "profile",
+      "weight": 1
+    },
+    {
+      "source": "src/app",
+      "target": "tag",
+      "weight": 1
+    },
+    {
+      "source": "src/app",
+      "target": "../article",
+      "weight": 2
+    },
+    {
+      "source": "src/app",
+      "target": "src/prisma",
+      "weight": 4
+    },
+    {
+      "source": "src/app",
+      "target": "../..",
+      "weight": 3
+    },
+    {
+      "source": "src/app",
+      "target": ".",
+      "weight": 13
+    },
+    {
+      "source": "src/app",
+      "target": "../auth",
+      "weight": 2
+    },
+    {
+      "source": "src/app",
+      "target": "../profile",
+      "weight": 1
+    },
+    {
+      "source": "src/app",
+      "target": "../tag",
+      "weight": 1
+    },
+    {
+      "source": "src/prisma",
+      "target": "../app",
+      "weight": 2
+    },
+    {
+      "source": "src/prisma",
+      "target": "src/app",
+      "weight": 1
+    },
+    {
+      "source": "src/tests",
+      "target": "src/prisma",
+      "weight": 1
+    },
+    {
+      "source": "src/tests",
+      "target": "../..",
+      "weight": 2
+    },
+    {
+      "source": "src/tests",
+      "target": "src/app",
+      "weight": 1
+    }
+  ],
+  "centrality": [
+    {
+      "module": "src/app",
+      "in_degree": 3,
+      "out_degree": 10,
+      "total_degree": 13
+    },
+    {
+      "module": "src/prisma",
+      "in_degree": 2,
+      "out_degree": 2,
+      "total_degree": 4
+    },
+    {
+      "module": "src/tests",
+      "in_degree": 0,
+      "out_degree": 3,
+      "total_degree": 3
+    },
+    {
+      "module": "../..",
+      "in_degree": 2,
+      "out_degree": 0,
+      "total_degree": 2
+    },
+    {
+      "module": "src",
+      "in_degree": 0,
+      "out_degree": 2,
+      "total_degree": 2
+    },
+    {
+      "module": ".",
+      "in_degree": 1,
+      "out_degree": 0,
+      "total_degree": 1
+    },
+    {
+      "module": "../app",
+      "in_degree": 1,
+      "out_degree": 0,
+      "total_degree": 1
+    },
+    {
+      "module": "../article",
+      "in_degree": 1,
+      "out_degree": 0,
+      "total_degree": 1
+    },
+    {
+      "module": "../auth",
+      "in_degree": 1,
+      "out_degree": 0,
+      "total_degree": 1
+    },
+    {
+      "module": "../profile",
+      "in_degree": 1,
+      "out_degree": 0,
+      "total_degree": 1
+    }
+  ],
+  "cycles": [
+    [
+      "src/app",
+      "src/prisma",
+      "src/app"
+    ]
+  ],
+  "raw_edges": [
+    {
+      "source": "jest.preset.js",
+      "target": "@nx/jest/preset",
+      "type": "external",
+      "specifier": "@nx/jest/preset"
+    },
+    {
+      "source": "e2e/src/server/server.spec.ts",
+      "target": "axios",
+      "type": "external",
+      "specifier": "axios"
+    },
+    {
+      "source": "e2e/src/support/test-setup.ts",
+      "target": "axios",
+      "type": "external",
+      "specifier": "axios"
+    },
+    {
+      "source": "src/main.ts",
+      "target": "./app/models/http-exception.model",
+      "type": "internal",
+      "specifier": "./app/models/http-exception.model"
+    },
+    {
+      "source": "src/main.ts",
+      "target": "src/app/routes/routes.ts",
+      "type": "internal",
+      "specifier": "./app/routes/routes"
+    },
+    {
+      "source": "src/main.ts",
+      "target": "body-parser",
+      "type": "external",
+      "specifier": "body-parser"
+    },
+    {
+      "source": "src/main.ts",
+      "target": "cors",
+      "type": "external",
+      "specifier": "cors"
+    },
+    {
+      "source": "src/main.ts",
+      "target": "express",
+      "type": "external",
+      "specifier": "express"
+    },
+    {
+      "source": "src/app/routes/routes.ts",
+      "target": "./article/article.controller",
+      "type": "internal",
+      "specifier": "./article/article.controller"
+    },
+    {
+      "source": "src/app/routes/routes.ts",
+      "target": "src/app/routes/auth/auth.ts",
+      "type": "internal",
+      "specifier": "./auth/auth.controller"
+    },
+    {
+      "source": "src/app/routes/routes.ts",
+      "target": "./profile/profile.controller",
+      "type": "internal",
+      "specifier": "./profile/profile.controller"
+    },
+    {
+      "source": "src/app/routes/routes.ts",
+      "target": "./tag/tag.controller",
+      "type": "internal",
+      "specifier": "./tag/tag.controller"
+    },
+    {
+      "source": "src/app/routes/routes.ts",
+      "target": "express",
+      "type": "external",
+      "specifier": "express"
+    },
+    {
+      "source": "src/app/routes/auth/user.model.ts",
+      "target": "../article/article.model",
+      "type": "internal",
+      "specifier": "../article/article.model"
+    },
+    {
+      "source": "src/app/routes/auth/user.model.ts",
+      "target": "../article/comment.model",
+      "type": "internal",
+      "specifier": "../article/comment.model"
+    },
+    {
+      "source": "src/app/routes/auth/auth.controller.ts",
+      "target": "src/app/routes/auth/auth.ts",
+      "type": "internal",
+      "specifier": "./auth"
+    },
+    {
+      "source": "src/app/routes/auth/auth.controller.ts",
+      "target": "src/app/routes/auth/auth.ts",
+      "type": "internal",
+      "specifier": "./auth.service"
+    },
+    {
+      "source": "src/app/routes/auth/auth.controller.ts",
+      "target": "express",
+      "type": "external",
+      "specifier": "express"
+    },
+    {
+      "source": "src/app/routes/auth/auth.service.ts",
+      "target": "src/prisma/prisma-client.ts",
+      "type": "internal",
+      "specifier": "../../../prisma/prisma-client"
+    },
+    {
+      "source": "src/app/routes/auth/auth.service.ts",
+      "target": "../../models/http-exception.model",
+      "type": "internal",
+      "specifier": "../../models/http-exception.model"
+    },
+    {
+      "source": "src/app/routes/auth/auth.service.ts",
+      "target": "./register-input.model",
+      "type": "internal",
+      "specifier": "./register-input.model"
+    },
+    {
+      "source": "src/app/routes/auth/auth.service.ts",
+      "target": "./registered-user.model",
+      "type": "internal",
+      "specifier": "./registered-user.model"
+    },
+    {
+      "source": "src/app/routes/auth/auth.service.ts",
+      "target": "./token.utils",
+      "type": "internal",
+      "specifier": "./token.utils"
+    },
+    {
+      "source": "src/app/routes/auth/auth.service.ts",
+      "target": "./user.model",
+      "type": "internal",
+      "specifier": "./user.model"
+    },
+    {
+      "source": "src/app/routes/auth/auth.service.ts",
+      "target": "bcryptjs",
+      "type": "external",
+      "specifier": "bcryptjs"
+    },
+    {
+      "source": "src/app/routes/auth/token.utils.ts",
+      "target": "jsonwebtoken",
+      "type": "external",
+      "specifier": "jsonwebtoken"
+    },
+    {
+      "source": "src/app/routes/auth/auth.ts",
+      "target": "express",
+      "type": "external",
+      "specifier": "express"
+    },
+    {
+      "source": "src/app/routes/auth/auth.ts",
+      "target": "express-jwt",
+      "type": "external",
+      "specifier": "express-jwt"
+    },
+    {
+      "source": "src/app/routes/profile/profile.controller.ts",
+      "target": "src/app/routes/auth/auth.ts",
+      "type": "internal",
+      "specifier": "../auth/auth"
+    },
+    {
+      "source": "src/app/routes/profile/profile.controller.ts",
+      "target": "./profile.service",
+      "type": "internal",
+      "specifier": "./profile.service"
+    },
+    {
+      "source": "src/app/routes/profile/profile.controller.ts",
+      "target": "express",
+      "type": "external",
+      "specifier": "express"
+    },
+    {
+      "source": "src/app/routes/profile/profile.utils.ts",
+      "target": "../auth/user.model",
+      "type": "internal",
+      "specifier": "../auth/user.model"
+    },
+    {
+      "source": "src/app/routes/profile/profile.utils.ts",
+      "target": "./profile.model",
+      "type": "internal",
+      "specifier": "./profile.model"
+    },
+    {
+      "source": "src/app/routes/profile/profile.service.ts",
+      "target": "src/prisma/prisma-client.ts",
+      "type": "internal",
+      "specifier": "../../../prisma/prisma-client"
+    },
+    {
+      "source": "src/app/routes/profile/profile.service.ts",
+      "target": "../../models/http-exception.model",
+      "type": "internal",
+      "specifier": "../../models/http-exception.model"
+    },
+    {
+      "source": "src/app/routes/profile/profile.service.ts",
+      "target": "./profile.utils",
+      "type": "internal",
+      "specifier": "./profile.utils"
+    },
+    {
+      "source": "src/app/routes/article/comment.model.ts",
+      "target": "./article.model",
+      "type": "internal",
+      "specifier": "./article.model"
+    },
+    {
+      "source": "src/app/routes/article/article.service.ts",
+      "target": "src/prisma/prisma-client.ts",
+      "type": "internal",
+      "specifier": "../../../prisma/prisma-client"
+    },
+    {
+      "source": "src/app/routes/article/article.service.ts",
+      "target": "../../models/http-exception.model",
+      "type": "internal",
+      "specifier": "../../models/http-exception.model"
+    },
+    {
+      "source": "src/app/routes/article/article.service.ts",
+      "target": "../profile/profile.utils",
+      "type": "internal",
+      "specifier": "../profile/profile.utils"
+    },
+    {
+      "source": "src/app/routes/article/article.service.ts",
+      "target": "../tag/tag.model",
+      "type": "internal",
+      "specifier": "../tag/tag.model"
+    },
+    {
+      "source": "src/app/routes/article/article.service.ts",
+      "target": "./article.mapper",
+      "type": "internal",
+      "specifier": "./article.mapper"
+    },
+    {
+      "source": "src/app/routes/article/article.service.ts",
+      "target": "slugify",
+      "type": "external",
+      "specifier": "slugify"
+    },
+    {
+      "source": "src/app/routes/article/author.mapper.ts",
+      "target": "../auth/user.model",
+      "type": "internal",
+      "specifier": "../auth/user.model"
+    },
+    {
+      "source": "src/app/routes/article/article.mapper.ts",
+      "target": "./author.mapper",
+      "type": "internal",
+      "specifier": "./author.mapper"
+    },
+    {
+      "source": "src/app/routes/article/article.controller.ts",
+      "target": "src/app/routes/auth/auth.ts",
+      "type": "internal",
+      "specifier": "../auth/auth"
+    },
+    {
+      "source": "src/app/routes/article/article.controller.ts",
+      "target": "express",
+      "type": "external",
+      "specifier": "express"
+    },
+    {
+      "source": "src/app/routes/article/article.model.ts",
+      "target": "./comment.model",
+      "type": "internal",
+      "specifier": "./comment.model"
+    },
+    {
+      "source": "src/app/routes/tag/tag.service.ts",
+      "target": "src/prisma/prisma-client.ts",
+      "type": "internal",
+      "specifier": "../../../prisma/prisma-client"
+    },
+    {
+      "source": "src/app/routes/tag/tag.service.ts",
+      "target": "./tag.model",
+      "type": "internal",
+      "specifier": "./tag.model"
+    },
+    {
+      "source": "src/app/routes/tag/tag.controller.ts",
+      "target": "src/app/routes/auth/auth.ts",
+      "type": "internal",
+      "specifier": "../auth/auth"
+    },
+    {
+      "source": "src/app/routes/tag/tag.controller.ts",
+      "target": "./tag.service",
+      "type": "internal",
+      "specifier": "./tag.service"
+    },
+    {
+      "source": "src/app/routes/tag/tag.controller.ts",
+      "target": "express",
+      "type": "external",
+      "specifier": "express"
+    },
+    {
+      "source": "src/prisma/seed.ts",
+      "target": "../app/routes/article/article.service",
+      "type": "internal",
+      "specifier": "../app/routes/article/article.service"
+    },
+    {
+      "source": "src/prisma/seed.ts",
+      "target": "src/app/routes/auth/auth.ts",
+      "type": "internal",
+      "specifier": "../app/routes/auth/auth.service"
+    },
+    {
+      "source": "src/prisma/seed.ts",
+      "target": "../app/routes/auth/registered-user.model",
+      "type": "internal",
+      "specifier": "../app/routes/auth/registered-user.model"
+    },
+    {
+      "source": "src/prisma/seed.ts",
+      "target": "@prisma/client",
+      "type": "external",
+      "specifier": "@prisma/client"
+    },
+    {
+      "source": "src/prisma/prisma-client.ts",
+      "target": "@prisma/client",
+      "type": "external",
+      "specifier": "@prisma/client"
+    },
+    {
+      "source": "src/tests/prisma-mock.ts",
+      "target": "src/prisma/prisma-client.ts",
+      "type": "internal",
+      "specifier": "../prisma/prisma-client"
+    },
+    {
+      "source": "src/tests/prisma-mock.ts",
+      "target": "@prisma/client",
+      "type": "external",
+      "specifier": "@prisma/client"
+    },
+    {
+      "source": "src/tests/prisma-mock.ts",
+      "target": "jest-mock-extended",
+      "type": "external",
+      "specifier": "jest-mock-extended"
+    },
+    {
+      "source": "src/tests/utils/profile.utils.test.ts",
+      "target": "../../app/routes/profile/profile.utils",
+      "type": "internal",
+      "specifier": "../../app/routes/profile/profile.utils"
+    },
+    {
+      "source": "src/tests/services/auth.service.test.ts",
+      "target": "src/app/routes/auth/auth.ts",
+      "type": "internal",
+      "specifier": "../../app/routes/auth/auth.service"
+    },
+    {
+      "source": "src/tests/services/auth.service.test.ts",
+      "target": "src/tests/prisma-mock.ts",
+      "type": "internal",
+      "specifier": "../prisma-mock"
+    },
+    {
+      "source": "src/tests/services/auth.service.test.ts",
+      "target": "bcryptjs",
+      "type": "external",
+      "specifier": "bcryptjs"
+    },
+    {
+      "source": "src/tests/services/profile.service.test.ts",
+      "target": "../../app/routes/profile/profile.service",
+      "type": "internal",
+      "specifier": "../../app/routes/profile/profile.service"
+    },
+    {
+      "source": "src/tests/services/profile.service.test.ts",
+      "target": "src/tests/prisma-mock.ts",
+      "type": "internal",
+      "specifier": "../prisma-mock"
+    },
+    {
+      "source": "src/tests/services/article.service.test.ts",
+      "target": "src/tests/prisma-mock.ts",
+      "type": "internal",
+      "specifier": "../prisma-mock"
+    }
+  ]
+}

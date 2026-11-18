@@ -1,0 +1,32 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/real-repos/repo-b",
+  "ecosystems": [
+    "Node/TypeScript"
+  ],
+  "manifests": [
+    {
+      "path": "package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    }
+  ],
+  "frameworks": [
+    "Express",
+    "Jest",
+    "Prisma"
+  ],
+  "datastores": [],
+  "infra": [
+    {
+      "type": "Docker",
+      "file": "Dockerfile"
+    }
+  ],
+  "commands": {
+    "install": "npm install",
+    "build": "npm run build",
+    "test": "npm test",
+    "start": "npm start"
+  },
+  "confidence": "high"
+}

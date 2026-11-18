@@ -1,0 +1,66 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/real-repos/repo-b",
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/",
+      "handler": "src/main.ts:21",
+      "framework": "Node/Express/Nest/Fastify",
+      "auth_required": false
+    },
+    {
+      "method": "POST",
+      "path": "/users",
+      "handler": "src/app/routes/auth/auth.controller.ts:14",
+      "framework": "Node/Express/Nest/Fastify",
+      "auth_required": false
+    },
+    {
+      "method": "POST",
+      "path": "/users/login",
+      "handler": "src/app/routes/auth/auth.controller.ts:30",
+      "framework": "Node/Express/Nest/Fastify",
+      "auth_required": false
+    },
+    {
+      "method": "GET",
+      "path": "/user",
+      "handler": "src/app/routes/auth/auth.controller.ts:45",
+      "framework": "Node/Express/Nest/Fastify",
+      "auth_required": false
+    },
+    {
+      "method": "PUT",
+      "path": "/user",
+      "handler": "src/app/routes/auth/auth.controller.ts:61",
+      "framework": "Node/Express/Nest/Fastify",
+      "auth_required": false
+    },
+    {
+      "method": "GET",
+      "path": "/articles",
+      "handler": "src/app/routes/article/article.controller.ts:30",
+      "framework": "Node/Express/Nest/Fastify",
+      "auth_required": false
+    },
+    {
+      "method": "POST",
+      "path": "/articles",
+      "handler": "src/app/routes/article/article.controller.ts:71",
+      "framework": "Node/Express/Nest/Fastify",
+      "auth_required": false
+    },
+    {
+      "method": "GET",
+      "path": "/tags",
+      "handler": "src/app/routes/tag/tag.controller.ts:13",
+      "framework": "Node/Express/Nest/Fastify",
+      "auth_required": false
+    }
+  ],
+  "openapi": [],
+  "graphql": [],
+  "grpc": [],
+  "cli_commands": [],
+  "public_exports": []
+}
