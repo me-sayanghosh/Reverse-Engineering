@@ -55,7 +55,7 @@
 - [x] Step 46 – Skeleton
 - [x] Step 47 – Manifest-declared entrypoints
 - [x] Step 48 – Server bootstrap patterns
-- [ ] Step 49 – Route definition patterns
+- [x] Step 49 – Route definition patterns
 - [ ] Step 50 – CLI & worker detection
 - [ ] Step 51 – Frontend entrypoints
 - [ ] Step 52 – Ranking

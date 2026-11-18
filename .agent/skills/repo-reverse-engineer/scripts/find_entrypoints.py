@@ -224,6 +224,68 @@ def find_server_bootstraps(root_path: Path):
     return entries
 
 
+ROUTE_PATTERNS = [
+    r"(?:app|router|fastify|server)\.(?:get|post|put|delete|patch|all)\s*\(",
+    r"@(?:app|router|api)\.(?:get|post|put|delete|patch|route)\s*\(",
+    r"(?:r|router|app|g|api)\.(?:GET|POST|PUT|DELETE|PATCH)\s*\(",
+    r"@(?:GetMapping|PostMapping|PutMapping|DeleteMapping|RequestMapping)\s*\(",
+    r"(?:get|post|put|delete|patch|resources)\s+['\":/]",
+]
+
+
+def find_route_definitions(root_path: Path):
+    """Detect HTTP route definitions and aggregate count per file."""
+    root_path = Path(root_path).resolve()
+    entries = []
+    import re
+
+    for file_path in _common.walk_repo(root_path):
+        if _common.is_binary(file_path):
+            continue
+        ext = file_path.suffix.lower()
+        if ext not in (
+            ".js",
+            ".ts",
+            ".mjs",
+            ".py",
+            ".go",
+            ".java",
+            ".kt",
+            ".rs",
+            ".rb",
+            ".php",
+        ):
+            continue
+
+        route_count = 0
+        first_line = None
+        try:
+            with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                for idx, line in enumerate(f, start=1):
+                    for pat in ROUTE_PATTERNS:
+                        if re.search(pat, line):
+                            route_count += 1
+                            if first_line is None:
+                                first_line = idx
+                            break
+        except Exception:
+            pass
+
+        if route_count > 0:
+            rel = file_path.relative_to(root_path)
+            entries.append(
+                {
+                    "path": f"{rel}:{first_line}",
+                    "type": "route",
+                    "confidence": 0.85,
+                    "route_count": route_count,
+                    "reason": f"Defines {route_count} HTTP route handler(s)",
+                }
+            )
+
+    return entries
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Locate and rank application entrypoints, server bootstraps, routes, and workers with citations."
@@ -241,8 +303,9 @@ def main():
 
     manifest_entries = find_manifest_entrypoints(root_path)
     bootstrap_entries = find_server_bootstraps(root_path)
+    route_entries = find_route_definitions(root_path)
 
-    all_entries = manifest_entries + bootstrap_entries
+    all_entries = manifest_entries + bootstrap_entries + route_entries
 
     data = {
         "root": str(root_path),
