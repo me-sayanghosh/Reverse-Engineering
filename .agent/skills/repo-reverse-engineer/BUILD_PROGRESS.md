@@ -122,7 +122,7 @@
 - [x] Step 113 – Test repo A: scripts
 - [x] Step 114 – Test repo A: full workflow
 - [x] Step 115 – Test repo B: clone + scripts
-- [ ] Step 116 – Test repo B: full workflow (deep)
+- [x] Step 116 – Test repo B: full workflow (deep)
 - [ ] Step 117 – Test repo C: monorepo
 - [ ] Step 118 – Spot-check accuracy
 - [ ] Step 119 – Fix script bugs found
