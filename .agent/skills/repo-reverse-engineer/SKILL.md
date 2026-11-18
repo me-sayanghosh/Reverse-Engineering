@@ -48,3 +48,20 @@ The skill accepts the following parameters:
 | `quick` | High-level architectural overview & stack recon | Phases 0–2 | `00-SUMMARY.md`, `01-ARCHITECTURE.md` |
 | `standard` | Full static reverse engineering of architecture, API, data model, and risks | Phases 0–3, 5–7 | Reports `00` through `07`, `09` |
 | `deep` | Comprehensive reverse engineering plus runtime analysis & complete rebuild blueprint | All Phases (0–7) including Rebuild Blueprint | Complete suite: Reports `00` through `09` |
+
+## Output Folder Convention
+
+All reverse engineering artifacts and markdown reports are stored in:
+`reverse-engineered/<repo-name>/`
+
+The 10 report filenames are:
+1. `00-SUMMARY.md` - Executive summary, purpose, high-level stack, and key findings.
+2. `01-ARCHITECTURE.md` - System architecture, component topology, boundaries, and Mermaid diagrams.
+3. `02-CODE-MAP.md` - Directory tree walkthrough, entrypoint rankings, and module catalog.
+4. `03-API-AND-DATA.md` - Public API surface, HTTP/RPC/CLI routes, database schemas, and ER diagrams.
+5. `04-FLOWS.md` - Critical path traces, sequence diagrams, and lifecycle state machines.
+6. `05-DEPENDENCIES.md` - Internal and external dependency graph, licenses, and central hubs.
+7. `06-CONFIG-AND-OPS.md` - Environment variables, configuration management, Docker/k8s/CI infrastructure.
+8. `07-RISKS-AND-DEBT.md` - Technical debt, security risks, potential secret leaks, and architectural pitfalls.
+9. `08-REBUILD-BLUEPRINT.md` - Clean-room reimplementation plan, phased milestones, prompts, and pseudocode.
+10. `09-GLOSSARY-AND-QA.md` - Domain glossary, architecture decisions records (ADR) FAQ, and interrogation notes.

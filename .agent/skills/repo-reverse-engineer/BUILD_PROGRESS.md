@@ -20,7 +20,7 @@
 - [x] Step 11 – Add inputs section
 - [x] Step 12 – Add safety rules block
 - [x] Step 13 – Add modes table
-- [ ] Step 14 – Add output folder convention
+- [x] Step 14 – Add output folder convention
 - [ ] Step 15 – Add "no hallucination" rules
 - [ ] Step 16 – Add citation format spec
 - [ ] Step 17 – Add script index
