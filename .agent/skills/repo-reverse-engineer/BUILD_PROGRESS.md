@@ -72,7 +72,7 @@
 - [x] Step 63 – Test
 - [x] Step 64 – Skeleton
 - [x] Step 65 – HTTP routes (Node)
-- [ ] Step 66 – HTTP routes (Python/Go/Java/Ruby)
+- [x] Step 66 – HTTP routes (Python/Go/Java/Ruby)
 - [ ] Step 67 – OpenAPI/Swagger ingestion
 - [ ] Step 68 – GraphQL / gRPC / tRPC
 - [ ] Step 69 – CLI commands & public exports
