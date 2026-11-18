@@ -82,7 +82,7 @@
 - [x] Step 73 – SQL/migration parser
 - [x] Step 74 – Prisma / Sequelize / TypeORM
 - [x] Step 75 – Mongoose / MongoDB schemas
-- [ ] Step 76 – Python ORMs
+- [x] Step 76 – Python ORMs
 - [ ] Step 77 – Go/Java/Rust types
 - [ ] Step 78 – Mermaid ERD output
 - [ ] Step 79 – Test

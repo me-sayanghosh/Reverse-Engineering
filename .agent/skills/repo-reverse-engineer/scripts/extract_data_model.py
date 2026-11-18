@@ -305,6 +305,101 @@ def parse_mongoose_schemas(root_path: Path):
     return list(entities.values()), relations
 
 
+import ast
+
+
+def parse_python_models(root_path: Path):
+    """Parse SQLAlchemy, Django, and Pydantic models with fields and foreign keys."""
+    root_path = root_path.resolve()
+    entities = {}
+    relations = []
+
+    for file_path in _common.walk_repo(root_path):
+        if _common.is_binary(file_path):
+            continue
+        if file_path.suffix.lower() not in (".py", ".pyi"):
+            continue
+
+        rel = str(file_path.relative_to(root_path))
+        try:
+            content = file_path.read_text(encoding="utf-8", errors="ignore")
+            tree = ast.parse(content, filename=str(file_path))
+
+            for node in ast.walk(tree):
+                if isinstance(node, ast.ClassDef):
+                    # Check base classes
+                    base_names = []
+                    for b in node.bases:
+                        if isinstance(b, ast.Name):
+                            base_names.append(b.id)
+                        elif isinstance(b, ast.Attribute):
+                            base_names.append(b.attr)
+
+                    is_model = any(
+                        b in ("Base", "Model", "BaseModel", "DeclarativeBase")
+                        for b in base_names
+                    )
+                    if not is_model:
+                        continue
+
+                    model_name = node.name
+                    columns = []
+
+                    # Parse fields in class body
+                    for item in node.body:
+                        # 1. Pydantic style type annotations: name: str
+                        if isinstance(item, ast.AnnAssign) and isinstance(item.target, ast.Name):
+                            f_name = item.target.id
+                            f_type = "any"
+                            if isinstance(item.annotation, ast.Name):
+                                f_type = item.annotation.id
+                            elif isinstance(item.annotation, ast.Attribute):
+                                f_type = item.annotation.attr
+                            is_pk = f_name == "id"
+                            columns.append({"name": f_name, "type": f_type, "primary_key": is_pk})
+
+                        # 2. SQLAlchemy / Django style assignments: col = Column(...)
+                        elif isinstance(item, ast.Assign):
+                            for target in item.targets:
+                                if isinstance(target, ast.Name):
+                                    f_name = target.id
+                                    val_str = ast.unparse(item.value) if hasattr(ast, "unparse") else ""
+                                    is_pk = "primary_key=True" in val_str or f_name == "id"
+
+                                    # Foreign key check
+                                    fk_m = re.search(r"""ForeignKey\s*\(\s*['"]([a-zA-Z0-9_.]+)(?:\.[a-zA-Z0-9_]+)?['"]""", val_str)
+                                    if fk_m:
+                                        target_model = fk_m.group(1).split(".")[0]
+                                        relations.append(
+                                            {
+                                                "from": model_name,
+                                                "to": target_model,
+                                                "from_column": f_name,
+                                                "type": "foreign_key",
+                                            }
+                                        )
+
+                                    col_type = "Column"
+                                    if "models." in val_str:
+                                        col_type = val_str.split("(")[0].replace("models.", "")
+                                    elif "Column(" in val_str:
+                                        col_type = "SQLAlchemy"
+
+                                    columns.append({"name": f_name, "type": col_type, "primary_key": is_pk})
+
+                    source_type = "Pydantic" if "BaseModel" in base_names else "SQLAlchemy/Django"
+                    entities[model_name] = {
+                        "name": model_name,
+                        "file": rel,
+                        "columns": columns,
+                        "source": source_type,
+                    }
+        except Exception:
+            pass
+
+    return list(entities.values()), relations
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Extract data models, database entities, foreign keys, and generate Mermaid ER diagrams."
@@ -324,9 +419,10 @@ def main():
     sql_entities, sql_relations = parse_sql_migrations(root_path)
     prisma_entities, prisma_relations = parse_prisma_and_orm_entities(root_path)
     mongoose_entities, mongoose_relations = parse_mongoose_schemas(root_path)
+    python_entities, python_relations = parse_python_models(root_path)
 
-    all_entities = sql_entities + prisma_entities + mongoose_entities
-    all_relations = sql_relations + prisma_relations + mongoose_relations
+    all_entities = sql_entities + prisma_entities + mongoose_entities + python_entities
+    all_relations = sql_relations + prisma_relations + mongoose_relations + python_relations
 
     data = {
         "root": str(root_path),
