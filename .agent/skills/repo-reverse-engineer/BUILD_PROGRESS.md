@@ -77,7 +77,7 @@
 - [x] Step 68 – GraphQL / gRPC / tRPC
 - [x] Step 69 – CLI commands & public exports
 - [x] Step 70 – Auth hints
-- [ ] Step 71 – Test
+- [x] Step 71 – Test
 - [ ] Step 72 – Skeleton
 - [ ] Step 73 – SQL/migration parser
 - [ ] Step 74 – Prisma / Sequelize / TypeORM
