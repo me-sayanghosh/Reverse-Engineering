@@ -1,0 +1,229 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/real-repos/repo-b",
+  "languages": {
+    "TypeScript": {
+      "files": 38,
+      "lines": 2104
+    },
+    "JSON": {
+      "files": 12,
+      "lines": 332
+    },
+    "SQL": {
+      "files": 4,
+      "lines": 123
+    },
+    "Other": {
+      "files": 5,
+      "lines": 94
+    },
+    "Markdown": {
+      "files": 1,
+      "lines": 48
+    },
+    "Docker": {
+      "files": 1,
+      "lines": 18
+    },
+    "TOML": {
+      "files": 1,
+      "lines": 3
+    },
+    "JavaScript": {
+      "files": 1,
+      "lines": 2
+    }
+  },
+  "tree": {
+    ".": {
+      "depth": 0,
+      "files": 17,
+      "subdirs": 2
+    },
+    "e2e": {
+      "depth": 1,
+      "files": 5,
+      "subdirs": 1
+    },
+    "e2e/src": {
+      "depth": 2,
+      "files": 0,
+      "subdirs": 2
+    },
+    "e2e/src/server": {
+      "depth": 3,
+      "files": 1,
+      "subdirs": 0
+    },
+    "e2e/src/support": {
+      "depth": 3,
+      "files": 3,
+      "subdirs": 0
+    },
+    "src": {
+      "depth": 1,
+      "files": 1,
+      "subdirs": 4
+    },
+    "src/app": {
+      "depth": 2,
+      "files": 0,
+      "subdirs": 2
+    },
+    "src/app/models": {
+      "depth": 3,
+      "files": 1,
+      "subdirs": 0
+    },
+    "src/app/routes": {
+      "depth": 3,
+      "files": 1,
+      "subdirs": 4
+    },
+    "src/prisma": {
+      "depth": 2,
+      "files": 3,
+      "subdirs": 1
+    },
+    "src/prisma/migrations": {
+      "depth": 3,
+      "files": 1,
+      "subdirs": 4
+    },
+    "src/tests": {
+      "depth": 2,
+      "files": 1,
+      "subdirs": 2
+    },
+    "src/tests/utils": {
+      "depth": 3,
+      "files": 1,
+      "subdirs": 0
+    },
+    "src/tests/services": {
+      "depth": 3,
+      "files": 4,
+      "subdirs": 0
+    },
+    "src/assets": {
+      "depth": 2,
+      "files": 0,
+      "subdirs": 1
+    },
+    "src/assets/images": {
+      "depth": 3,
+      "files": 2,
+      "subdirs": 0
+    }
+  },
+  "largest_files": [
+    {
+      "path": "src/app/routes/article/article.service.ts",
+      "lines": 652,
+      "language": "TypeScript"
+    },
+    {
+      "path": "src/tests/services/auth.service.test.ts",
+      "lines": 254,
+      "language": "TypeScript"
+    },
+    {
+      "path": "src/app/routes/article/article.controller.ts",
+      "lines": 243,
+      "language": "TypeScript"
+    },
+    {
+      "path": "src/app/routes/auth/auth.service.ts",
+      "lines": 183,
+      "language": "TypeScript"
+    },
+    {
+      "path": "src/tests/services/profile.service.test.ts",
+      "lines": 145,
+      "language": "TypeScript"
+    },
+    {
+      "path": "src/tests/services/article.service.test.ts",
+      "lines": 144,
+      "language": "TypeScript"
+    },
+    {
+      "path": "src/prisma/migrations/20210924225358_initial/migration.sql",
+      "lines": 114,
+      "language": "SQL"
+    },
+    {
+      "path": "src/tests/utils/profile.utils.test.ts",
+      "lines": 79,
+      "language": "TypeScript"
+    },
+    {
+      "path": "project.json",
+      "lines": 75,
+      "language": "JSON"
+    },
+    {
+      "path": "README.md",
+      "lines": 74,
+      "language": "Markdown"
+    },
+    {
+      "path": "src/app/routes/auth/auth.controller.ts",
+      "lines": 70,
+      "language": "TypeScript"
+    },
+    {
+      "path": "src/app/routes/profile/profile.controller.ts",
+      "lines": 67,
+      "language": "TypeScript"
+    },
+    {
+      "path": "src/prisma/seed.ts",
+      "lines": 66,
+      "language": "TypeScript"
+    },
+    {
+      "path": "src/app/routes/profile/profile.service.ts",
+      "lines": 60,
+      "language": "TypeScript"
+    },
+    {
+      "path": "package.json",
+      "lines": 58,
+      "language": "JSON"
+    }
+  ],
+  "recently_modified": [
+    ".eslintignore",
+    ".eslintrc.json",
+    ".gitignore",
+    ".prettierignore",
+    ".prettierrc",
+    ".vscode/extensions.json",
+    "Dockerfile",
+    "README.md",
+    "e2e/.eslintrc.json",
+    "e2e/jest.config.ts"
+  ],
+  "markers": {
+    "tests": {
+      "present": false,
+      "paths": []
+    },
+    "docs": {
+      "present": false,
+      "paths": []
+    },
+    "ci": {
+      "present": false,
+      "paths": []
+    }
+  },
+  "monorepo": {
+    "is_monorepo": true,
+    "signals": [
+      "Nx config detected (nx.json)"
+    ],
+    "packages": []
+  }
+}

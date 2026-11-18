@@ -1,0 +1,260 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+    cat << 'EOF'
+Usage: clone_repo.sh <url|path> [--branch <branch>] [--subdir <subdir>] [--out <dir>] [--max-mb <mb>] [--yes]
+
+Arguments:
+  <url|path>         GitHub HTTPS/SSH URL, owner/repo shorthand, or local filesystem path.
+
+Options:
+  --branch <branch>  Specific branch, tag, or commit to clone.
+  --subdir <subdir>  Subdirectory to sparsely check out.
+  --out <dir>        Destination directory for clone/metadata.
+  --max-mb <mb>      Maximum repository size in MB (default: 500).
+  --yes              Skip size confirmation prompt.
+  -h, --help         Show this help message and exit.
+EOF
+}
+
+TARGET=""
+BRANCH=""
+SUBDIR=""
+OUT_DIR=""
+MAX_MB=500
+YES=0
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        --branch)
+            BRANCH="$2"
+            shift 2
+            ;;
+        --subdir)
+            SUBDIR="$2"
+            shift 2
+            ;;
+        --out)
+            OUT_DIR="$2"
+            shift 2
+            ;;
+        --max-mb)
+            MAX_MB="$2"
+            shift 2
+            ;;
+        --yes)
+            YES=1
+            shift
+            ;;
+        -*)
+            echo "Error: Unknown option $1" >&2
+            usage >&2
+            exit 1
+            ;;
+        *)
+            if [[ -z "$TARGET" ]]; then
+                TARGET="$1"
+                shift
+            else
+                echo "Error: Unexpected argument $1" >&2
+                usage >&2
+                exit 1
+            fi
+            ;;
+    esac
+done
+
+if [[ -z "$TARGET" ]]; then
+    echo "Error: Missing required target <url|path>" >&2
+    usage >&2
+    exit 1
+fi
+
+# Normalize target by stripping trailing slash
+TARGET="${TARGET%/}"
+
+TARGET_TYPE=""
+CLONE_URL=""
+LOCAL_PATH=""
+REPO_NAME=""
+
+if [[ -d "$TARGET" ]]; then
+    TARGET_TYPE="local"
+    LOCAL_PATH="$(cd "$TARGET" && pwd)"
+    REPO_NAME="$(basename "$LOCAL_PATH")"
+elif [[ "$TARGET" =~ ^https?://github\.com/([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+)$ ]]; then
+    TARGET_TYPE="github_https"
+    REPO_NAME="${BASH_REMATCH[2]%.git}"
+    CLONE_URL="https://github.com/${BASH_REMATCH[1]}/${REPO_NAME}.git"
+elif [[ "$TARGET" =~ ^git@github\.com:([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+)$ ]]; then
+    TARGET_TYPE="github_ssh"
+    REPO_NAME="${BASH_REMATCH[2]%.git}"
+    CLONE_URL="git@github.com:${BASH_REMATCH[1]}/${REPO_NAME}.git"
+elif [[ "$TARGET" =~ ^([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+)$ ]]; then
+    TARGET_TYPE="shorthand"
+    REPO_NAME="${BASH_REMATCH[2]%.git}"
+    CLONE_URL="https://github.com/${BASH_REMATCH[1]}/${REPO_NAME}.git"
+else
+    echo "Error: Invalid target '$TARGET'. Must be a GitHub URL, owner/repo shorthand, or existing local directory." >&2
+    exit 1
+fi
+
+echo "Validated target: type=$TARGET_TYPE, repo=$REPO_NAME"
+
+if [[ -z "$OUT_DIR" ]]; then
+    OUT_DIR="reverse-engineered/$REPO_NAME"
+fi
+mkdir -p "$OUT_DIR"
+
+if [[ "$TARGET_TYPE" == "local" ]]; then
+    echo "Local mode: using repository at $LOCAL_PATH"
+    echo "Output directory: $OUT_DIR"
+fi
+
+check_repo_size() {
+    if [[ "$TARGET_TYPE" != "local" ]]; then
+        python3 - << PYEOF
+import sys, urllib.request, json, re
+
+clone_url = "$CLONE_URL"
+max_mb = float("$MAX_MB")
+skip_confirm = int("$YES")
+
+match = re.search(r"github\.com[:/]([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+?)(?:\.git)?$", clone_url)
+if not match:
+    sys.exit(0)
+
+owner, repo = match.group(1), match.group(2)
+api_url = f"https://api.github.com/repos/{owner}/{repo}"
+
+try:
+    req = urllib.request.Request(api_url, headers={"User-Agent": "repo-reverse-engineer"})
+    with urllib.request.urlopen(req, timeout=10) as resp:
+        data = json.load(resp)
+        size_kb = data.get("size", 0)
+        size_mb = size_kb / 1024.0
+        if size_mb > max_mb and not skip_confirm:
+            print(f"Error: Repository {owner}/{repo} size (~{size_mb:.1f} MB) exceeds limit of {max_mb:.0f} MB.", file=sys.stderr)
+            print("To proceed anyway, re-run with --yes.", file=sys.stderr)
+            sys.exit(2)
+        elif size_mb > max_mb and skip_confirm:
+            print(f"Notice: Repository size (~{size_mb:.1f} MB) exceeds {max_mb:.0f} MB, continuing due to --yes.")
+except urllib.error.HTTPError as e:
+    # 404/403: might be private or rate limited; let git clone attempt and report auth error
+    pass
+except Exception:
+    pass
+PYEOF
+    fi
+}
+
+check_repo_size
+
+REPO_DIR="$OUT_DIR"
+if [[ "$TARGET_TYPE" == "local" ]]; then
+    REPO_DIR="$LOCAL_PATH"
+else
+    CLONE_ARGS=(--depth 1)
+    if [[ -n "$BRANCH" ]]; then
+        CLONE_ARGS+=(--branch "$BRANCH")
+    fi
+    if [[ -n "$SUBDIR" ]]; then
+        CLONE_ARGS+=(--filter=blob:none --sparse)
+    fi
+
+    # Remove empty OUT_DIR if it was created so git clone can populate it
+    if [[ -d "$OUT_DIR" ]] && [[ -z "$(ls -A "$OUT_DIR" 2>/dev/null)" ]]; then
+        rmdir "$OUT_DIR"
+    fi
+
+    CLONE_OUTPUT=""
+    if ! CLONE_OUTPUT=$(git clone "${CLONE_ARGS[@]}" "$CLONE_URL" "$OUT_DIR" 2>&1); then
+        if echo "$CLONE_OUTPUT" | grep -qiE "Could not resolve host|Failed to connect"; then
+            echo "Error: Network failure connecting to remote host." >&2
+        elif echo "$CLONE_OUTPUT" | grep -qiE "Remote branch .* not found"; then
+            echo "Error: Branch '$BRANCH' not found on remote repository." >&2
+        elif echo "$CLONE_OUTPUT" | grep -qiE "Authentication failed|could not read Username|Repository not found"; then
+            echo "Error: Private repository or authentication required for $CLONE_URL." >&2
+        else
+            echo "Error: Failed to clone repository: $CLONE_OUTPUT" >&2
+        fi
+        exit 1
+    fi
+
+    if [[ -n "$SUBDIR" ]]; then
+        git -C "$OUT_DIR" sparse-checkout set "$SUBDIR"
+    fi
+    echo "Cloned into $OUT_DIR (depth 1)"
+fi
+
+detect_license() {
+    local target_dir="$1"
+    python3 - << PYEOF
+import os, sys, glob, re
+
+target_dir = "$target_dir"
+candidates = glob.glob(os.path.join(target_dir, "LICENSE*")) + glob.glob(os.path.join(target_dir, "COPYING*"))
+if not candidates:
+    print("none\tnone")
+    sys.exit(0)
+
+lic_file = os.path.basename(candidates[0])
+spdx = "none"
+try:
+    with open(candidates[0], "r", encoding="utf-8", errors="ignore") as f:
+        head = "".join([f.readline() for _ in range(30)])
+        if "MIT License" in head or "Permission is hereby granted, free of charge" in head:
+            spdx = "MIT"
+        elif "Apache License" in head and "2.0" in head:
+            spdx = "Apache-2.0"
+        elif "GNU GENERAL PUBLIC LICENSE" in head or "GNU General Public License" in head:
+            spdx = "GPL"
+        elif "BSD 3-Clause" in head or "BSD-3-Clause" in head or "Redistribution and use in source and binary forms" in head:
+            spdx = "BSD"
+        elif "Mozilla Public License" in head:
+            spdx = "MPL-2.0"
+        else:
+            spdx = "Custom"
+except Exception:
+    spdx = "none"
+
+print(f"{lic_file}\t{spdx}")
+PYEOF
+}
+
+LIC_INFO=$(detect_license "$REPO_DIR")
+LIC_FILE=$(echo "$LIC_INFO" | cut -f1)
+LIC_SPDX=$(echo "$LIC_INFO" | cut -f2)
+
+COMMIT_SHA=$(git -C "$REPO_DIR" rev-parse HEAD 2>/dev/null || echo "unknown")
+DETECTED_BRANCH=$(git -C "$REPO_DIR" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
+DEFAULT_BRANCH=$(git -C "$REPO_DIR" symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "$DETECTED_BRANCH")
+
+if [[ -z "$DEFAULT_BRANCH" || "$DEFAULT_BRANCH" == "unknown" ]]; then
+    DEFAULT_BRANCH="$DETECTED_BRANCH"
+fi
+
+CLONE_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+python3 - << PYEOF
+import json
+
+meta = {
+    "url": "${CLONE_URL:-$LOCAL_PATH}",
+    "commit_sha": "$COMMIT_SHA",
+    "branch": "${BRANCH:-$DETECTED_BRANCH}",
+    "clone_date": "$CLONE_DATE",
+    "license_file_detected": "$LIC_FILE" if "$LIC_FILE" != "none" else None,
+    "license_spdx": "$LIC_SPDX",
+    "default_branch": "$DEFAULT_BRANCH"
+}
+
+with open("$OUT_DIR/repo_meta.json", "w", encoding="utf-8") as f:
+    json.dump(meta, f, indent=2)
+print("Wrote metadata to $OUT_DIR/repo_meta.json")
+PYEOF

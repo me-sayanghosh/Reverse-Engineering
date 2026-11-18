@@ -1,0 +1,31 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/demo-app",
+  "entrypoints": [
+    {
+      "path": "src/server.js:1",
+      "type": "main",
+      "confidence": 1.0,
+      "reason": "Declared as \"main\" in package.json"
+    },
+    {
+      "path": "src/server.js:5",
+      "type": "server",
+      "confidence": 0.9,
+      "reason": "Express/Node app.listen bootstrap"
+    },
+    {
+      "path": "src/routes/items.js:7",
+      "type": "route",
+      "confidence": 0.85,
+      "route_count": 3,
+      "reason": "Defines 3 HTTP route handler(s)"
+    },
+    {
+      "path": "src/routes/auth.js:4",
+      "type": "route",
+      "confidence": 0.85,
+      "route_count": 2,
+      "reason": "Defines 2 HTTP route handler(s)"
+    }
+  ]
+}

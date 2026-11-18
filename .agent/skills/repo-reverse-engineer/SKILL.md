@@ -1,0 +1,290 @@
+---
+name: repo-reverse-engineer
+description: Reverse engineer any GitHub repository or local codebase end to end, explain how the project works, document the codebase architecture, and produce structured reports including rebuild blueprints. Triggers on requests to reverse engineer this repo, explain how this GitHub project works, document this codebase, map the architecture of a repository, or how would I rebuild X.
+---
+
+
+## When to Use
+
+- Understanding an unfamiliar codebase, repository, or library from scratch.
+- Reverse engineering architecture, components, data models, APIs, and key execution flows.
+- Producing a comprehensive codebase documentation report suite or architectural review.
+- Planning a rewrite, clean-room reimplementation, or rebuild blueprint of an existing system.
+- Auditing a repository for dependencies, operational configuration, secrets, and architectural risks.
+
+## When NOT to Use
+
+- Implementing a specific new feature or bug fix in an existing active workspace.
+- Debugging a single runtime error or isolated stack trace.
+- Running general repository maintenance or routine code formatting/linting tasks.
+- Executing continuous deployment or infrastructure provisioning workflows.
+
+## Inputs
+
+The skill accepts the following parameters:
+
+1. **`target`** (required): GitHub repository URL (HTTPS or SSH), shorthand `owner/repo`, or local filesystem path.
+   - Default: Current workspace if no argument is provided.
+2. **`ref`** (optional): Git branch, tag, or commit SHA to inspect.
+   - Default: Repository default branch (`HEAD` / `main` / `master`).
+3. **`subfolder`** (optional): Subdirectory path within a monorepo or large codebase to focus analysis on.
+   - Default: Repository root (`/`).
+4. **`mode`** (optional): Depth of reverse engineering execution (`quick`, `standard`, or `deep`).
+   - Default: `standard`.
+5. **`audience`** (optional): Target audience style for synthesis (`beginner` or `senior`).
+   - Default: `senior`.
+
+## Safety Rules
+
+1. **Never execute untrusted repo code on host**: Default to static code analysis and parsing. Never run build scripts, test runners, install scripts, or hooks from an untrusted repository on the host machine.
+2. **Never print secret values**: Only report secret names, environment variable keys, and file locations. Always redact tokens, passwords, and sensitive keys (e.g. mask as `AKIA****`).
+3. **Respect software licenses**: Document the repository's license accurately and flag non-commercial or restrictive copyleft constraints.
+4. **Require explicit user approval before sandbox execution**: If dynamic runtime analysis (Phase 4) is desired, run strictly in an isolated sandbox and obtain explicit user consent before starting containers or processes.
+
+## Modes
+
+| Mode | Target Scope & Depth | Phases Included | Outputs Generated |
+| :--- | :--- | :--- | :--- |
+| `quick` | High-level architectural overview & stack recon | Phases 0–2 | `00-SUMMARY.md`, `01-ARCHITECTURE.md` |
+| `standard` | Full static reverse engineering of architecture, API, data model, and risks | Phases 0–3, 5–7 | Reports `00` through `07`, `09` |
+| `deep` | Comprehensive reverse engineering plus runtime analysis & complete rebuild blueprint | All Phases (0–7) including Rebuild Blueprint | Complete suite: Reports `00` through `09` |
+
+## Output Folder Convention
+
+All reverse engineering artifacts and markdown reports are stored in:
+`reverse-engineered/<repo-name>/`
+
+The 10 report filenames are:
+1. `00-SUMMARY.md` - Executive summary, purpose, high-level stack, and key findings.
+2. `01-ARCHITECTURE.md` - System architecture, component topology, boundaries, and Mermaid diagrams.
+3. `02-CODE-MAP.md` - Directory tree walkthrough, entrypoint rankings, and module catalog.
+4. `03-API-AND-DATA.md` - Public API surface, HTTP/RPC/CLI routes, database schemas, and ER diagrams.
+5. `04-FLOWS.md` - Critical path traces, sequence diagrams, and lifecycle state machines.
+6. `05-DEPENDENCIES.md` - Internal and external dependency graph, licenses, and central hubs.
+7. `06-CONFIG-AND-OPS.md` - Environment variables, configuration management, Docker/k8s/CI infrastructure.
+8. `07-RISKS-AND-DEBT.md` - Technical debt, security risks, potential secret leaks, and architectural pitfalls.
+9. `08-REBUILD-BLUEPRINT.md` - Clean-room reimplementation plan, phased milestones, prompts, and pseudocode.
+10. `09-GLOSSARY-AND-QA.md` - Domain glossary, architecture decisions records (ADR) FAQ, and interrogation notes.
+
+## No-Hallucination Rules
+
+1. **Cite `file:line` for claims**: Every architectural, functional, or data model assertion must be backed by an exact file and line reference.
+2. **Label `[inferred]` with confidence**: If a conclusion is inferred rather than directly observed in source code, mark it explicitly as `[inferred: high|medium|low]` and explain the deduction logic.
+3. **Say "not found" instead of guessing**: If a pattern, test suite, configuration, or documentation file does not exist in the repository, explicitly state "not found" rather than inventing or assuming standard conventions.
+4. **Prefer code over README**: When code and documentation disagree, treat actual source code implementation as the ground truth, and note the documentation discrepancy in `07-RISKS-AND-DEBT.md`.
+
+## Citation Format Specification
+
+Citations must reference repository files using exact line numbers or line ranges:
+- Single line format: `path/to/file.ext:LINE` (e.g. `src/server.ts:42`)
+- Multi-line range format: `path/to/file.ext:START-END` (e.g. `src/models/user.py:10-25`)
+
+### Citation Examples
+
+- **Valid citation example**: `src/auth/jwt.ts:45-58` references lines 45 through 58 in `src/auth/jwt.ts`.
+- **Invalid citation example**: `User model file (around line 50)` is invalid because it lacks an exact relative file path and concrete line numbers.
+
+## Script Index
+
+The skill provides 8 dedicated automation scripts located in `scripts/`:
+
+1. **`clone_repo.sh`**: Clones a remote repository or prepares a local path, capturing repository metadata and license.
+   - Usage: `bash scripts/clone_repo.sh <url|path> [--branch X] [--subdir Y] [--out DIR] [--max-mb N] [--yes]`
+2. **`repo_stats.py`**: Computes file counts, lines of code per language, directory tree structure, largest files, and monorepo hints.
+   - Usage: `python3 scripts/repo_stats.py <root> [--json]`
+3. **`detect_stack.py`**: Identifies languages, frameworks, package manifests, datastores, queues, and build/run commands.
+   - Usage: `python3 scripts/detect_stack.py <root> [--json]`
+4. **`find_entrypoints.py`**: Locates application bootstrap files, route roots, CLI commands, and worker entrypoints with citations.
+   - Usage: `python3 scripts/find_entrypoints.py <root> [--json]`
+5. **`dep_graph.py`**: Parses imports across languages, computes module-level dependencies, detects cycles, and generates Mermaid diagrams.
+   - Usage: `python3 scripts/dep_graph.py <root> [--json] [--mermaid] [--depth N]`
+6. **`extract_api_surface.py`**: Extracts HTTP endpoints, OpenAPI routes, GraphQL queries/mutations, gRPC services, and CLI commands.
+   - Usage: `python3 scripts/extract_api_surface.py <root> [--json]`
+7. **`extract_data_model.py`**: Analyzes database migrations, ORM models (Prisma, Mongoose, SQLAlchemy, Django), and generates Mermaid ERDs.
+   - Usage: `python3 scripts/extract_data_model.py <root> [--json] [--mermaid]`
+8. **`scan_secrets_env.py`**: Discovers environment variables, config keys, and flags potential secrets while strictly redacting values.
+   - Usage: `python3 scripts/scan_secrets_env.py <root> [--json]`
+
+## Phase 0: Intake & Safety
+
+1. **Confirm Inputs & Modes**:
+   - Determine target repository (`target`), branch/ref (`ref`), subfolder focus (`subfolder`), depth mode (`quick|standard|deep`), and target audience (`beginner|senior`).
+2. **Execute Ingestion**:
+   - Run the preparation script:
+     ```bash
+     bash scripts/clone_repo.sh "<target>" [--branch "<ref>"] [--subdir "<subfolder>"] [--out "reverse-engineered/<repo-name>"]
+     ```
+   - For remote repositories, this executes a shallow clone (`--depth 1`) with automated size pre-checks. For local workspaces, it inspects metadata in-place without copying.
+3. **Inspect Captured Metadata**:
+   - Read `reverse-engineered/<repo-name>/repo_meta.json` to extract exact commit SHA, active branch, and detected license.
+   - Note license constraints in `00-SUMMARY.md` (e.g. AGPL/GPL copyleft or commercial suitability).
+4. **Enforce Zero-Host-Execution Safety**:
+   - Default strictly to static code inspection and script-based parsing.
+   - Ask for explicit user confirmation before any containerized execution in Phase 4. Never execute untrusted scripts, hooks, or tests directly on the host machine.
+
+## Phase 1: Recon & Orientation
+
+1. **Execute Automated Reconnaissance Scripts**:
+   - Run repository statistics analysis:
+     ```bash
+     python3 scripts/repo_stats.py "<repo_path>" --json
+     ```
+   - Detect tech stack, frameworks, datastores, and build commands:
+     ```bash
+     python3 scripts/detect_stack.py "<repo_path>" --json
+     ```
+   - Discover application entrypoints, route registrations, and workers:
+     ```bash
+     python3 scripts/find_entrypoints.py "<repo_path>" --json
+     ```
+2. **Review Core Documentation & Infrastructure Artifacts**:
+   - Read `README.md`, `CONTRIBUTING.md`, architectural docs in `docs/`, CI workflows in `.github/workflows/`, and `Dockerfile` / `docker-compose.yml`.
+   - Contrast stated intentions in documentation against actual findings from code scanning.
+3. **Draft Orientation Summary**:
+   - **What**: Exact system purpose, target problem domain, and functional capabilities.
+   - **Who**: Target end-users, client integrations, or consumer services.
+   - **Stack**: Primary programming languages, web/RPC frameworks, databases, and message queues.
+   - **How to Run**: Validated installation, local development bootstrap, and test execution commands.
+
+## Phase 2: Architecture & Topology
+
+1. **Extract Dependency Graph & Topology**:
+   - Run the dependency graph extraction script:
+     ```bash
+     python3 scripts/dep_graph.py "<repo_path>" --json --mermaid
+     ```
+   - Review top central modules, in/out degrees, and any detected circular dependency cycles.
+2. **Identify System Boundaries & Layers**:
+   - Map files to standard architectural tiers: Presentation/API Gateway, Domain Business Logic, Data Access/Persistence, and External Clients/Adapters.
+   - For monorepo workspaces (pnpm/turborepo/lerna/cargo workspaces), analyze package boundaries, public internal APIs, and cross-package dependencies.
+3. **Produce Architectural Component Diagram in Mermaid**:
+   - Generate a clean `graph LR` Mermaid diagram highlighting boundaries, datastores, and inter-service communications for `01-ARCHITECTURE.md`.
+4. **Draft 01-ARCHITECTURE.md and 02-CODE-MAP.md**:
+   - Synthesize architectural topology narrative, cross-cutting concerns, and file index maps citing verified `file:line` locations.
+
+## Phase 3: Deep Dives & Tracing
+
+Execute focused deep-dive investigations across 12 prioritized subsystems:
+1. **API Surface**: Extract routes and endpoints via `python3 scripts/extract_api_surface.py "<repo_path>" --json`.
+2. **Data Model**: Extract schemas and ERDs via `python3 scripts/extract_data_model.py "<repo_path>" --json --mermaid`.
+3. **Authentication & Authorization**: Audit JWT/session issuance, RBAC/ABAC guards, and middleware validation.
+4. **State Management**: Track domain entity lifecycles, frontend stores, and database transaction boundaries.
+5. **Configuration & Secrets**: Inspect runtime variables via `python3 scripts/scan_secrets_env.py "<repo_path>" --json`.
+6. **External Integrations**: Map third-party SDKs, webhook consumers, and outbound HTTP/gRPC clients.
+7. **Background Jobs & Workers**: Analyze queues (Celery/Bull/Sidekiq) and scheduled crons.
+8. **Caching & Acceleration**: Inspect Redis, Memcached, HTTP cache-control headers, and query caching.
+9. **Error Handling & Resilience**: Trace custom exception hierarchies, retry loops, and global error middleware.
+10. **Logging & Observability**: Inspect OpenTelemetry, Prometheus metrics, and structured loggers (Winston/Pino/Zap).
+11. **Testing Strategy**: Audit unit, integration, and E2E coverage, fixtures, and CI automation gates.
+12. **Security Posture**: Identify potential secret exposures, unsafe deserialization, SQL injection, or CORS risks.
+
+### Critical Execution Flows
+Trace 3–5 flows as sequence diagrams in `04-FLOWS.md`:
+- Primary user request lifecycle (e.g. registration/login or order placement).
+- Background worker execution or asynchronous event ingestion.
+- Critical failure / retry recovery pathway.
+- Data synchronization or outbound webhook delivery flow.
+- Core business logic calculation or transaction processing flow.
+
+## Phase 4: Optional Runtime Observation
+
+1. **User Approval Requirement**:
+   - Dynamic execution is strictly optional and only activated in `deep` mode when authorized by the user. Explicit user approval is required before building images, spinning up containers, or executing test suites.
+2. **Sandbox-Only Isolation**:
+   - Never run untrusted code on the host machine. All runtime probes must occur inside an ephemeral Docker container or VM sandbox with restricted network and filesystem access.
+3. **Compare Observed Behavior with Static Findings**:
+   - Compare dynamic runtime behavior (e.g. startup logs, bound ports, actual HTTP responses, SQL query logs) with conclusions drawn from static code analysis.
+   - Reconcile differences and document discrepancies in `07-RISKS-AND-DEBT.md`.
+
+## Phase 5: Synthesis & Report Generation
+
+Generate the formal reverse-engineering report suite in `reverse-engineered/<repo-name>/`. Each report maps directly to its designated template in `references/output-templates.md` and is fed by specific automated scripts:
+
+1. **`00-SUMMARY.md`**: Template 00. Fed by `clone_repo.sh` (`repo_meta.json`), `detect_stack.py`, and `repo_stats.py`.
+2. **`01-ARCHITECTURE.md`**: Template 01. Fed by `dep_graph.py` (topology graph) and `find_entrypoints.py`.
+3. **`02-CODE-MAP.md`**: Template 02. Fed by `repo_stats.py` (directory tree, largest files) and `find_entrypoints.py`.
+4. **`03-API-AND-DATA.md`**: Template 03. Fed by `extract_api_surface.py` (routes, schemas) and `extract_data_model.py` (ERD, models).
+5. **`04-FLOWS.md`**: Template 04. Fed by `find_entrypoints.py` and manual code tracing across 3–5 sequences.
+6. **`05-DEPENDENCIES.md`**: Template 05. Fed by `dep_graph.py` (import centrality, cycles) and `detect_stack.py` (manifests).
+7. **`06-CONFIG-AND-OPS.md`**: Template 06. Fed by `scan_secrets_env.py` (env vars, config keys) and `detect_stack.py` (infra).
+8. **`07-RISKS-AND-DEBT.md`**: Template 07. Fed by `scan_secrets_env.py` (secret findings) and `dep_graph.py` (cycles).
+9. **`08-REBUILD-BLUEPRINT.md`**: Template 08. Fed by architectural synthesis (phased milestones and coding agent prompts).
+10. **`09-GLOSSARY-AND-QA.md`**: Template 09. Fed by domain terminology extracted across models and architecture decisions.
+
+*Length constraint*: Cap each generated report file at ~400 lines to avoid fluff and retain maximum actionable density.
+
+## Phase 6: Verification & Cross-Checking
+
+Perform a rigorous QA verification pass across all generated report markdown files before handoff:
+1. **Citations Verification**: Every factual assertion, route listing, and architectural pattern claim must contain an exact `file:line` citation that exists in the analyzed codebase.
+2. **`[inferred]` Labels Check**: Ensure any deduction not explicitly verified by source code is tagged with `[inferred: high|medium|low]` and accompanied by reasoning.
+3. **Mermaid Diagrams Validation**: Re-check all generated Mermaid blocks (`graph LR`, `sequenceDiagram`, `erDiagram`) for syntax errors, unescaped characters, and node count limits (≤ 40 nodes).
+4. **"Not Analyzed" Scope Disclosure**: In large or sampled codebases, verify that the explicit "Scope & Not Analyzed" disclosure list clearly enumerates any skipped directories, unanalyzed tests, or mocked services.
+
+## Phase 7: Handoff & Next Steps
+
+When concluding the reverse-engineering task, provide a clean executive handoff to the user:
+1. **Report Suite Location**: Provide clickable links to all generated reports in `reverse-engineered/<repo-name>/`.
+2. **Top 5 Things to Know**: Deliver an immediate high-impact summary of the 5 most critical insights, architectural patterns, or technical debt findings in the project.
+3. **Actionable Follow-up Offers**: Offer specific next steps based on user intent:
+   - "Would you like me to deep dive into a specific subsystem or trace another execution flow?"
+   - "Would you like me to begin implementing Milestone 1 from the Rebuild Blueprint?"
+   - "Would you like me to draft an ADR (Architecture Decision Record) or security remediation plan?"
+
+## Invocation Examples
+
+1. **Remote GitHub Repository (Standard Mode)**:
+   > "Reverse engineer this repository: https://github.com/expressjs/express and document how its middleware routing system works."
+2. **Local Codebase Path**:
+   > "Explain how this local project works: `/path/to/my-backend-repo`. Generate an architectural map and data model report."
+3. **Monorepo Subfolder Focus**:
+   > "Map the architecture of `https://github.com/trpc/trpc` focusing only on the `packages/server` subfolder."
+4. **Deep Mode with Rebuild Blueprint**:
+   > "Reverse engineer `https://github.com/fastify/fastify` in deep mode. I want a complete rebuild blueprint and implementation prompts to recreate it from scratch."
+5. **Beginner Audience Orientation**:
+   > "Explain how this GitHub project works for a junior developer: `https://github.com/pallets/flask`. Keep explanations accessible and provide an expanded glossary."
+
+## References
+
+Detailed guides, templates, and reference documentation:
+- [Analysis Playbook](references/analysis-playbook.md): Ecosystem-specific investigation strategies across 10 stacks.
+- [Output Templates](references/output-templates.md): Fill-in templates for reports 00 through 09.
+- [Large Repository Strategy](references/large-repo-strategy.md): Sampling, ranking by import centrality, and disclosure of unanalyzed scope.
+- [Mermaid Cheatsheet](references/mermaid-cheatsheet.md): Diagram syntax and examples for architecture, sequences, and ERDs.
+
+## Audience Flag Behavior
+
+The skill adjusts tone, technical density, and explanatory depth based on the `audience` parameter:
+
+- **`beginner` (or `junior`)**:
+  - **Tone**: Educational, supportive, and accessible. Explains underlying industry paradigms (e.g. why dependency injection is used, what an ORM migration accomplishes).
+  - **Depth**: Focuses on high-level operational concepts before diving into complex metaprogramming or low-level optimizations. Avoids assumed jargon.
+  - **Glossary (`09-GLOSSARY-AND-QA.md`)**: Expanded glossary containing fundamental terminology, library names, acronyms, and step-by-step FAQ entries answering "why" questions.
+
+- **`senior` (or `lead`)**:
+  - **Tone**: Direct, concise, and technically rigorous. Cuts straight to architectural decisions, trade-offs, and critical bottlenecks.
+  - **Depth**: Highlights concurrency hazards, state consistency guarantees, latency hot-paths, technical debt, and scalability limits.
+  - **Glossary (`09-GLOSSARY-AND-QA.md`)**: Compact glossary focused exclusively on proprietary domain terms and non-obvious internal acronyms. Emphasizes Architecture Decision Records (ADRs).
+
+## Failure & Fallback Strategies
+
+When encountering runtime obstacles, follow these standardized fallback procedures:
+
+1. **Clone Failure (Network / Remote Host Disconnect)**:
+   - Check internet connectivity and proxy settings. If git times out or network connection drops, retry `clone_repo.sh` with a specific shallow branch or inspect local clone caches.
+2. **Private Repository (Authentication Required)**:
+   - If cloning yields an authentication failure, notify the user immediately. Instruct the user to either supply a GitHub Personal Access Token (`https://TOKEN@github.com/...`), configure SSH keys, or clone the repository locally and provide the local directory path as the target.
+3. **Unsupported Language or Niche Framework**:
+   - If an exotic language or unsupported framework is detected where automated scripts return empty results, fall back to manual targeted inspection: use `grep`, `find`, and direct AST/file reading. Follow the general investigative principles documented in `references/analysis-playbook.md`.
+4. **Huge Repository (>50k LOC or Massive Monorepo)**:
+   - When a repository exceeds standard analysis limits, invoke `references/large-repo-strategy.md`: narrow focus using `--subdir` to a specific subfolder, sample top central files using `dep_graph.py`, and explicitly disclose unanalyzed directories in `07-RISKS-AND-DEBT.md`.
+
+## Parallelization Guidance
+
+When subagent delegation or parallel worker execution is supported in the host agent environment:
+1. **Parallel Package Mapping**: In monorepos, spawn parallel subagents per distinct package (e.g. `apps/web`, `apps/api`, `packages/core`). Each subagent analyzes its assigned package independently and generates localized findings.
+2. **Parallel Deep-Dive Tasks**: In large single-application repositories, spawn parallel workers across independent Phase 3 deep-dive domains:
+   - Worker A: API Surface & Route Handlers (`extract_api_surface.py`)
+   - Worker B: Data Models & Migrations (`extract_data_model.py`)
+   - Worker C: Configuration, Secrets & Infrastructure (`scan_secrets_env.py`)
+3. **Synthesis & Convergence**: The primary coordinator agent aggregates parallel subagent findings, reconciles cross-package dependency edges, resolves shared citations, and compiles the final unified 10-report suite in `reverse-engineered/<repo-name>/`.

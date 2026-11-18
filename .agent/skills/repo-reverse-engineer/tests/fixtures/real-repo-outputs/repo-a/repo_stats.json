@@ -1,0 +1,196 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/real-repos/repo-a",
+  "languages": {
+    "JavaScript": {
+      "files": 168,
+      "lines": 16720
+    },
+    "Markdown": {
+      "files": 15,
+      "lines": 3580
+    },
+    "TypeScript": {
+      "files": 3,
+      "lines": 1665
+    },
+    "Other": {
+      "files": 23,
+      "lines": 411
+    },
+    "JSON": {
+      "files": 6,
+      "lines": 168
+    }
+  },
+  "tree": {
+    ".": {
+      "depth": 0,
+      "files": 20,
+      "subdirs": 5
+    },
+    "typings": {
+      "depth": 1,
+      "files": 2,
+      "subdirs": 0
+    },
+    "tests": {
+      "depth": 1,
+      "files": 110,
+      "subdirs": 2
+    },
+    "tests/fixtures-extensions": {
+      "depth": 2,
+      "files": 4,
+      "subdirs": 0
+    },
+    "tests/fixtures": {
+      "depth": 2,
+      "files": 17,
+      "subdirs": 2
+    },
+    "tests/fixtures/another-dir": {
+      "depth": 3,
+      "files": 1,
+      "subdirs": 0
+    },
+    "tests/fixtures/other-dir": {
+      "depth": 3,
+      "files": 1,
+      "subdirs": 0
+    },
+    "docs": {
+      "depth": 1,
+      "files": 6,
+      "subdirs": 1
+    },
+    "docs/zh-CN": {
+      "depth": 2,
+      "files": 3,
+      "subdirs": 0
+    },
+    "examples": {
+      "depth": 1,
+      "files": 45,
+      "subdirs": 0
+    },
+    "lib": {
+      "depth": 1,
+      "files": 6,
+      "subdirs": 0
+    }
+  },
+  "largest_files": [
+    {
+      "path": "lib/command.js",
+      "lines": 2803,
+      "language": "JavaScript"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "lines": 1674,
+      "language": "Markdown"
+    },
+    {
+      "path": "Readme.md",
+      "lines": 1146,
+      "language": "Markdown"
+    },
+    {
+      "path": "typings/index.d.ts",
+      "lines": 1116,
+      "language": "TypeScript"
+    },
+    {
+      "path": "Readme_zh-CN.md",
+      "lines": 1049,
+      "language": "Markdown"
+    },
+    {
+      "path": "typings/index.test-d.ts",
+      "lines": 787,
+      "language": "TypeScript"
+    },
+    {
+      "path": "lib/help.js",
+      "lines": 735,
+      "language": "JavaScript"
+    },
+    {
+      "path": "tests/command.positionalOptions.test.js",
+      "lines": 534,
+      "language": "JavaScript"
+    },
+    {
+      "path": "tests/command.parse.test.js",
+      "lines": 446,
+      "language": "JavaScript"
+    },
+    {
+      "path": "tests/command.exitOverride.test.js",
+      "lines": 435,
+      "language": "JavaScript"
+    },
+    {
+      "path": "tests/command.hook.test.js",
+      "lines": 417,
+      "language": "JavaScript"
+    },
+    {
+      "path": "tests/options.conflicts.test.js",
+      "lines": 395,
+      "language": "JavaScript"
+    },
+    {
+      "path": "lib/option.js",
+      "lines": 377,
+      "language": "JavaScript"
+    },
+    {
+      "path": "tests/command.configureOutput.test.js",
+      "lines": 374,
+      "language": "JavaScript"
+    },
+    {
+      "path": "tests/options.env.test.js",
+      "lines": 371,
+      "language": "JavaScript"
+    }
+  ],
+  "recently_modified": [
+    ".editorconfig",
+    ".gitattributes",
+    ".github/FUNDING.yml",
+    ".github/PULL_REQUEST_TEMPLATE.md",
+    ".github/dependabot.yml",
+    ".github/workflows/codeql-analysis.yml",
+    ".github/workflows/tests.yml",
+    ".gitignore",
+    ".prettierignore",
+    ".prettierrc.js"
+  ],
+  "markers": {
+    "tests": {
+      "present": true,
+      "paths": [
+        "tests"
+      ]
+    },
+    "docs": {
+      "present": true,
+      "paths": [
+        "docs"
+      ]
+    },
+    "ci": {
+      "present": true,
+      "paths": [
+        ".github/workflows"
+      ]
+    }
+  },
+  "monorepo": {
+    "is_monorepo": false,
+    "signals": [],
+    "packages": []
+  }
+}

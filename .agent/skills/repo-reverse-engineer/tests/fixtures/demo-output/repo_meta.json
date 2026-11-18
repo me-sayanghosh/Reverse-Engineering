@@ -1,0 +1,9 @@
+{
+  "url": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/demo-app",
+  "commit_sha": "5c396e759a5a38e1ac40ff064e40f06008e0fc6e",
+  "branch": "dev",
+  "clone_date": "2026-11-18T15:57:25Z",
+  "license_file_detected": null,
+  "license_spdx": "none",
+  "default_branch": "dev"
+}

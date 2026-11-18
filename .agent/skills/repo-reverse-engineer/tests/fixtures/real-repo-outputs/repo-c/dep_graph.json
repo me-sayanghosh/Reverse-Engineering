@@ -1,0 +1,4352 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/real-repos/repo-c",
+  "total_file_imports": 689,
+  "modules": [
+    ".",
+    "docs/.vitepress",
+    "docs/blog",
+    "docs/guide",
+    "docs/scripts",
+    "packages/apply-release-plan",
+    "packages/assemble-release-plan",
+    "packages/changelog-git",
+    "packages/changelog-github",
+    "packages/cli",
+    "packages/config",
+    "packages/errors",
+    "packages/get-dependents-graph",
+    "packages/get-github-info",
+    "packages/get-release-plan",
+    "packages/get-version-range-type",
+    "packages/git",
+    "packages/logger",
+    "packages/parse",
+    "packages/pre",
+    "packages/read",
+    "packages/release-utils",
+    "packages/should-skip-package",
+    "packages/types",
+    "packages/write"
+  ],
+  "module_edges": [
+    {
+      "source": "docs/guide",
+      "target": "packages/cli",
+      "weight": 1
+    },
+    {
+      "source": "docs/blog",
+      "target": "docs/.vitepress",
+      "weight": 1
+    },
+    {
+      "source": "docs/scripts",
+      "target": "docs/.vitepress",
+      "weight": 1
+    },
+    {
+      "source": "packages/write",
+      "target": ".",
+      "weight": 1
+    },
+    {
+      "source": "packages/assemble-release-plan",
+      "target": ".",
+      "weight": 1
+    },
+    {
+      "source": "packages/types",
+      "target": ".",
+      "weight": 1
+    },
+    {
+      "source": "packages/logger",
+      "target": ".",
+      "weight": 1
+    },
+    {
+      "source": "packages/config",
+      "target": ".",
+      "weight": 1
+    },
+    {
+      "source": "packages/get-version-range-type",
+      "target": ".",
+      "weight": 1
+    },
+    {
+      "source": "packages/should-skip-package",
+      "target": ".",
+      "weight": 1
+    },
+    {
+      "source": "packages/parse",
+      "target": ".",
+      "weight": 1
+    },
+    {
+      "source": "packages/read",
+      "target": ".",
+      "weight": 1
+    },
+    {
+      "source": "packages/get-release-plan",
+      "target": ".",
+      "weight": 1
+    },
+    {
+      "source": "packages/get-dependents-graph",
+      "target": ".",
+      "weight": 1
+    },
+    {
+      "source": "packages/cli",
+      "target": ".",
+      "weight": 1
+    },
+    {
+      "source": "packages/cli",
+      "target": "packages/errors",
+      "weight": 1
+    },
+    {
+      "source": "packages/release-utils",
+      "target": ".",
+      "weight": 1
+    },
+    {
+      "source": "packages/changelog-git",
+      "target": ".",
+      "weight": 1
+    },
+    {
+      "source": "packages/pre",
+      "target": ".",
+      "weight": 1
+    },
+    {
+      "source": "packages/get-github-info",
+      "target": ".",
+      "weight": 1
+    },
+    {
+      "source": "packages/errors",
+      "target": ".",
+      "weight": 1
+    },
+    {
+      "source": "packages/changelog-github",
+      "target": ".",
+      "weight": 1
+    },
+    {
+      "source": "packages/apply-release-plan",
+      "target": ".",
+      "weight": 1
+    },
+    {
+      "source": "packages/git",
+      "target": ".",
+      "weight": 1
+    }
+  ],
+  "centrality": [
+    {
+      "module": ".",
+      "in_degree": 20,
+      "out_degree": 0,
+      "total_degree": 20
+    },
+    {
+      "module": "packages/cli",
+      "in_degree": 1,
+      "out_degree": 2,
+      "total_degree": 3
+    },
+    {
+      "module": "docs/.vitepress",
+      "in_degree": 2,
+      "out_degree": 0,
+      "total_degree": 2
+    },
+    {
+      "module": "packages/errors",
+      "in_degree": 1,
+      "out_degree": 1,
+      "total_degree": 2
+    },
+    {
+      "module": "docs/blog",
+      "in_degree": 0,
+      "out_degree": 1,
+      "total_degree": 1
+    },
+    {
+      "module": "docs/guide",
+      "in_degree": 0,
+      "out_degree": 1,
+      "total_degree": 1
+    },
+    {
+      "module": "docs/scripts",
+      "in_degree": 0,
+      "out_degree": 1,
+      "total_degree": 1
+    },
+    {
+      "module": "packages/apply-release-plan",
+      "in_degree": 0,
+      "out_degree": 1,
+      "total_degree": 1
+    },
+    {
+      "module": "packages/assemble-release-plan",
+      "in_degree": 0,
+      "out_degree": 1,
+      "total_degree": 1
+    },
+    {
+      "module": "packages/changelog-git",
+      "in_degree": 0,
+      "out_degree": 1,
+      "total_degree": 1
+    }
+  ],
+  "cycles": [],
+  "raw_edges": [
+    {
+      "source": "eslint.config.js",
+      "target": "**/*config.*",
+      "type": "external",
+      "specifier": "**/*config.*"
+    },
+    {
+      "source": "eslint.config.js",
+      "target": "@e18e/eslint-plugin",
+      "type": "external",
+      "specifier": "@e18e/eslint-plugin"
+    },
+    {
+      "source": "eslint.config.js",
+      "target": "@eslint/js",
+      "type": "external",
+      "specifier": "@eslint/js"
+    },
+    {
+      "source": "eslint.config.js",
+      "target": "@vitest/eslint-plugin",
+      "type": "external",
+      "specifier": "@vitest/eslint-plugin"
+    },
+    {
+      "source": "eslint.config.js",
+      "target": "eslint-config-prettier/flat",
+      "type": "external",
+      "specifier": "eslint-config-prettier/flat"
+    },
+    {
+      "source": "eslint.config.js",
+      "target": "eslint-plugin-import-lite",
+      "type": "external",
+      "specifier": "eslint-plugin-import-lite"
+    },
+    {
+      "source": "eslint.config.js",
+      "target": "eslint-plugin-n",
+      "type": "external",
+      "specifier": "eslint-plugin-n"
+    },
+    {
+      "source": "eslint.config.js",
+      "target": "eslint/config",
+      "type": "external",
+      "specifier": "eslint/config"
+    },
+    {
+      "source": "eslint.config.js",
+      "target": "typescript-eslint",
+      "type": "external",
+      "specifier": "typescript-eslint"
+    },
+    {
+      "source": "tsdown.config.ts",
+      "target": "tsdown/config",
+      "type": "external",
+      "specifier": "tsdown/config"
+    },
+    {
+      "source": "vitest.config.ts",
+      "target": "vitest/config",
+      "type": "external",
+      "specifier": "vitest/config"
+    },
+    {
+      "source": "docs/guide/cli.data.ts",
+      "target": "packages/cli/src/cli.ts",
+      "type": "internal",
+      "specifier": "../../packages/cli/src/cli.ts"
+    },
+    {
+      "source": "docs/blog/index.data.ts",
+      "target": "docs/.vitepress/theme/utils.ts",
+      "type": "internal",
+      "specifier": "../.vitepress/theme/utils.ts"
+    },
+    {
+      "source": "docs/blog/index.data.ts",
+      "target": "vitepress",
+      "type": "external",
+      "specifier": "vitepress"
+    },
+    {
+      "source": "docs/scripts/generate-og.ts",
+      "target": "docs/.vitepress/theme/utils.ts",
+      "type": "internal",
+      "specifier": "../.vitepress/theme/utils.ts"
+    },
+    {
+      "source": "docs/scripts/generate-og.ts",
+      "target": "node:fs",
+      "type": "stdlib",
+      "specifier": "node:fs"
+    },
+    {
+      "source": "docs/scripts/generate-og.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "docs/scripts/generate-og.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "docs/scripts/generate-og.ts",
+      "target": "takumi-js",
+      "type": "external",
+      "specifier": "takumi-js"
+    },
+    {
+      "source": "docs/scripts/generate-og.ts",
+      "target": "takumi-js/helpers",
+      "type": "external",
+      "specifier": "takumi-js/helpers"
+    },
+    {
+      "source": "docs/packages/[pkg].paths.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "docs/packages/[pkg].paths.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "docs/packages/[pkg].paths.ts",
+      "target": "vitepress",
+      "type": "external",
+      "specifier": "vitepress"
+    },
+    {
+      "source": "scripts/test-utils/src/index.ts",
+      "target": "fs-fixture",
+      "type": "external",
+      "specifier": "fs-fixture"
+    },
+    {
+      "source": "scripts/test-utils/src/index.ts",
+      "target": "node:fs",
+      "type": "stdlib",
+      "specifier": "node:fs"
+    },
+    {
+      "source": "scripts/test-utils/src/index.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "scripts/test-utils/src/index.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "scripts/test-utils/src/index.ts",
+      "target": "node:url",
+      "type": "stdlib",
+      "specifier": "node:url"
+    },
+    {
+      "source": "scripts/test-utils/src/index.ts",
+      "target": "tinyexec",
+      "type": "external",
+      "specifier": "tinyexec"
+    },
+    {
+      "source": "scripts/test-utils/src/index.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "scripts/e2e/publish.test.ts",
+      "target": "@changesets/git",
+      "type": "external",
+      "specifier": "@changesets/git"
+    },
+    {
+      "source": "scripts/e2e/publish.test.ts",
+      "target": "modern-tar/fs",
+      "type": "external",
+      "specifier": "modern-tar/fs"
+    },
+    {
+      "source": "scripts/e2e/publish.test.ts",
+      "target": "node:child_process",
+      "type": "stdlib",
+      "specifier": "node:child_process"
+    },
+    {
+      "source": "scripts/e2e/publish.test.ts",
+      "target": "node:crypto",
+      "type": "stdlib",
+      "specifier": "node:crypto"
+    },
+    {
+      "source": "scripts/e2e/publish.test.ts",
+      "target": "node:events",
+      "type": "stdlib",
+      "specifier": "node:events"
+    },
+    {
+      "source": "scripts/e2e/publish.test.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "scripts/e2e/publish.test.ts",
+      "target": "node:http",
+      "type": "stdlib",
+      "specifier": "node:http"
+    },
+    {
+      "source": "scripts/e2e/publish.test.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "scripts/e2e/publish.test.ts",
+      "target": "node:stream",
+      "type": "stdlib",
+      "specifier": "node:stream"
+    },
+    {
+      "source": "scripts/e2e/publish.test.ts",
+      "target": "node:stream/promises",
+      "type": "stdlib",
+      "specifier": "node:stream/promises"
+    },
+    {
+      "source": "scripts/e2e/publish.test.ts",
+      "target": "node:timers/promises",
+      "type": "stdlib",
+      "specifier": "node:timers/promises"
+    },
+    {
+      "source": "scripts/e2e/publish.test.ts",
+      "target": "node:util",
+      "type": "stdlib",
+      "specifier": "node:util"
+    },
+    {
+      "source": "scripts/e2e/publish.test.ts",
+      "target": "node:zlib",
+      "type": "stdlib",
+      "specifier": "node:zlib"
+    },
+    {
+      "source": "scripts/e2e/publish.test.ts",
+      "target": "tinyexec",
+      "type": "external",
+      "specifier": "tinyexec"
+    },
+    {
+      "source": "scripts/e2e/publish.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "scripts/e2e/e2e-utils.ts",
+      "target": "@changesets/config",
+      "type": "external",
+      "specifier": "@changesets/config"
+    },
+    {
+      "source": "scripts/e2e/e2e-utils.ts",
+      "target": "@changesets/test-utils",
+      "type": "external",
+      "specifier": "@changesets/test-utils"
+    },
+    {
+      "source": "scripts/e2e/e2e-utils.ts",
+      "target": "@lydell/node-pty",
+      "type": "external",
+      "specifier": "@lydell/node-pty"
+    },
+    {
+      "source": "scripts/e2e/e2e-utils.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "scripts/e2e/e2e-utils.ts",
+      "target": "node:net",
+      "type": "stdlib",
+      "specifier": "node:net"
+    },
+    {
+      "source": "scripts/e2e/e2e-utils.ts",
+      "target": "node:os",
+      "type": "stdlib",
+      "specifier": "node:os"
+    },
+    {
+      "source": "scripts/e2e/e2e-utils.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "scripts/e2e/e2e-utils.ts",
+      "target": "node:url",
+      "type": "stdlib",
+      "specifier": "node:url"
+    },
+    {
+      "source": "scripts/e2e/e2e-utils.ts",
+      "target": "tinyexec",
+      "type": "external",
+      "specifier": "tinyexec"
+    },
+    {
+      "source": "scripts/e2e/vitest.config.ts",
+      "target": "vitest/config",
+      "type": "external",
+      "specifier": "vitest/config"
+    },
+    {
+      "source": "scripts/e2e/pack.test.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "scripts/e2e/pack.test.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "scripts/e2e/pack.test.ts",
+      "target": "node:util",
+      "type": "stdlib",
+      "specifier": "node:util"
+    },
+    {
+      "source": "scripts/e2e/pack.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/write/tsdown.config.ts",
+      "target": "tsdown.config.ts",
+      "type": "internal",
+      "specifier": "../../tsdown.config.ts"
+    },
+    {
+      "source": "packages/write/tsdown.config.ts",
+      "target": "tsdown/config",
+      "type": "external",
+      "specifier": "tsdown/config"
+    },
+    {
+      "source": "packages/write/src/index.test.ts",
+      "target": "packages/write/src/index.ts",
+      "type": "internal",
+      "specifier": "./index.ts"
+    },
+    {
+      "source": "packages/write/src/index.test.ts",
+      "target": "@changesets/format",
+      "type": "external",
+      "specifier": "@changesets/format"
+    },
+    {
+      "source": "packages/write/src/index.test.ts",
+      "target": "@changesets/parse",
+      "type": "external",
+      "specifier": "@changesets/parse"
+    },
+    {
+      "source": "packages/write/src/index.test.ts",
+      "target": "@changesets/test-utils",
+      "type": "external",
+      "specifier": "@changesets/test-utils"
+    },
+    {
+      "source": "packages/write/src/index.test.ts",
+      "target": "human-id",
+      "type": "external",
+      "specifier": "human-id"
+    },
+    {
+      "source": "packages/write/src/index.test.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/write/src/index.test.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/write/src/index.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/write/src/index.ts",
+      "target": "@changesets/format",
+      "type": "external",
+      "specifier": "@changesets/format"
+    },
+    {
+      "source": "packages/write/src/index.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/write/src/index.ts",
+      "target": "human-id",
+      "type": "external",
+      "specifier": "human-id"
+    },
+    {
+      "source": "packages/write/src/index.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/write/src/index.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/assemble-release-plan/tsdown.config.ts",
+      "target": "tsdown.config.ts",
+      "type": "internal",
+      "specifier": "../../tsdown.config.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/tsdown.config.ts",
+      "target": "tsdown/config",
+      "type": "external",
+      "specifier": "tsdown/config"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/increment.test.ts",
+      "target": "packages/assemble-release-plan/src/increment.ts",
+      "type": "internal",
+      "specifier": "./increment.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/increment.test.ts",
+      "target": "packages/assemble-release-plan/src/types.ts",
+      "type": "internal",
+      "specifier": "./types.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/increment.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/index.test.ts",
+      "target": "packages/assemble-release-plan/src/index.ts",
+      "type": "internal",
+      "specifier": "./index.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/index.test.ts",
+      "target": "packages/assemble-release-plan/src/test-utils.ts",
+      "type": "internal",
+      "specifier": "./test-utils.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/index.test.ts",
+      "target": "@changesets/config",
+      "type": "external",
+      "specifier": "@changesets/config"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/index.test.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/index.test.ts",
+      "target": "node:crypto",
+      "type": "stdlib",
+      "specifier": "node:crypto"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/index.test.ts",
+      "target": "semver",
+      "type": "external",
+      "specifier": "semver"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/index.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/apply-links.ts",
+      "target": "packages/assemble-release-plan/src/types.ts",
+      "type": "internal",
+      "specifier": "./types.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/apply-links.ts",
+      "target": "packages/assemble-release-plan/src/utils.ts",
+      "type": "internal",
+      "specifier": "./utils.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/apply-links.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/utils.ts",
+      "target": "packages/assemble-release-plan/src/types.ts",
+      "type": "internal",
+      "specifier": "./types.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/utils.ts",
+      "target": "@changesets/errors",
+      "type": "external",
+      "specifier": "@changesets/errors"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/utils.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/utils.ts",
+      "target": "semver/functions/gt.js",
+      "type": "external",
+      "specifier": "semver/functions/gt.js"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/determine-dependents.ts",
+      "target": "packages/assemble-release-plan/src/increment.ts",
+      "type": "internal",
+      "specifier": "./increment.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/determine-dependents.ts",
+      "target": "packages/assemble-release-plan/src/types.ts",
+      "type": "internal",
+      "specifier": "./types.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/determine-dependents.ts",
+      "target": "packages/assemble-release-plan/src/utils.ts",
+      "type": "internal",
+      "specifier": "./utils.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/determine-dependents.ts",
+      "target": "@changesets/should-skip-package",
+      "type": "external",
+      "specifier": "@changesets/should-skip-package"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/determine-dependents.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/determine-dependents.ts",
+      "target": "semver/functions/satisfies.js",
+      "type": "external",
+      "specifier": "semver/functions/satisfies.js"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/determine-dependents.ts",
+      "target": "semver/ranges/valid.js",
+      "type": "external",
+      "specifier": "semver/ranges/valid.js"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/types.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/match-fixed-constraint.ts",
+      "target": "packages/assemble-release-plan/src/types.ts",
+      "type": "internal",
+      "specifier": "./types.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/match-fixed-constraint.ts",
+      "target": "@changesets/should-skip-package",
+      "type": "external",
+      "specifier": "@changesets/should-skip-package"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/match-fixed-constraint.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/increment.ts",
+      "target": "packages/assemble-release-plan/src/types.ts",
+      "type": "internal",
+      "specifier": "./types.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/increment.ts",
+      "target": "packages/assemble-release-plan/src/utils.ts",
+      "type": "internal",
+      "specifier": "./utils.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/increment.ts",
+      "target": "semver/functions/inc.js",
+      "type": "external",
+      "specifier": "semver/functions/inc.js"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/index.ts",
+      "target": "packages/assemble-release-plan/src/apply-links.ts",
+      "type": "internal",
+      "specifier": "./apply-links.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/index.ts",
+      "target": "packages/assemble-release-plan/src/determine-dependents.ts",
+      "type": "internal",
+      "specifier": "./determine-dependents.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/index.ts",
+      "target": "packages/assemble-release-plan/src/flatten-releases.ts",
+      "type": "internal",
+      "specifier": "./flatten-releases.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/index.ts",
+      "target": "packages/assemble-release-plan/src/increment.ts",
+      "type": "internal",
+      "specifier": "./increment.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/index.ts",
+      "target": "packages/assemble-release-plan/src/match-fixed-constraint.ts",
+      "type": "internal",
+      "specifier": "./match-fixed-constraint.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/index.ts",
+      "target": "packages/assemble-release-plan/src/types.ts",
+      "type": "internal",
+      "specifier": "./types.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/index.ts",
+      "target": "packages/assemble-release-plan/src/utils.ts",
+      "type": "internal",
+      "specifier": "./utils.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/index.ts",
+      "target": "@changesets/errors",
+      "type": "external",
+      "specifier": "@changesets/errors"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/index.ts",
+      "target": "@changesets/get-dependents-graph",
+      "type": "external",
+      "specifier": "@changesets/get-dependents-graph"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/index.ts",
+      "target": "@changesets/should-skip-package",
+      "type": "external",
+      "specifier": "@changesets/should-skip-package"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/index.ts",
+      "target": "semver/functions/parse.js",
+      "type": "external",
+      "specifier": "semver/functions/parse.js"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/flatten-releases.ts",
+      "target": "packages/assemble-release-plan/src/types.ts",
+      "type": "internal",
+      "specifier": "./types.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/flatten-releases.ts",
+      "target": "packages/assemble-release-plan/src/utils.ts",
+      "type": "internal",
+      "specifier": "./utils.ts"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/flatten-releases.ts",
+      "target": "@changesets/should-skip-package",
+      "type": "external",
+      "specifier": "@changesets/should-skip-package"
+    },
+    {
+      "source": "packages/assemble-release-plan/src/flatten-releases.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/types/tsdown.config.ts",
+      "target": "tsdown.config.ts",
+      "type": "internal",
+      "specifier": "../../tsdown.config.ts"
+    },
+    {
+      "source": "packages/types/tsdown.config.ts",
+      "target": "tsdown/config",
+      "type": "external",
+      "specifier": "tsdown/config"
+    },
+    {
+      "source": "packages/logger/tsdown.config.ts",
+      "target": "tsdown.config.ts",
+      "type": "internal",
+      "specifier": "../../tsdown.config.ts"
+    },
+    {
+      "source": "packages/logger/tsdown.config.ts",
+      "target": "tsdown/config",
+      "type": "external",
+      "specifier": "tsdown/config"
+    },
+    {
+      "source": "packages/logger/src/index.test.ts",
+      "target": "packages/logger/src/index.ts",
+      "type": "internal",
+      "specifier": "./index.ts"
+    },
+    {
+      "source": "packages/logger/src/index.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/logger/src/index.ts",
+      "target": "@changesets/color",
+      "type": "external",
+      "specifier": "@changesets/color"
+    },
+    {
+      "source": "packages/logger/src/index.ts",
+      "target": "node:util",
+      "type": "stdlib",
+      "specifier": "node:util"
+    },
+    {
+      "source": "packages/config/tsdown.config.ts",
+      "target": "tsdown.config.ts",
+      "type": "internal",
+      "specifier": "../../tsdown.config.ts"
+    },
+    {
+      "source": "packages/config/tsdown.config.ts",
+      "target": "tsdown/config",
+      "type": "external",
+      "specifier": "tsdown/config"
+    },
+    {
+      "source": "packages/config/scripts/json-schema.test.ts",
+      "target": "packages/config/scripts/generate-json-schema.ts",
+      "type": "internal",
+      "specifier": "./generate-json-schema.ts"
+    },
+    {
+      "source": "packages/config/scripts/json-schema.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/config/scripts/generate-json-schema.ts",
+      "target": "packages/config/src/config.ts",
+      "type": "internal",
+      "specifier": "../src/config.ts"
+    },
+    {
+      "source": "packages/config/scripts/generate-json-schema.ts",
+      "target": "@valibot/to-json-schema",
+      "type": "external",
+      "specifier": "@valibot/to-json-schema"
+    },
+    {
+      "source": "packages/config/scripts/generate-json-schema.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/config/scripts/generate-json-schema.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/config/scripts/generate-json-schema.ts",
+      "target": "oxfmt",
+      "type": "external",
+      "specifier": "oxfmt"
+    },
+    {
+      "source": "packages/config/src/parse.ts",
+      "target": "packages/config/src/config.ts",
+      "type": "internal",
+      "specifier": "./config.ts"
+    },
+    {
+      "source": "packages/config/src/parse.ts",
+      "target": "packages/config/src/rules.ts",
+      "type": "internal",
+      "specifier": "./rules.ts"
+    },
+    {
+      "source": "packages/config/src/parse.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/config/src/parse.ts",
+      "target": "@manypkg/get-packages",
+      "type": "external",
+      "specifier": "@manypkg/get-packages"
+    },
+    {
+      "source": "packages/config/src/parse.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/config/src/parse.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/config/src/parse.ts",
+      "target": "valibot",
+      "type": "external",
+      "specifier": "valibot"
+    },
+    {
+      "source": "packages/config/src/defaults.ts",
+      "target": "packages/config/package.json",
+      "type": "internal",
+      "specifier": "../package.json"
+    },
+    {
+      "source": "packages/config/src/defaults.ts",
+      "target": "packages/config/src/config.ts",
+      "type": "internal",
+      "specifier": "./config.ts"
+    },
+    {
+      "source": "packages/config/src/defaults.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/config/src/defaults.ts",
+      "target": "valibot",
+      "type": "external",
+      "specifier": "valibot"
+    },
+    {
+      "source": "packages/config/src/parse.test.ts",
+      "target": "packages/config/src/defaults.ts",
+      "type": "internal",
+      "specifier": "./defaults.ts"
+    },
+    {
+      "source": "packages/config/src/parse.test.ts",
+      "target": "packages/config/src/parse.ts",
+      "type": "internal",
+      "specifier": "./parse.ts"
+    },
+    {
+      "source": "packages/config/src/parse.test.ts",
+      "target": "@changesets/test-utils",
+      "type": "external",
+      "specifier": "@changesets/test-utils"
+    },
+    {
+      "source": "packages/config/src/parse.test.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/config/src/parse.test.ts",
+      "target": "@manypkg/get-packages",
+      "type": "external",
+      "specifier": "@manypkg/get-packages"
+    },
+    {
+      "source": "packages/config/src/parse.test.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/config/src/parse.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/config/src/utils.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/config/src/utils.ts",
+      "target": "picomatch",
+      "type": "external",
+      "specifier": "picomatch"
+    },
+    {
+      "source": "packages/config/src/rules.ts",
+      "target": "packages/config/src/utils.ts",
+      "type": "internal",
+      "specifier": "./utils.ts"
+    },
+    {
+      "source": "packages/config/src/rules.ts",
+      "target": "@changesets/get-dependents-graph",
+      "type": "external",
+      "specifier": "@changesets/get-dependents-graph"
+    },
+    {
+      "source": "packages/config/src/rules.ts",
+      "target": "@changesets/should-skip-package",
+      "type": "external",
+      "specifier": "@changesets/should-skip-package"
+    },
+    {
+      "source": "packages/config/src/rules.ts",
+      "target": "picomatch",
+      "type": "external",
+      "specifier": "picomatch"
+    },
+    {
+      "source": "packages/config/src/index.ts",
+      "target": "packages/config/src/defaults.ts",
+      "type": "internal",
+      "specifier": "./defaults.ts"
+    },
+    {
+      "source": "packages/config/src/index.ts",
+      "target": "packages/config/src/parse.ts",
+      "type": "internal",
+      "specifier": "./parse.ts"
+    },
+    {
+      "source": "packages/config/src/config.ts",
+      "target": "packages/config/src/utils.ts",
+      "type": "internal",
+      "specifier": "./utils.ts"
+    },
+    {
+      "source": "packages/config/src/config.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/config/src/config.ts",
+      "target": "valibot",
+      "type": "external",
+      "specifier": "valibot"
+    },
+    {
+      "source": "packages/get-version-range-type/tsdown.config.ts",
+      "target": "tsdown.config.ts",
+      "type": "internal",
+      "specifier": "../../tsdown.config.ts"
+    },
+    {
+      "source": "packages/get-version-range-type/tsdown.config.ts",
+      "target": "tsdown/config",
+      "type": "external",
+      "specifier": "tsdown/config"
+    },
+    {
+      "source": "packages/get-version-range-type/src/index.test.ts",
+      "target": "packages/get-version-range-type/src/index.ts",
+      "type": "internal",
+      "specifier": "./index.ts"
+    },
+    {
+      "source": "packages/get-version-range-type/src/index.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/should-skip-package/tsdown.config.ts",
+      "target": "tsdown.config.ts",
+      "type": "internal",
+      "specifier": "../../tsdown.config.ts"
+    },
+    {
+      "source": "packages/should-skip-package/tsdown.config.ts",
+      "target": "tsdown/config",
+      "type": "external",
+      "specifier": "tsdown/config"
+    },
+    {
+      "source": "packages/should-skip-package/src/index.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/color/src/index.ts",
+      "target": "node:util",
+      "type": "stdlib",
+      "specifier": "node:util"
+    },
+    {
+      "source": "packages/parse/tsdown.config.ts",
+      "target": "tsdown.config.ts",
+      "type": "internal",
+      "specifier": "../../tsdown.config.ts"
+    },
+    {
+      "source": "packages/parse/tsdown.config.ts",
+      "target": "tsdown/config",
+      "type": "external",
+      "specifier": "tsdown/config"
+    },
+    {
+      "source": "packages/parse/src/index.test.ts",
+      "target": "packages/parse/src/index.ts",
+      "type": "internal",
+      "specifier": "./index.ts"
+    },
+    {
+      "source": "packages/parse/src/index.test.ts",
+      "target": "outdent",
+      "type": "external",
+      "specifier": "outdent"
+    },
+    {
+      "source": "packages/parse/src/index.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/parse/src/index.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/parse/src/index.ts",
+      "target": "yaml",
+      "type": "external",
+      "specifier": "yaml"
+    },
+    {
+      "source": "packages/read/tsdown.config.ts",
+      "target": "tsdown.config.ts",
+      "type": "internal",
+      "specifier": "../../tsdown.config.ts"
+    },
+    {
+      "source": "packages/read/tsdown.config.ts",
+      "target": "tsdown/config",
+      "type": "external",
+      "specifier": "tsdown/config"
+    },
+    {
+      "source": "packages/read/src/index.test.ts",
+      "target": "packages/read/src/index.ts",
+      "type": "internal",
+      "specifier": "./index.ts"
+    },
+    {
+      "source": "packages/read/src/index.test.ts",
+      "target": "@changesets/git",
+      "type": "external",
+      "specifier": "@changesets/git"
+    },
+    {
+      "source": "packages/read/src/index.test.ts",
+      "target": "@changesets/test-utils",
+      "type": "external",
+      "specifier": "@changesets/test-utils"
+    },
+    {
+      "source": "packages/read/src/index.test.ts",
+      "target": "@changesets/write",
+      "type": "external",
+      "specifier": "@changesets/write"
+    },
+    {
+      "source": "packages/read/src/index.test.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/read/src/index.test.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/read/src/index.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/read/src/index.ts",
+      "target": "@changesets/git",
+      "type": "external",
+      "specifier": "@changesets/git"
+    },
+    {
+      "source": "packages/read/src/index.ts",
+      "target": "@changesets/parse",
+      "type": "external",
+      "specifier": "@changesets/parse"
+    },
+    {
+      "source": "packages/read/src/index.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/read/src/index.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/read/src/index.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/get-release-plan/tsdown.config.ts",
+      "target": "tsdown.config.ts",
+      "type": "internal",
+      "specifier": "../../tsdown.config.ts"
+    },
+    {
+      "source": "packages/get-release-plan/tsdown.config.ts",
+      "target": "tsdown/config",
+      "type": "external",
+      "specifier": "tsdown/config"
+    },
+    {
+      "source": "packages/get-release-plan/src/index.ts",
+      "target": "@changesets/assemble-release-plan",
+      "type": "external",
+      "specifier": "@changesets/assemble-release-plan"
+    },
+    {
+      "source": "packages/get-release-plan/src/index.ts",
+      "target": "@changesets/config",
+      "type": "external",
+      "specifier": "@changesets/config"
+    },
+    {
+      "source": "packages/get-release-plan/src/index.ts",
+      "target": "@changesets/pre",
+      "type": "external",
+      "specifier": "@changesets/pre"
+    },
+    {
+      "source": "packages/get-release-plan/src/index.ts",
+      "target": "@changesets/read",
+      "type": "external",
+      "specifier": "@changesets/read"
+    },
+    {
+      "source": "packages/get-release-plan/src/index.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/get-release-plan/src/index.ts",
+      "target": "@manypkg/get-packages",
+      "type": "external",
+      "specifier": "@manypkg/get-packages"
+    },
+    {
+      "source": "packages/get-dependents-graph/tsdown.config.ts",
+      "target": "tsdown.config.ts",
+      "type": "internal",
+      "specifier": "../../tsdown.config.ts"
+    },
+    {
+      "source": "packages/get-dependents-graph/tsdown.config.ts",
+      "target": "tsdown/config",
+      "type": "external",
+      "specifier": "tsdown/config"
+    },
+    {
+      "source": "packages/get-dependents-graph/src/get-dependency-graph.test.ts",
+      "target": "packages/get-dependents-graph/src/get-dependency-graph.ts",
+      "type": "internal",
+      "specifier": "./get-dependency-graph.ts"
+    },
+    {
+      "source": "packages/get-dependents-graph/src/get-dependency-graph.test.ts",
+      "target": "@changesets/test-utils",
+      "type": "external",
+      "specifier": "@changesets/test-utils"
+    },
+    {
+      "source": "packages/get-dependents-graph/src/get-dependency-graph.test.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/get-dependents-graph/src/get-dependency-graph.test.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/get-dependents-graph/src/get-dependency-graph.test.ts",
+      "target": "node:util",
+      "type": "stdlib",
+      "specifier": "node:util"
+    },
+    {
+      "source": "packages/get-dependents-graph/src/get-dependency-graph.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/get-dependents-graph/src/get-dependency-graph.ts",
+      "target": "@changesets/color",
+      "type": "external",
+      "specifier": "@changesets/color"
+    },
+    {
+      "source": "packages/get-dependents-graph/src/get-dependency-graph.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/get-dependents-graph/src/get-dependency-graph.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/get-dependents-graph/src/get-dependency-graph.ts",
+      "target": "semver/classes/range.js",
+      "type": "external",
+      "specifier": "semver/classes/range.js"
+    },
+    {
+      "source": "packages/get-dependents-graph/src/index.ts",
+      "target": "packages/get-dependents-graph/src/get-dependency-graph.ts",
+      "type": "internal",
+      "specifier": "./get-dependency-graph.ts"
+    },
+    {
+      "source": "packages/get-dependents-graph/src/index.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/bin.js",
+      "target": "@changesets/cli",
+      "type": "external",
+      "specifier": "@changesets/cli"
+    },
+    {
+      "source": "packages/cli/tsdown.config.ts",
+      "target": "tsdown.config.ts",
+      "type": "internal",
+      "specifier": "../../tsdown.config.ts"
+    },
+    {
+      "source": "packages/cli/tsdown.config.ts",
+      "target": "tsdown/config",
+      "type": "external",
+      "specifier": "tsdown/config"
+    },
+    {
+      "source": "packages/cli/src/cli.ts",
+      "target": "packages/errors/src/index.ts",
+      "type": "internal",
+      "specifier": "../../errors/src/index.ts"
+    },
+    {
+      "source": "packages/cli/src/cli.ts",
+      "target": "packages/cli/src/commands/add/index.ts",
+      "type": "internal",
+      "specifier": "./commands/add/index.ts"
+    },
+    {
+      "source": "packages/cli/src/cli.ts",
+      "target": "packages/cli/src/commands/git-tag/index.ts",
+      "type": "internal",
+      "specifier": "./commands/git-tag/index.ts"
+    },
+    {
+      "source": "packages/cli/src/cli.ts",
+      "target": "packages/cli/src/commands/init/index.ts",
+      "type": "internal",
+      "specifier": "./commands/init/index.ts"
+    },
+    {
+      "source": "packages/cli/src/cli.ts",
+      "target": "packages/cli/src/commands/pack/index.ts",
+      "type": "internal",
+      "specifier": "./commands/pack/index.ts"
+    },
+    {
+      "source": "packages/cli/src/cli.ts",
+      "target": "packages/cli/src/commands/pre/index.ts",
+      "type": "internal",
+      "specifier": "./commands/pre/index.ts"
+    },
+    {
+      "source": "packages/cli/src/cli.ts",
+      "target": "packages/cli/src/commands/publish-plan/index.ts",
+      "type": "internal",
+      "specifier": "./commands/publish-plan/index.ts"
+    },
+    {
+      "source": "packages/cli/src/cli.ts",
+      "target": "packages/cli/src/commands/publish/index.ts",
+      "type": "internal",
+      "specifier": "./commands/publish/index.ts"
+    },
+    {
+      "source": "packages/cli/src/cli.ts",
+      "target": "packages/cli/src/commands/status/index.ts",
+      "type": "internal",
+      "specifier": "./commands/status/index.ts"
+    },
+    {
+      "source": "packages/cli/src/cli.ts",
+      "target": "packages/cli/src/commands/version/index.ts",
+      "type": "internal",
+      "specifier": "./commands/version/index.ts"
+    },
+    {
+      "source": "packages/cli/src/cli.ts",
+      "target": "@changesets/cli/package.json",
+      "type": "external",
+      "specifier": "@changesets/cli/package.json"
+    },
+    {
+      "source": "packages/cli/src/cli.ts",
+      "target": "@changesets/color",
+      "type": "external",
+      "specifier": "@changesets/color"
+    },
+    {
+      "source": "packages/cli/src/cli.ts",
+      "target": "@clack/prompts",
+      "type": "external",
+      "specifier": "@clack/prompts"
+    },
+    {
+      "source": "packages/cli/src/cli.ts",
+      "target": "cac",
+      "type": "external",
+      "specifier": "cac"
+    },
+    {
+      "source": "packages/cli/src/changelog.ts",
+      "target": "@changesets/changelog-git",
+      "type": "external",
+      "specifier": "@changesets/changelog-git"
+    },
+    {
+      "source": "packages/cli/src/index.ts",
+      "target": "packages/cli/src/cli.ts",
+      "type": "internal",
+      "specifier": "./cli.ts"
+    },
+    {
+      "source": "packages/cli/src/index.ts",
+      "target": "@changesets/cli/package.json",
+      "type": "external",
+      "specifier": "@changesets/cli/package.json"
+    },
+    {
+      "source": "packages/cli/src/index.ts",
+      "target": "@changesets/color",
+      "type": "external",
+      "specifier": "@changesets/color"
+    },
+    {
+      "source": "packages/cli/src/index.ts",
+      "target": "@changesets/errors",
+      "type": "external",
+      "specifier": "@changesets/errors"
+    },
+    {
+      "source": "packages/cli/src/index.ts",
+      "target": "@clack/prompts",
+      "type": "external",
+      "specifier": "@clack/prompts"
+    },
+    {
+      "source": "packages/cli/src/index.ts",
+      "target": "node:util",
+      "type": "stdlib",
+      "specifier": "node:util"
+    },
+    {
+      "source": "packages/cli/src/cli.test.ts",
+      "target": "packages/cli/src/cli.ts",
+      "type": "internal",
+      "specifier": "./cli.ts"
+    },
+    {
+      "source": "packages/cli/src/cli.test.ts",
+      "target": "packages/cli/src/commands/add/index.ts",
+      "type": "internal",
+      "specifier": "./commands/add/index.ts"
+    },
+    {
+      "source": "packages/cli/src/cli.test.ts",
+      "target": "packages/cli/src/commands/git-tag/index.ts",
+      "type": "internal",
+      "specifier": "./commands/git-tag/index.ts"
+    },
+    {
+      "source": "packages/cli/src/cli.test.ts",
+      "target": "packages/cli/src/commands/init/index.ts",
+      "type": "internal",
+      "specifier": "./commands/init/index.ts"
+    },
+    {
+      "source": "packages/cli/src/cli.test.ts",
+      "target": "packages/cli/src/commands/pack/index.ts",
+      "type": "internal",
+      "specifier": "./commands/pack/index.ts"
+    },
+    {
+      "source": "packages/cli/src/cli.test.ts",
+      "target": "packages/cli/src/commands/pre/index.ts",
+      "type": "internal",
+      "specifier": "./commands/pre/index.ts"
+    },
+    {
+      "source": "packages/cli/src/cli.test.ts",
+      "target": "packages/cli/src/commands/publish-plan/index.ts",
+      "type": "internal",
+      "specifier": "./commands/publish-plan/index.ts"
+    },
+    {
+      "source": "packages/cli/src/cli.test.ts",
+      "target": "packages/cli/src/commands/publish/index.ts",
+      "type": "internal",
+      "specifier": "./commands/publish/index.ts"
+    },
+    {
+      "source": "packages/cli/src/cli.test.ts",
+      "target": "packages/cli/src/commands/status/index.ts",
+      "type": "internal",
+      "specifier": "./commands/status/index.ts"
+    },
+    {
+      "source": "packages/cli/src/cli.test.ts",
+      "target": "packages/cli/src/commands/version/index.ts",
+      "type": "internal",
+      "specifier": "./commands/version/index.ts"
+    },
+    {
+      "source": "packages/cli/src/cli.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/cli/src/commit/getCommitFunctions.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/src/commit/getCommitFunctions.ts",
+      "target": "import-meta-resolve",
+      "type": "external",
+      "specifier": "import-meta-resolve"
+    },
+    {
+      "source": "packages/cli/src/commit/getCommitFunctions.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/commit/getCommitFunctions.ts",
+      "target": "node:url",
+      "type": "stdlib",
+      "specifier": "node:url"
+    },
+    {
+      "source": "packages/cli/src/commit/commit.test.ts",
+      "target": "packages/cli/src/commit/index.ts",
+      "type": "internal",
+      "specifier": "./index.ts"
+    },
+    {
+      "source": "packages/cli/src/commit/commit.test.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/src/commit/commit.test.ts",
+      "target": "outdent",
+      "type": "external",
+      "specifier": "outdent"
+    },
+    {
+      "source": "packages/cli/src/commit/commit.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/cli/src/commit/index.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/src/utils/output.ts",
+      "target": "node:events",
+      "type": "stdlib",
+      "specifier": "node:events"
+    },
+    {
+      "source": "packages/cli/src/utils/output.ts",
+      "target": "node:fs",
+      "type": "stdlib",
+      "specifier": "node:fs"
+    },
+    {
+      "source": "packages/cli/src/utils/output.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/cli/src/utils/output.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/utils/read-config.ts",
+      "target": "@changesets/color",
+      "type": "external",
+      "specifier": "@changesets/color"
+    },
+    {
+      "source": "packages/cli/src/utils/read-config.ts",
+      "target": "@changesets/config",
+      "type": "external",
+      "specifier": "@changesets/config"
+    },
+    {
+      "source": "packages/cli/src/utils/read-config.ts",
+      "target": "@changesets/errors",
+      "type": "external",
+      "specifier": "@changesets/errors"
+    },
+    {
+      "source": "packages/cli/src/utils/read-config.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/src/utils/read-config.ts",
+      "target": "@clack/prompts",
+      "type": "external",
+      "specifier": "@clack/prompts"
+    },
+    {
+      "source": "packages/cli/src/utils/getLastJsonObjectFromString.test.ts",
+      "target": "packages/cli/src/utils/getLastJsonObjectFromString.ts",
+      "type": "internal",
+      "specifier": "./getLastJsonObjectFromString.ts"
+    },
+    {
+      "source": "packages/cli/src/utils/getLastJsonObjectFromString.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/cli/src/utils/workspaceConcurrency.ts",
+      "target": "node:os",
+      "type": "stdlib",
+      "specifier": "node:os"
+    },
+    {
+      "source": "packages/cli/src/utils/createPromiseQueue.test.ts",
+      "target": "packages/cli/src/utils/createPromiseQueue.ts",
+      "type": "internal",
+      "specifier": "./createPromiseQueue.ts"
+    },
+    {
+      "source": "packages/cli/src/utils/createPromiseQueue.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/cli/src/utils/askWithEditor.ts",
+      "target": "@clack/prompts",
+      "type": "external",
+      "specifier": "@clack/prompts"
+    },
+    {
+      "source": "packages/cli/src/utils/askWithEditor.ts",
+      "target": "launch-editor",
+      "type": "external",
+      "specifier": "launch-editor"
+    },
+    {
+      "source": "packages/cli/src/utils/askWithEditor.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/cli/src/utils/askWithEditor.ts",
+      "target": "node:os",
+      "type": "stdlib",
+      "specifier": "node:os"
+    },
+    {
+      "source": "packages/cli/src/utils/askWithEditor.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/utils/versionablePackages.ts",
+      "target": "@changesets/git",
+      "type": "external",
+      "specifier": "@changesets/git"
+    },
+    {
+      "source": "packages/cli/src/utils/versionablePackages.ts",
+      "target": "@changesets/should-skip-package",
+      "type": "external",
+      "specifier": "@changesets/should-skip-package"
+    },
+    {
+      "source": "packages/cli/src/utils/versionablePackages.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/src/utils/gitTags.ts",
+      "target": "@changesets/git",
+      "type": "external",
+      "specifier": "@changesets/git"
+    },
+    {
+      "source": "packages/cli/src/utils/gitTags.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/src/utils/createPromiseQueue.ts",
+      "target": "packages/cli/src/ponyfills/promise-try.ts",
+      "type": "internal",
+      "specifier": "../ponyfills/promise-try.ts"
+    },
+    {
+      "source": "packages/cli/src/utils/cli-utilities.ts",
+      "target": "@changesets/color",
+      "type": "external",
+      "specifier": "@changesets/color"
+    },
+    {
+      "source": "packages/cli/src/lib/common.ts",
+      "target": "packages/cli/src/utils/createPromiseQueue.ts",
+      "type": "internal",
+      "specifier": "../utils/createPromiseQueue.ts"
+    },
+    {
+      "source": "packages/cli/src/lib/yarn.ts",
+      "target": "packages/cli/src/utils/streamNdjson.ts",
+      "type": "internal",
+      "specifier": "../utils/streamNdjson.ts"
+    },
+    {
+      "source": "packages/cli/src/lib/yarn.ts",
+      "target": "packages/cli/src/lib/common.ts",
+      "type": "internal",
+      "specifier": "./common.ts"
+    },
+    {
+      "source": "packages/cli/src/lib/yarn.ts",
+      "target": "packages/cli/src/lib/types.ts",
+      "type": "internal",
+      "specifier": "./types.ts"
+    },
+    {
+      "source": "packages/cli/src/lib/yarn.ts",
+      "target": "node:util",
+      "type": "stdlib",
+      "specifier": "node:util"
+    },
+    {
+      "source": "packages/cli/src/lib/yarn.ts",
+      "target": "tinyexec",
+      "type": "external",
+      "specifier": "tinyexec"
+    },
+    {
+      "source": "packages/cli/src/lib/yarn.test.ts",
+      "target": "packages/cli/src/commands/publish-plan/getPublishPlan.ts",
+      "type": "internal",
+      "specifier": "../commands/publish-plan/getPublishPlan.ts"
+    },
+    {
+      "source": "packages/cli/src/lib/yarn.test.ts",
+      "target": "packages/cli/src/lib/yarn.ts",
+      "type": "internal",
+      "specifier": "./yarn.ts"
+    },
+    {
+      "source": "packages/cli/src/lib/yarn.test.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/src/lib/yarn.test.ts",
+      "target": "tinyexec",
+      "type": "external",
+      "specifier": "tinyexec"
+    },
+    {
+      "source": "packages/cli/src/lib/yarn.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/cli/src/lib/npm.ts",
+      "target": "packages/cli/src/utils/getLastJsonObjectFromString.ts",
+      "type": "internal",
+      "specifier": "../utils/getLastJsonObjectFromString.ts"
+    },
+    {
+      "source": "packages/cli/src/lib/npm.ts",
+      "target": "packages/cli/src/lib/common.ts",
+      "type": "internal",
+      "specifier": "./common.ts"
+    },
+    {
+      "source": "packages/cli/src/lib/npm.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/src/lib/npm.ts",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "packages/cli/src/lib/npm.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/lib/npm.ts",
+      "target": "tinyexec",
+      "type": "external",
+      "specifier": "tinyexec"
+    },
+    {
+      "source": "packages/cli/src/lib/pnpm.test.ts",
+      "target": "packages/cli/src/commands/publish-plan/getPublishPlan.ts",
+      "type": "internal",
+      "specifier": "../commands/publish-plan/getPublishPlan.ts"
+    },
+    {
+      "source": "packages/cli/src/lib/pnpm.test.ts",
+      "target": "packages/cli/src/lib/pnpm.ts",
+      "type": "internal",
+      "specifier": "./pnpm.ts"
+    },
+    {
+      "source": "packages/cli/src/lib/pnpm.test.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/src/lib/pnpm.test.ts",
+      "target": "tinyexec",
+      "type": "external",
+      "specifier": "tinyexec"
+    },
+    {
+      "source": "packages/cli/src/lib/pnpm.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/cli/src/lib/types.ts",
+      "target": "packages/cli/src/commands/publish-plan/getPublishPlan.ts",
+      "type": "internal",
+      "specifier": "../commands/publish-plan/getPublishPlan.ts"
+    },
+    {
+      "source": "packages/cli/src/lib/types.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/src/lib/npm.test.ts",
+      "target": "packages/cli/src/commands/publish-plan/getPublishPlan.ts",
+      "type": "internal",
+      "specifier": "../commands/publish-plan/getPublishPlan.ts"
+    },
+    {
+      "source": "packages/cli/src/lib/npm.test.ts",
+      "target": "packages/cli/src/lib/npm.ts",
+      "type": "internal",
+      "specifier": "./npm.ts"
+    },
+    {
+      "source": "packages/cli/src/lib/npm.test.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/src/lib/npm.test.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/lib/npm.test.ts",
+      "target": "tinyexec",
+      "type": "external",
+      "specifier": "tinyexec"
+    },
+    {
+      "source": "packages/cli/src/lib/npm.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/cli/src/lib/pnpm.ts",
+      "target": "packages/cli/src/utils/getLastJsonObjectFromString.ts",
+      "type": "internal",
+      "specifier": "../utils/getLastJsonObjectFromString.ts"
+    },
+    {
+      "source": "packages/cli/src/lib/pnpm.ts",
+      "target": "packages/cli/src/lib/common.ts",
+      "type": "internal",
+      "specifier": "./common.ts"
+    },
+    {
+      "source": "packages/cli/src/lib/pnpm.ts",
+      "target": "packages/cli/src/lib/npm.ts",
+      "type": "internal",
+      "specifier": "./npm.ts"
+    },
+    {
+      "source": "packages/cli/src/lib/pnpm.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/lib/pnpm.ts",
+      "target": "tinyexec",
+      "type": "external",
+      "specifier": "tinyexec"
+    },
+    {
+      "source": "packages/cli/src/commands/shared.ts",
+      "target": "@changesets/color",
+      "type": "external",
+      "specifier": "@changesets/color"
+    },
+    {
+      "source": "packages/cli/src/commands/shared.ts",
+      "target": "@changesets/errors",
+      "type": "external",
+      "specifier": "@changesets/errors"
+    },
+    {
+      "source": "packages/cli/src/commands/shared.ts",
+      "target": "@clack/prompts",
+      "type": "external",
+      "specifier": "@clack/prompts"
+    },
+    {
+      "source": "packages/cli/src/commands/shared.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/cli/src/commands/shared.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/commands/init/index.ts",
+      "target": "packages/cli/src/utils/cli-utilities.ts",
+      "type": "internal",
+      "specifier": "../../utils/cli-utilities.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/init/index.ts",
+      "target": "@changesets/color",
+      "type": "external",
+      "specifier": "@changesets/color"
+    },
+    {
+      "source": "packages/cli/src/commands/init/index.ts",
+      "target": "@changesets/config",
+      "type": "external",
+      "specifier": "@changesets/config"
+    },
+    {
+      "source": "packages/cli/src/commands/init/index.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/src/commands/init/index.ts",
+      "target": "@clack/prompts",
+      "type": "external",
+      "specifier": "@clack/prompts"
+    },
+    {
+      "source": "packages/cli/src/commands/init/index.ts",
+      "target": "@manypkg/get-packages",
+      "type": "external",
+      "specifier": "@manypkg/get-packages"
+    },
+    {
+      "source": "packages/cli/src/commands/init/index.ts",
+      "target": "node:fs",
+      "type": "stdlib",
+      "specifier": "node:fs"
+    },
+    {
+      "source": "packages/cli/src/commands/init/index.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/cli/src/commands/init/index.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/commands/init/index.ts",
+      "target": "node:url",
+      "type": "stdlib",
+      "specifier": "node:url"
+    },
+    {
+      "source": "packages/cli/src/commands/init/__tests__/command.test.ts",
+      "target": "packages/cli/src/utils/cli-utilities.ts",
+      "type": "internal",
+      "specifier": "../../../utils/cli-utilities.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/init/__tests__/command.test.ts",
+      "target": "packages/cli/src/commands/init/index.ts",
+      "type": "internal",
+      "specifier": "../index.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/init/__tests__/command.test.ts",
+      "target": "@changesets/config",
+      "type": "external",
+      "specifier": "@changesets/config"
+    },
+    {
+      "source": "packages/cli/src/commands/init/__tests__/command.test.ts",
+      "target": "@changesets/test-utils",
+      "type": "external",
+      "specifier": "@changesets/test-utils"
+    },
+    {
+      "source": "packages/cli/src/commands/init/__tests__/command.test.ts",
+      "target": "node:fs",
+      "type": "stdlib",
+      "specifier": "node:fs"
+    },
+    {
+      "source": "packages/cli/src/commands/init/__tests__/command.test.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/cli/src/commands/init/__tests__/command.test.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/commands/init/__tests__/command.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/cli/src/commands/git-tag/utils.ts",
+      "target": "packages/cli/src/utils/gitTags.ts",
+      "type": "internal",
+      "specifier": "../../utils/gitTags.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/git-tag/utils.ts",
+      "target": "packages/cli/src/utils/output.ts",
+      "type": "internal",
+      "specifier": "../../utils/output.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/git-tag/utils.ts",
+      "target": "packages/cli/src/commands/publish-plan/getPublishPlan.ts",
+      "type": "internal",
+      "specifier": "../publish-plan/getPublishPlan.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/git-tag/utils.ts",
+      "target": "@changesets/color",
+      "type": "external",
+      "specifier": "@changesets/color"
+    },
+    {
+      "source": "packages/cli/src/commands/git-tag/utils.ts",
+      "target": "@changesets/git",
+      "type": "external",
+      "specifier": "@changesets/git"
+    },
+    {
+      "source": "packages/cli/src/commands/git-tag/utils.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/src/commands/git-tag/index.ts",
+      "target": "packages/cli/src/utils/output.ts",
+      "type": "internal",
+      "specifier": "../../utils/output.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/git-tag/index.ts",
+      "target": "packages/cli/src/utils/read-config.ts",
+      "type": "internal",
+      "specifier": "../../utils/read-config.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/git-tag/index.ts",
+      "target": "packages/cli/src/commands/shared.ts",
+      "type": "internal",
+      "specifier": "../shared.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/git-tag/index.ts",
+      "target": "packages/cli/src/commands/git-tag/utils.ts",
+      "type": "internal",
+      "specifier": "./utils.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/git-tag/index.ts",
+      "target": "@changesets/should-skip-package",
+      "type": "external",
+      "specifier": "@changesets/should-skip-package"
+    },
+    {
+      "source": "packages/cli/src/commands/git-tag/index.ts",
+      "target": "@clack/prompts",
+      "type": "external",
+      "specifier": "@clack/prompts"
+    },
+    {
+      "source": "packages/cli/src/commands/git-tag/index.ts",
+      "target": "@manypkg/get-packages",
+      "type": "external",
+      "specifier": "@manypkg/get-packages"
+    },
+    {
+      "source": "packages/cli/src/commands/git-tag/__tests__/index.test.ts",
+      "target": "packages/cli/src/commands/git-tag/index.ts",
+      "type": "internal",
+      "specifier": "../index.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/git-tag/__tests__/index.test.ts",
+      "target": "@changesets/git",
+      "type": "external",
+      "specifier": "@changesets/git"
+    },
+    {
+      "source": "packages/cli/src/commands/git-tag/__tests__/index.test.ts",
+      "target": "@changesets/test-utils",
+      "type": "external",
+      "specifier": "@changesets/test-utils"
+    },
+    {
+      "source": "packages/cli/src/commands/git-tag/__tests__/index.test.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/cli/src/commands/git-tag/__tests__/index.test.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/commands/git-tag/__tests__/index.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/index.ts",
+      "target": "packages/cli/src/utils/createPromiseQueue.ts",
+      "type": "internal",
+      "specifier": "../../utils/createPromiseQueue.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/index.ts",
+      "target": "packages/cli/src/utils/read-config.ts",
+      "type": "internal",
+      "specifier": "../../utils/read-config.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/index.ts",
+      "target": "packages/cli/src/utils/workspaceConcurrency.ts",
+      "type": "internal",
+      "specifier": "../../utils/workspaceConcurrency.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/index.ts",
+      "target": "packages/cli/src/commands/publish/getPublishTool.ts",
+      "type": "internal",
+      "specifier": "../publish/getPublishTool.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/index.ts",
+      "target": "packages/cli/src/commands/shared.ts",
+      "type": "internal",
+      "specifier": "../shared.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/index.ts",
+      "target": "@changesets/color",
+      "type": "external",
+      "specifier": "@changesets/color"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/index.ts",
+      "target": "@changesets/errors",
+      "type": "external",
+      "specifier": "@changesets/errors"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/index.ts",
+      "target": "@clack/prompts",
+      "type": "external",
+      "specifier": "@clack/prompts"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/index.ts",
+      "target": "@manypkg/get-packages",
+      "type": "external",
+      "specifier": "@manypkg/get-packages"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/index.ts",
+      "target": "node:crypto",
+      "type": "stdlib",
+      "specifier": "node:crypto"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/index.ts",
+      "target": "node:fs",
+      "type": "stdlib",
+      "specifier": "node:fs"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/index.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/index.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/index.ts",
+      "target": "node:stream/promises",
+      "type": "stdlib",
+      "specifier": "node:stream/promises"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/__tests__/index.test.ts",
+      "target": "packages/cli/src/commands/pack/index.ts",
+      "type": "internal",
+      "specifier": "../index.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/__tests__/index.test.ts",
+      "target": "@changesets/git",
+      "type": "external",
+      "specifier": "@changesets/git"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/__tests__/index.test.ts",
+      "target": "@changesets/test-utils",
+      "type": "external",
+      "specifier": "@changesets/test-utils"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/__tests__/index.test.ts",
+      "target": "node:crypto",
+      "type": "stdlib",
+      "specifier": "node:crypto"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/__tests__/index.test.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/__tests__/index.test.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/__tests__/index.test.ts",
+      "target": "tinyexec",
+      "type": "external",
+      "specifier": "tinyexec"
+    },
+    {
+      "source": "packages/cli/src/commands/pack/__tests__/index.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/getPublishPlan.ts",
+      "target": "packages/cli/src/lib/common.ts",
+      "type": "internal",
+      "specifier": "../../lib/common.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/getPublishPlan.ts",
+      "target": "packages/cli/src/utils/gitTags.ts",
+      "type": "internal",
+      "specifier": "../../utils/gitTags.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/getPublishPlan.ts",
+      "target": "packages/cli/src/commands/publish/getPublishTool.ts",
+      "type": "internal",
+      "specifier": "../publish/getPublishTool.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/getPublishPlan.ts",
+      "target": "@changesets/color",
+      "type": "external",
+      "specifier": "@changesets/color"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/getPublishPlan.ts",
+      "target": "@changesets/errors",
+      "type": "external",
+      "specifier": "@changesets/errors"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/getPublishPlan.ts",
+      "target": "@changesets/get-dependents-graph",
+      "type": "external",
+      "specifier": "@changesets/get-dependents-graph"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/getPublishPlan.ts",
+      "target": "@changesets/pre",
+      "type": "external",
+      "specifier": "@changesets/pre"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/getPublishPlan.ts",
+      "target": "@changesets/should-skip-package",
+      "type": "external",
+      "specifier": "@changesets/should-skip-package"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/getPublishPlan.ts",
+      "target": "@clack/prompts",
+      "type": "external",
+      "specifier": "@clack/prompts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/getPublishPlan.ts",
+      "target": "@manypkg/get-packages",
+      "type": "external",
+      "specifier": "@manypkg/get-packages"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/getPublishPlan.ts",
+      "target": "@pnpm/deps.graph-sequencer",
+      "type": "external",
+      "specifier": "@pnpm/deps.graph-sequencer"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/getPublishPlan.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/getPublishPlan.ts",
+      "target": "semver/functions/parse.js",
+      "type": "external",
+      "specifier": "semver/functions/parse.js"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/index.ts",
+      "target": "packages/cli/src/utils/read-config.ts",
+      "type": "internal",
+      "specifier": "../../utils/read-config.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/index.ts",
+      "target": "packages/cli/src/commands/shared.ts",
+      "type": "internal",
+      "specifier": "../shared.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/index.ts",
+      "target": "@clack/prompts",
+      "type": "external",
+      "specifier": "@clack/prompts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/index.ts",
+      "target": "@manypkg/get-packages",
+      "type": "external",
+      "specifier": "@manypkg/get-packages"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/index.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/index.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/__tests__/index.test.ts",
+      "target": "packages/cli/src/lib/types.ts",
+      "type": "internal",
+      "specifier": "../../../lib/types.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/__tests__/index.test.ts",
+      "target": "packages/cli/src/commands/publish/getPublishTool.ts",
+      "type": "internal",
+      "specifier": "../../publish/getPublishTool.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/__tests__/index.test.ts",
+      "target": "packages/cli/src/commands/publish-plan/index.ts",
+      "type": "internal",
+      "specifier": "../index.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/__tests__/index.test.ts",
+      "target": "@changesets/git",
+      "type": "external",
+      "specifier": "@changesets/git"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/__tests__/index.test.ts",
+      "target": "@changesets/test-utils",
+      "type": "external",
+      "specifier": "@changesets/test-utils"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/__tests__/index.test.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/__tests__/index.test.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/__tests__/index.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/__tests__/getPublishPlan.test.ts",
+      "target": "packages/cli/src/lib/types.ts",
+      "type": "internal",
+      "specifier": "../../../lib/types.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/__tests__/getPublishPlan.test.ts",
+      "target": "packages/cli/src/commands/publish/getPublishTool.ts",
+      "type": "internal",
+      "specifier": "../../publish/getPublishTool.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/__tests__/getPublishPlan.test.ts",
+      "target": "packages/cli/src/commands/publish-plan/getPublishPlan.ts",
+      "type": "internal",
+      "specifier": "../getPublishPlan.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/__tests__/getPublishPlan.test.ts",
+      "target": "@changesets/config",
+      "type": "external",
+      "specifier": "@changesets/config"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/__tests__/getPublishPlan.test.ts",
+      "target": "@changesets/git",
+      "type": "external",
+      "specifier": "@changesets/git"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/__tests__/getPublishPlan.test.ts",
+      "target": "@changesets/test-utils",
+      "type": "external",
+      "specifier": "@changesets/test-utils"
+    },
+    {
+      "source": "packages/cli/src/commands/publish-plan/__tests__/getPublishPlan.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/cli/src/commands/status/index.ts",
+      "target": "packages/cli/src/utils/read-config.ts",
+      "type": "internal",
+      "specifier": "../../utils/read-config.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/status/index.ts",
+      "target": "packages/cli/src/utils/versionablePackages.ts",
+      "type": "internal",
+      "specifier": "../../utils/versionablePackages.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/status/index.ts",
+      "target": "packages/cli/src/commands/shared.ts",
+      "type": "internal",
+      "specifier": "../shared.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/status/index.ts",
+      "target": "@changesets/assemble-release-plan",
+      "type": "external",
+      "specifier": "@changesets/assemble-release-plan"
+    },
+    {
+      "source": "packages/cli/src/commands/status/index.ts",
+      "target": "@changesets/color",
+      "type": "external",
+      "specifier": "@changesets/color"
+    },
+    {
+      "source": "packages/cli/src/commands/status/index.ts",
+      "target": "@changesets/errors",
+      "type": "external",
+      "specifier": "@changesets/errors"
+    },
+    {
+      "source": "packages/cli/src/commands/status/index.ts",
+      "target": "@changesets/pre",
+      "type": "external",
+      "specifier": "@changesets/pre"
+    },
+    {
+      "source": "packages/cli/src/commands/status/index.ts",
+      "target": "@changesets/read",
+      "type": "external",
+      "specifier": "@changesets/read"
+    },
+    {
+      "source": "packages/cli/src/commands/status/index.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/src/commands/status/index.ts",
+      "target": "@clack/prompts",
+      "type": "external",
+      "specifier": "@clack/prompts"
+    },
+    {
+      "source": "packages/cli/src/commands/status/index.ts",
+      "target": "@manypkg/get-packages",
+      "type": "external",
+      "specifier": "@manypkg/get-packages"
+    },
+    {
+      "source": "packages/cli/src/commands/status/index.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/cli/src/commands/status/index.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/commands/status/__tests__/status.test.ts",
+      "target": "packages/cli/src/commands/status/index.ts",
+      "type": "internal",
+      "specifier": "../index.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/status/__tests__/status.test.ts",
+      "target": "@changesets/git",
+      "type": "external",
+      "specifier": "@changesets/git"
+    },
+    {
+      "source": "packages/cli/src/commands/status/__tests__/status.test.ts",
+      "target": "@changesets/test-utils",
+      "type": "external",
+      "specifier": "@changesets/test-utils"
+    },
+    {
+      "source": "packages/cli/src/commands/status/__tests__/status.test.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/src/commands/status/__tests__/status.test.ts",
+      "target": "@changesets/write",
+      "type": "external",
+      "specifier": "@changesets/write"
+    },
+    {
+      "source": "packages/cli/src/commands/status/__tests__/status.test.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/cli/src/commands/status/__tests__/status.test.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/commands/status/__tests__/status.test.ts",
+      "target": "tinyexec",
+      "type": "external",
+      "specifier": "tinyexec"
+    },
+    {
+      "source": "packages/cli/src/commands/status/__tests__/status.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/getPublishTool.ts",
+      "target": "packages/cli/src/lib/npm.ts",
+      "type": "internal",
+      "specifier": "../../lib/npm.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/getPublishTool.ts",
+      "target": "packages/cli/src/lib/pnpm.ts",
+      "type": "internal",
+      "specifier": "../../lib/pnpm.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/getPublishTool.ts",
+      "target": "packages/cli/src/lib/types.ts",
+      "type": "internal",
+      "specifier": "../../lib/types.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/getPublishTool.ts",
+      "target": "packages/cli/src/lib/yarn.ts",
+      "type": "internal",
+      "specifier": "../../lib/yarn.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/getPublishTool.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/getPublishTool.ts",
+      "target": "package-manager-detector/detect",
+      "type": "external",
+      "specifier": "package-manager-detector/detect"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/getPublishTool.ts",
+      "target": "tinyexec",
+      "type": "external",
+      "specifier": "tinyexec"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/index.ts",
+      "target": "packages/cli/src/lib/types.ts",
+      "type": "internal",
+      "specifier": "../../lib/types.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/index.ts",
+      "target": "packages/cli/src/utils/cli-utilities.ts",
+      "type": "internal",
+      "specifier": "../../utils/cli-utilities.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/index.ts",
+      "target": "packages/cli/src/utils/output.ts",
+      "type": "internal",
+      "specifier": "../../utils/output.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/index.ts",
+      "target": "packages/cli/src/utils/read-config.ts",
+      "type": "internal",
+      "specifier": "../../utils/read-config.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/index.ts",
+      "target": "packages/cli/src/commands/git-tag/utils.ts",
+      "type": "internal",
+      "specifier": "../git-tag/utils.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/index.ts",
+      "target": "packages/cli/src/commands/shared.ts",
+      "type": "internal",
+      "specifier": "../shared.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/index.ts",
+      "target": "packages/cli/src/commands/publish/getPublishTool.ts",
+      "type": "internal",
+      "specifier": "./getPublishTool.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/index.ts",
+      "target": "@changesets/color",
+      "type": "external",
+      "specifier": "@changesets/color"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/index.ts",
+      "target": "@changesets/errors",
+      "type": "external",
+      "specifier": "@changesets/errors"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/index.ts",
+      "target": "@changesets/pre",
+      "type": "external",
+      "specifier": "@changesets/pre"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/index.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/index.ts",
+      "target": "@clack/prompts",
+      "type": "external",
+      "specifier": "@clack/prompts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/index.ts",
+      "target": "@manypkg/get-packages",
+      "type": "external",
+      "specifier": "@manypkg/get-packages"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/index.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/__tests__/index.test.ts",
+      "target": "packages/cli/src/commands/publish/index.ts",
+      "type": "internal",
+      "specifier": "../index.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/__tests__/index.test.ts",
+      "target": "@changesets/config",
+      "type": "external",
+      "specifier": "@changesets/config"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/__tests__/index.test.ts",
+      "target": "@changesets/git",
+      "type": "external",
+      "specifier": "@changesets/git"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/__tests__/index.test.ts",
+      "target": "@changesets/test-utils",
+      "type": "external",
+      "specifier": "@changesets/test-utils"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/__tests__/index.test.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/__tests__/index.test.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/__tests__/index.test.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/__tests__/index.test.ts",
+      "target": "tinyexec",
+      "type": "external",
+      "specifier": "tinyexec"
+    },
+    {
+      "source": "packages/cli/src/commands/publish/__tests__/index.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/cli/src/commands/add/messages.ts",
+      "target": "@changesets/color",
+      "type": "external",
+      "specifier": "@changesets/color"
+    },
+    {
+      "source": "packages/cli/src/commands/add/messages.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/src/commands/add/messages.ts",
+      "target": "@clack/prompts",
+      "type": "external",
+      "specifier": "@clack/prompts"
+    },
+    {
+      "source": "packages/cli/src/commands/add/index.ts",
+      "target": "packages/cli/src/commit/getCommitFunctions.ts",
+      "type": "internal",
+      "specifier": "../../commit/getCommitFunctions.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/add/index.ts",
+      "target": "packages/cli/src/utils/cli-utilities.ts",
+      "type": "internal",
+      "specifier": "../../utils/cli-utilities.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/add/index.ts",
+      "target": "packages/cli/src/utils/read-config.ts",
+      "type": "internal",
+      "specifier": "../../utils/read-config.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/add/index.ts",
+      "target": "packages/cli/src/utils/versionablePackages.ts",
+      "type": "internal",
+      "specifier": "../../utils/versionablePackages.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/add/index.ts",
+      "target": "packages/cli/src/commands/shared.ts",
+      "type": "internal",
+      "specifier": "../shared.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/add/index.ts",
+      "target": "packages/cli/src/commands/add/createChangeset.ts",
+      "type": "internal",
+      "specifier": "./createChangeset.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/add/index.ts",
+      "target": "packages/cli/src/commands/add/messages.ts",
+      "type": "internal",
+      "specifier": "./messages.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/add/index.ts",
+      "target": "@changesets/color",
+      "type": "external",
+      "specifier": "@changesets/color"
+    },
+    {
+      "source": "packages/cli/src/commands/add/index.ts",
+      "target": "@changesets/errors",
+      "type": "external",
+      "specifier": "@changesets/errors"
+    },
+    {
+      "source": "packages/cli/src/commands/add/index.ts",
+      "target": "@changesets/git",
+      "type": "external",
+      "specifier": "@changesets/git"
+    },
+    {
+      "source": "packages/cli/src/commands/add/index.ts",
+      "target": "@changesets/should-skip-package",
+      "type": "external",
+      "specifier": "@changesets/should-skip-package"
+    },
+    {
+      "source": "packages/cli/src/commands/add/index.ts",
+      "target": "@changesets/write",
+      "type": "external",
+      "specifier": "@changesets/write"
+    },
+    {
+      "source": "packages/cli/src/commands/add/index.ts",
+      "target": "@clack/prompts",
+      "type": "external",
+      "specifier": "@clack/prompts"
+    },
+    {
+      "source": "packages/cli/src/commands/add/index.ts",
+      "target": "@manypkg/get-packages",
+      "type": "external",
+      "specifier": "@manypkg/get-packages"
+    },
+    {
+      "source": "packages/cli/src/commands/add/index.ts",
+      "target": "launch-editor",
+      "type": "external",
+      "specifier": "launch-editor"
+    },
+    {
+      "source": "packages/cli/src/commands/add/index.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/commands/add/index.ts",
+      "target": "node:url",
+      "type": "stdlib",
+      "specifier": "node:url"
+    },
+    {
+      "source": "packages/cli/src/commands/add/createChangeset.ts",
+      "target": "packages/cli/src/utils/askWithEditor.ts",
+      "type": "internal",
+      "specifier": "../../utils/askWithEditor.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/add/createChangeset.ts",
+      "target": "packages/cli/src/utils/cli-utilities.ts",
+      "type": "internal",
+      "specifier": "../../utils/cli-utilities.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/add/createChangeset.ts",
+      "target": "@changesets/color",
+      "type": "external",
+      "specifier": "@changesets/color"
+    },
+    {
+      "source": "packages/cli/src/commands/add/createChangeset.ts",
+      "target": "@changesets/errors",
+      "type": "external",
+      "specifier": "@changesets/errors"
+    },
+    {
+      "source": "packages/cli/src/commands/add/createChangeset.ts",
+      "target": "@clack/prompts",
+      "type": "external",
+      "specifier": "@clack/prompts"
+    },
+    {
+      "source": "packages/cli/src/commands/add/createChangeset.ts",
+      "target": "semver/functions/lt.js",
+      "type": "external",
+      "specifier": "semver/functions/lt.js"
+    },
+    {
+      "source": "packages/cli/src/commands/add/__tests__/add.test.ts",
+      "target": "packages/cli/src/utils/askWithEditor.ts",
+      "type": "internal",
+      "specifier": "../../../utils/askWithEditor.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/add/__tests__/add.test.ts",
+      "target": "packages/cli/src/utils/cli-utilities.ts",
+      "type": "internal",
+      "specifier": "../../../utils/cli-utilities.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/add/__tests__/add.test.ts",
+      "target": "packages/cli/src/commands/add/index.ts",
+      "type": "internal",
+      "specifier": "../index.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/add/__tests__/add.test.ts",
+      "target": "@changesets/config",
+      "type": "external",
+      "specifier": "@changesets/config"
+    },
+    {
+      "source": "packages/cli/src/commands/add/__tests__/add.test.ts",
+      "target": "@changesets/git",
+      "type": "external",
+      "specifier": "@changesets/git"
+    },
+    {
+      "source": "packages/cli/src/commands/add/__tests__/add.test.ts",
+      "target": "@changesets/read",
+      "type": "external",
+      "specifier": "@changesets/read"
+    },
+    {
+      "source": "packages/cli/src/commands/add/__tests__/add.test.ts",
+      "target": "@clack/prompts",
+      "type": "external",
+      "specifier": "@clack/prompts"
+    },
+    {
+      "source": "packages/cli/src/commands/add/__tests__/add.test.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/commands/add/__tests__/add.test.ts",
+      "target": "node:util",
+      "type": "stdlib",
+      "specifier": "node:util"
+    },
+    {
+      "source": "packages/cli/src/commands/add/__tests__/add.test.ts",
+      "target": "tinyexec",
+      "type": "external",
+      "specifier": "tinyexec"
+    },
+    {
+      "source": "packages/cli/src/commands/add/__tests__/add.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/cli/src/commands/version/version.test.ts",
+      "target": "packages/cli/src/commands/pre/index.ts",
+      "type": "internal",
+      "specifier": "../pre/index.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/version/version.test.ts",
+      "target": "packages/cli/src/commands/version/index.ts",
+      "type": "internal",
+      "specifier": "./index.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/version/version.test.ts",
+      "target": "@changesets/config",
+      "type": "external",
+      "specifier": "@changesets/config"
+    },
+    {
+      "source": "packages/cli/src/commands/version/version.test.ts",
+      "target": "@changesets/errors",
+      "type": "external",
+      "specifier": "@changesets/errors"
+    },
+    {
+      "source": "packages/cli/src/commands/version/version.test.ts",
+      "target": "@changesets/git",
+      "type": "external",
+      "specifier": "@changesets/git"
+    },
+    {
+      "source": "packages/cli/src/commands/version/version.test.ts",
+      "target": "@changesets/test-utils",
+      "type": "external",
+      "specifier": "@changesets/test-utils"
+    },
+    {
+      "source": "packages/cli/src/commands/version/version.test.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/src/commands/version/version.test.ts",
+      "target": "@changesets/write",
+      "type": "external",
+      "specifier": "@changesets/write"
+    },
+    {
+      "source": "packages/cli/src/commands/version/version.test.ts",
+      "target": "@clack/prompts",
+      "type": "external",
+      "specifier": "@clack/prompts"
+    },
+    {
+      "source": "packages/cli/src/commands/version/version.test.ts",
+      "target": "@manypkg/get-packages",
+      "type": "external",
+      "specifier": "@manypkg/get-packages"
+    },
+    {
+      "source": "packages/cli/src/commands/version/version.test.ts",
+      "target": "human-id",
+      "type": "external",
+      "specifier": "human-id"
+    },
+    {
+      "source": "packages/cli/src/commands/version/version.test.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/cli/src/commands/version/version.test.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/commands/version/version.test.ts",
+      "target": "node:util",
+      "type": "stdlib",
+      "specifier": "node:util"
+    },
+    {
+      "source": "packages/cli/src/commands/version/version.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/cli/src/commands/version/index.ts",
+      "target": "packages/cli/src/commit/getCommitFunctions.ts",
+      "type": "internal",
+      "specifier": "../../commit/getCommitFunctions.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/version/index.ts",
+      "target": "packages/cli/src/utils/cli-utilities.ts",
+      "type": "internal",
+      "specifier": "../../utils/cli-utilities.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/version/index.ts",
+      "target": "packages/cli/src/utils/read-config.ts",
+      "type": "internal",
+      "specifier": "../../utils/read-config.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/version/index.ts",
+      "target": "packages/cli/src/commands/shared.ts",
+      "type": "internal",
+      "specifier": "../shared.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/version/index.ts",
+      "target": "@changesets/apply-release-plan",
+      "type": "external",
+      "specifier": "@changesets/apply-release-plan"
+    },
+    {
+      "source": "packages/cli/src/commands/version/index.ts",
+      "target": "@changesets/assemble-release-plan",
+      "type": "external",
+      "specifier": "@changesets/assemble-release-plan"
+    },
+    {
+      "source": "packages/cli/src/commands/version/index.ts",
+      "target": "@changesets/color",
+      "type": "external",
+      "specifier": "@changesets/color"
+    },
+    {
+      "source": "packages/cli/src/commands/version/index.ts",
+      "target": "@changesets/errors",
+      "type": "external",
+      "specifier": "@changesets/errors"
+    },
+    {
+      "source": "packages/cli/src/commands/version/index.ts",
+      "target": "@changesets/get-dependents-graph",
+      "type": "external",
+      "specifier": "@changesets/get-dependents-graph"
+    },
+    {
+      "source": "packages/cli/src/commands/version/index.ts",
+      "target": "@changesets/git",
+      "type": "external",
+      "specifier": "@changesets/git"
+    },
+    {
+      "source": "packages/cli/src/commands/version/index.ts",
+      "target": "@changesets/pre",
+      "type": "external",
+      "specifier": "@changesets/pre"
+    },
+    {
+      "source": "packages/cli/src/commands/version/index.ts",
+      "target": "@changesets/read",
+      "type": "external",
+      "specifier": "@changesets/read"
+    },
+    {
+      "source": "packages/cli/src/commands/version/index.ts",
+      "target": "@changesets/should-skip-package",
+      "type": "external",
+      "specifier": "@changesets/should-skip-package"
+    },
+    {
+      "source": "packages/cli/src/commands/version/index.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/cli/src/commands/version/index.ts",
+      "target": "@clack/prompts",
+      "type": "external",
+      "specifier": "@clack/prompts"
+    },
+    {
+      "source": "packages/cli/src/commands/version/index.ts",
+      "target": "@manypkg/get-packages",
+      "type": "external",
+      "specifier": "@manypkg/get-packages"
+    },
+    {
+      "source": "packages/cli/src/commands/version/index.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/commands/version/index.ts",
+      "target": "node:url",
+      "type": "stdlib",
+      "specifier": "node:url"
+    },
+    {
+      "source": "packages/cli/src/commands/pre/index.test.ts",
+      "target": "packages/cli/src/commands/pre/index.ts",
+      "type": "internal",
+      "specifier": "./index.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/pre/index.test.ts",
+      "target": "@changesets/errors",
+      "type": "external",
+      "specifier": "@changesets/errors"
+    },
+    {
+      "source": "packages/cli/src/commands/pre/index.test.ts",
+      "target": "@changesets/test-utils",
+      "type": "external",
+      "specifier": "@changesets/test-utils"
+    },
+    {
+      "source": "packages/cli/src/commands/pre/index.test.ts",
+      "target": "@clack/prompts",
+      "type": "external",
+      "specifier": "@clack/prompts"
+    },
+    {
+      "source": "packages/cli/src/commands/pre/index.test.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/cli/src/commands/pre/index.test.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/cli/src/commands/pre/index.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/cli/src/commands/pre/index.ts",
+      "target": "packages/cli/src/commands/shared.ts",
+      "type": "internal",
+      "specifier": "../shared.ts"
+    },
+    {
+      "source": "packages/cli/src/commands/pre/index.ts",
+      "target": "@changesets/color",
+      "type": "external",
+      "specifier": "@changesets/color"
+    },
+    {
+      "source": "packages/cli/src/commands/pre/index.ts",
+      "target": "@changesets/pre",
+      "type": "external",
+      "specifier": "@changesets/pre"
+    },
+    {
+      "source": "packages/cli/src/commands/pre/index.ts",
+      "target": "@clack/prompts",
+      "type": "external",
+      "specifier": "@clack/prompts"
+    },
+    {
+      "source": "packages/cli/src/commands/pre/index.ts",
+      "target": "@manypkg/get-packages",
+      "type": "external",
+      "specifier": "@manypkg/get-packages"
+    },
+    {
+      "source": "packages/release-utils/tsdown.config.ts",
+      "target": "tsdown.config.ts",
+      "type": "internal",
+      "specifier": "../../tsdown.config.ts"
+    },
+    {
+      "source": "packages/release-utils/tsdown.config.ts",
+      "target": "tsdown/config",
+      "type": "external",
+      "specifier": "tsdown/config"
+    },
+    {
+      "source": "packages/release-utils/src/utils.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/release-utils/src/readChangesetState.ts",
+      "target": "@changesets/pre",
+      "type": "external",
+      "specifier": "@changesets/pre"
+    },
+    {
+      "source": "packages/release-utils/src/readChangesetState.ts",
+      "target": "@changesets/read",
+      "type": "external",
+      "specifier": "@changesets/read"
+    },
+    {
+      "source": "packages/release-utils/src/readChangesetState.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/release-utils/src/utils.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/release-utils/src/utils.ts",
+      "target": "@manypkg/get-packages",
+      "type": "external",
+      "specifier": "@manypkg/get-packages"
+    },
+    {
+      "source": "packages/release-utils/src/gitUtils.ts",
+      "target": "tinyexec",
+      "type": "external",
+      "specifier": "tinyexec"
+    },
+    {
+      "source": "packages/release-utils/src/run.test.ts",
+      "target": "packages/release-utils/src/run.ts",
+      "type": "internal",
+      "specifier": "./run.ts"
+    },
+    {
+      "source": "packages/release-utils/src/run.test.ts",
+      "target": "@changesets/git",
+      "type": "external",
+      "specifier": "@changesets/git"
+    },
+    {
+      "source": "packages/release-utils/src/run.test.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/release-utils/src/run.test.ts",
+      "target": "@changesets/write",
+      "type": "external",
+      "specifier": "@changesets/write"
+    },
+    {
+      "source": "packages/release-utils/src/run.test.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/release-utils/src/run.test.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/release-utils/src/run.test.ts",
+      "target": "tinyexec",
+      "type": "external",
+      "specifier": "tinyexec"
+    },
+    {
+      "source": "packages/release-utils/src/run.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/release-utils/src/index.ts",
+      "target": "packages/release-utils/src/readChangesetState.ts",
+      "type": "internal",
+      "specifier": "./readChangesetState.ts"
+    },
+    {
+      "source": "packages/release-utils/src/index.ts",
+      "target": "packages/release-utils/src/run.ts",
+      "type": "internal",
+      "specifier": "./run.ts"
+    },
+    {
+      "source": "packages/release-utils/src/run.ts",
+      "target": "packages/release-utils/src/gitUtils.ts",
+      "type": "internal",
+      "specifier": "./gitUtils.ts"
+    },
+    {
+      "source": "packages/release-utils/src/run.ts",
+      "target": "packages/release-utils/src/readChangesetState.ts",
+      "type": "internal",
+      "specifier": "./readChangesetState.ts"
+    },
+    {
+      "source": "packages/release-utils/src/run.ts",
+      "target": "packages/release-utils/src/utils.ts",
+      "type": "internal",
+      "specifier": "./utils.ts"
+    },
+    {
+      "source": "packages/release-utils/src/run.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/release-utils/src/run.ts",
+      "target": "@manypkg/get-packages",
+      "type": "external",
+      "specifier": "@manypkg/get-packages"
+    },
+    {
+      "source": "packages/release-utils/src/run.ts",
+      "target": "node:module",
+      "type": "stdlib",
+      "specifier": "node:module"
+    },
+    {
+      "source": "packages/release-utils/src/run.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/release-utils/src/run.ts",
+      "target": "tinyexec",
+      "type": "external",
+      "specifier": "tinyexec"
+    },
+    {
+      "source": "packages/changelog-git/tsdown.config.ts",
+      "target": "tsdown.config.ts",
+      "type": "internal",
+      "specifier": "../../tsdown.config.ts"
+    },
+    {
+      "source": "packages/changelog-git/tsdown.config.ts",
+      "target": "tsdown/config",
+      "type": "external",
+      "specifier": "tsdown/config"
+    },
+    {
+      "source": "packages/changelog-git/src/index.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/pre/tsdown.config.ts",
+      "target": "tsdown.config.ts",
+      "type": "internal",
+      "specifier": "../../tsdown.config.ts"
+    },
+    {
+      "source": "packages/pre/tsdown.config.ts",
+      "target": "tsdown/config",
+      "type": "external",
+      "specifier": "tsdown/config"
+    },
+    {
+      "source": "packages/pre/src/index.test.ts",
+      "target": "packages/pre/src/index.ts",
+      "type": "internal",
+      "specifier": "./index.ts"
+    },
+    {
+      "source": "packages/pre/src/index.test.ts",
+      "target": "@changesets/test-utils",
+      "type": "external",
+      "specifier": "@changesets/test-utils"
+    },
+    {
+      "source": "packages/pre/src/index.test.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/pre/src/index.test.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/pre/src/index.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/pre/src/index.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/pre/src/index.ts",
+      "target": "@manypkg/get-packages",
+      "type": "external",
+      "specifier": "@manypkg/get-packages"
+    },
+    {
+      "source": "packages/pre/src/index.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/pre/src/index.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/get-github-info/tsdown.config.ts",
+      "target": "tsdown.config.ts",
+      "type": "internal",
+      "specifier": "../../tsdown.config.ts"
+    },
+    {
+      "source": "packages/get-github-info/tsdown.config.ts",
+      "target": "tsdown/config",
+      "type": "external",
+      "specifier": "tsdown/config"
+    },
+    {
+      "source": "packages/get-github-info/src/get-commit-info.ts",
+      "target": "packages/get-github-info/src/dataloader.ts",
+      "type": "internal",
+      "specifier": "./dataloader.ts"
+    },
+    {
+      "source": "packages/get-github-info/src/get-commit-info.ts",
+      "target": "packages/get-github-info/src/utils.ts",
+      "type": "internal",
+      "specifier": "./utils.ts"
+    },
+    {
+      "source": "packages/get-github-info/src/get-pull-request-info.test.ts",
+      "target": "packages/get-github-info/src/dataloader.ts",
+      "type": "internal",
+      "specifier": "./dataloader.ts"
+    },
+    {
+      "source": "packages/get-github-info/src/get-pull-request-info.test.ts",
+      "target": "packages/get-github-info/src/get-pull-request-info.ts",
+      "type": "internal",
+      "specifier": "./get-pull-request-info.ts"
+    },
+    {
+      "source": "packages/get-github-info/src/get-pull-request-info.test.ts",
+      "target": "nock",
+      "type": "external",
+      "specifier": "nock"
+    },
+    {
+      "source": "packages/get-github-info/src/get-pull-request-info.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/get-github-info/src/dataloader.ts",
+      "target": "packages/get-github-info/src/env.ts",
+      "type": "internal",
+      "specifier": "./env.ts"
+    },
+    {
+      "source": "packages/get-github-info/src/dataloader.ts",
+      "target": "dataloader",
+      "type": "external",
+      "specifier": "dataloader"
+    },
+    {
+      "source": "packages/get-github-info/src/get-commit-info.test.ts",
+      "target": "packages/get-github-info/src/dataloader.ts",
+      "type": "internal",
+      "specifier": "./dataloader.ts"
+    },
+    {
+      "source": "packages/get-github-info/src/get-commit-info.test.ts",
+      "target": "packages/get-github-info/src/get-commit-info.ts",
+      "type": "internal",
+      "specifier": "./get-commit-info.ts"
+    },
+    {
+      "source": "packages/get-github-info/src/get-commit-info.test.ts",
+      "target": "nock",
+      "type": "external",
+      "specifier": "nock"
+    },
+    {
+      "source": "packages/get-github-info/src/get-commit-info.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/get-github-info/src/env.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/get-github-info/src/env.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/get-github-info/src/env.ts",
+      "target": "node:util",
+      "type": "stdlib",
+      "specifier": "node:util"
+    },
+    {
+      "source": "packages/get-github-info/src/get-pull-request-info.ts",
+      "target": "packages/get-github-info/src/dataloader.ts",
+      "type": "internal",
+      "specifier": "./dataloader.ts"
+    },
+    {
+      "source": "packages/get-github-info/src/get-pull-request-info.ts",
+      "target": "packages/get-github-info/src/utils.ts",
+      "type": "internal",
+      "specifier": "./utils.ts"
+    },
+    {
+      "source": "packages/errors/tsdown.config.ts",
+      "target": "tsdown.config.ts",
+      "type": "internal",
+      "specifier": "../../tsdown.config.ts"
+    },
+    {
+      "source": "packages/errors/tsdown.config.ts",
+      "target": "tsdown/config",
+      "type": "external",
+      "specifier": "tsdown/config"
+    },
+    {
+      "source": "packages/errors/src/index.test.ts",
+      "target": "packages/errors/src/index.ts",
+      "type": "internal",
+      "specifier": "./index.ts"
+    },
+    {
+      "source": "packages/errors/src/index.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/changelog-github/tsdown.config.ts",
+      "target": "tsdown.config.ts",
+      "type": "internal",
+      "specifier": "../../tsdown.config.ts"
+    },
+    {
+      "source": "packages/changelog-github/tsdown.config.ts",
+      "target": "tsdown/config",
+      "type": "external",
+      "specifier": "tsdown/config"
+    },
+    {
+      "source": "packages/changelog-github/src/index.test.ts",
+      "target": "packages/changelog-github/src/index.ts",
+      "type": "internal",
+      "specifier": "./index.ts"
+    },
+    {
+      "source": "packages/changelog-github/src/index.test.ts",
+      "target": "@changesets/get-github-info",
+      "type": "external",
+      "specifier": "@changesets/get-github-info"
+    },
+    {
+      "source": "packages/changelog-github/src/index.test.ts",
+      "target": "@changesets/parse",
+      "type": "external",
+      "specifier": "@changesets/parse"
+    },
+    {
+      "source": "packages/changelog-github/src/index.test.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/changelog-github/src/index.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/changelog-github/src/render-template.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/changelog-github/src/index.ts",
+      "target": "packages/changelog-github/src/render-template.ts",
+      "type": "internal",
+      "specifier": "./render-template.ts"
+    },
+    {
+      "source": "packages/changelog-github/src/index.ts",
+      "target": "@changesets/get-github-info",
+      "type": "external",
+      "specifier": "@changesets/get-github-info"
+    },
+    {
+      "source": "packages/changelog-github/src/index.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/changelog-github/src/index.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/changelog-github/src/index.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/changelog-github/src/index.ts",
+      "target": "node:util",
+      "type": "stdlib",
+      "specifier": "node:util"
+    },
+    {
+      "source": "packages/apply-release-plan/tsdown.config.ts",
+      "target": "tsdown.config.ts",
+      "type": "internal",
+      "specifier": "../../tsdown.config.ts"
+    },
+    {
+      "source": "packages/apply-release-plan/tsdown.config.ts",
+      "target": "tsdown/config",
+      "type": "external",
+      "specifier": "tsdown/config"
+    },
+    {
+      "source": "packages/apply-release-plan/src/index.test.ts",
+      "target": "packages/apply-release-plan/src/index.ts",
+      "type": "internal",
+      "specifier": "./index.ts"
+    },
+    {
+      "source": "packages/apply-release-plan/src/index.test.ts",
+      "target": "@changesets/config",
+      "type": "external",
+      "specifier": "@changesets/config"
+    },
+    {
+      "source": "packages/apply-release-plan/src/index.test.ts",
+      "target": "@changesets/git",
+      "type": "external",
+      "specifier": "@changesets/git"
+    },
+    {
+      "source": "packages/apply-release-plan/src/index.test.ts",
+      "target": "@manypkg/get-packages",
+      "type": "external",
+      "specifier": "@manypkg/get-packages"
+    },
+    {
+      "source": "packages/apply-release-plan/src/index.test.ts",
+      "target": "node:fs",
+      "type": "stdlib",
+      "specifier": "node:fs"
+    },
+    {
+      "source": "packages/apply-release-plan/src/index.test.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/apply-release-plan/src/index.test.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/apply-release-plan/src/index.test.ts",
+      "target": "tinyexec",
+      "type": "external",
+      "specifier": "tinyexec"
+    },
+    {
+      "source": "packages/apply-release-plan/src/index.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/apply-release-plan/src/get-changelog-entry.ts",
+      "target": "packages/apply-release-plan/src/utils.ts",
+      "type": "internal",
+      "specifier": "./utils.ts"
+    },
+    {
+      "source": "packages/apply-release-plan/src/get-changelog-entry.ts",
+      "target": "semver/ranges/valid.js",
+      "type": "external",
+      "specifier": "semver/ranges/valid.js"
+    },
+    {
+      "source": "packages/apply-release-plan/src/version-package.ts",
+      "target": "packages/apply-release-plan/src/edit-json.ts",
+      "type": "internal",
+      "specifier": "./edit-json.ts"
+    },
+    {
+      "source": "packages/apply-release-plan/src/version-package.ts",
+      "target": "packages/apply-release-plan/src/utils.ts",
+      "type": "internal",
+      "specifier": "./utils.ts"
+    },
+    {
+      "source": "packages/apply-release-plan/src/version-package.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/apply-release-plan/src/version-package.ts",
+      "target": "semver/classes/range.js",
+      "type": "external",
+      "specifier": "semver/classes/range.js"
+    },
+    {
+      "source": "packages/apply-release-plan/src/version-package.ts",
+      "target": "semver/functions/inc.js",
+      "type": "external",
+      "specifier": "semver/functions/inc.js"
+    },
+    {
+      "source": "packages/apply-release-plan/src/version-package.ts",
+      "target": "semver/functions/prerelease.js",
+      "type": "external",
+      "specifier": "semver/functions/prerelease.js"
+    },
+    {
+      "source": "packages/apply-release-plan/src/version-package.ts",
+      "target": "semver/functions/satisfies.js",
+      "type": "external",
+      "specifier": "semver/functions/satisfies.js"
+    },
+    {
+      "source": "packages/apply-release-plan/src/version-package.ts",
+      "target": "semver/ranges/valid.js",
+      "type": "external",
+      "specifier": "semver/ranges/valid.js"
+    },
+    {
+      "source": "packages/apply-release-plan/src/get-changelog-entry.test.ts",
+      "target": "packages/apply-release-plan/src/get-changelog-entry.ts",
+      "type": "internal",
+      "specifier": "./get-changelog-entry.ts"
+    },
+    {
+      "source": "packages/apply-release-plan/src/get-changelog-entry.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/apply-release-plan/src/utils.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/apply-release-plan/src/utils.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/apply-release-plan/src/utils.ts",
+      "target": "semver/functions/satisfies.js",
+      "type": "external",
+      "specifier": "semver/functions/satisfies.js"
+    },
+    {
+      "source": "packages/apply-release-plan/src/utils.ts",
+      "target": "semver/ranges/valid.js",
+      "type": "external",
+      "specifier": "semver/ranges/valid.js"
+    },
+    {
+      "source": "packages/apply-release-plan/src/index.ts",
+      "target": "packages/apply-release-plan/src/edit-json.ts",
+      "type": "internal",
+      "specifier": "./edit-json.ts"
+    },
+    {
+      "source": "packages/apply-release-plan/src/index.ts",
+      "target": "packages/apply-release-plan/src/get-changelog-entry.ts",
+      "type": "internal",
+      "specifier": "./get-changelog-entry.ts"
+    },
+    {
+      "source": "packages/apply-release-plan/src/index.ts",
+      "target": "@changesets/config",
+      "type": "external",
+      "specifier": "@changesets/config"
+    },
+    {
+      "source": "packages/apply-release-plan/src/index.ts",
+      "target": "@changesets/format",
+      "type": "external",
+      "specifier": "@changesets/format"
+    },
+    {
+      "source": "packages/apply-release-plan/src/index.ts",
+      "target": "@changesets/git",
+      "type": "external",
+      "specifier": "@changesets/git"
+    },
+    {
+      "source": "packages/apply-release-plan/src/index.ts",
+      "target": "@changesets/should-skip-package",
+      "type": "external",
+      "specifier": "@changesets/should-skip-package"
+    },
+    {
+      "source": "packages/apply-release-plan/src/index.ts",
+      "target": "import-meta-resolve",
+      "type": "external",
+      "specifier": "import-meta-resolve"
+    },
+    {
+      "source": "packages/apply-release-plan/src/index.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/apply-release-plan/src/index.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/apply-release-plan/src/index.ts",
+      "target": "node:url",
+      "type": "stdlib",
+      "specifier": "node:url"
+    },
+    {
+      "source": "packages/apply-release-plan/src/edit-json.test.ts",
+      "target": "packages/apply-release-plan/src/edit-json.ts",
+      "type": "internal",
+      "specifier": "./edit-json.ts"
+    },
+    {
+      "source": "packages/apply-release-plan/src/edit-json.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/apply-release-plan/src/test-utils/failing-functions.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/git/tsdown.config.ts",
+      "target": "tsdown.config.ts",
+      "type": "internal",
+      "specifier": "../../tsdown.config.ts"
+    },
+    {
+      "source": "packages/git/tsdown.config.ts",
+      "target": "tsdown/config",
+      "type": "external",
+      "specifier": "tsdown/config"
+    },
+    {
+      "source": "packages/git/src/index.test.ts",
+      "target": "@changesets/test-utils",
+      "type": "external",
+      "specifier": "@changesets/test-utils"
+    },
+    {
+      "source": "packages/git/src/index.test.ts",
+      "target": "@changesets/write",
+      "type": "external",
+      "specifier": "@changesets/write"
+    },
+    {
+      "source": "packages/git/src/index.test.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/git/src/index.test.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/git/src/index.test.ts",
+      "target": "tinyexec",
+      "type": "external",
+      "specifier": "tinyexec"
+    },
+    {
+      "source": "packages/git/src/index.test.ts",
+      "target": "vitest",
+      "type": "external",
+      "specifier": "vitest"
+    },
+    {
+      "source": "packages/git/src/index.ts",
+      "target": "@changesets/errors",
+      "type": "external",
+      "specifier": "@changesets/errors"
+    },
+    {
+      "source": "packages/git/src/index.ts",
+      "target": "@changesets/types",
+      "type": "external",
+      "specifier": "@changesets/types"
+    },
+    {
+      "source": "packages/git/src/index.ts",
+      "target": "@manypkg/get-packages",
+      "type": "external",
+      "specifier": "@manypkg/get-packages"
+    },
+    {
+      "source": "packages/git/src/index.ts",
+      "target": "node:fs/promises",
+      "type": "stdlib",
+      "specifier": "node:fs/promises"
+    },
+    {
+      "source": "packages/git/src/index.ts",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "packages/git/src/index.ts",
+      "target": "picomatch",
+      "type": "external",
+      "specifier": "picomatch"
+    },
+    {
+      "source": "packages/git/src/index.ts",
+      "target": "tinyexec",
+      "type": "external",
+      "specifier": "tinyexec"
+    }
+  ]
+}

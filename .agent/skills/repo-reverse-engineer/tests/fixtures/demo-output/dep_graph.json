@@ -1,0 +1,116 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/demo-app",
+  "total_file_imports": 10,
+  "modules": [
+    "src",
+    "src/middleware",
+    "src/models",
+    "src/routes"
+  ],
+  "module_edges": [
+    {
+      "source": "src",
+      "target": "src/routes",
+      "weight": 2
+    },
+    {
+      "source": "src/routes",
+      "target": "src/middleware",
+      "weight": 1
+    },
+    {
+      "source": "src/routes",
+      "target": "src/models",
+      "weight": 1
+    }
+  ],
+  "centrality": [
+    {
+      "module": "src/routes",
+      "in_degree": 1,
+      "out_degree": 2,
+      "total_degree": 3
+    },
+    {
+      "module": "src",
+      "in_degree": 0,
+      "out_degree": 1,
+      "total_degree": 1
+    },
+    {
+      "module": "src/middleware",
+      "in_degree": 1,
+      "out_degree": 0,
+      "total_degree": 1
+    },
+    {
+      "module": "src/models",
+      "in_degree": 1,
+      "out_degree": 0,
+      "total_degree": 1
+    }
+  ],
+  "cycles": [],
+  "raw_edges": [
+    {
+      "source": "src/server.js",
+      "target": "src/app.js",
+      "type": "internal",
+      "specifier": "./app"
+    },
+    {
+      "source": "src/app.js",
+      "target": "src/routes/auth.js",
+      "type": "internal",
+      "specifier": "./routes/auth"
+    },
+    {
+      "source": "src/app.js",
+      "target": "src/routes/items.js",
+      "type": "internal",
+      "specifier": "./routes/items"
+    },
+    {
+      "source": "src/app.js",
+      "target": "express",
+      "type": "external",
+      "specifier": "express"
+    },
+    {
+      "source": "src/middleware/auth.js",
+      "target": "jsonwebtoken",
+      "type": "external",
+      "specifier": "jsonwebtoken"
+    },
+    {
+      "source": "src/models/item.js",
+      "target": "mongoose",
+      "type": "external",
+      "specifier": "mongoose"
+    },
+    {
+      "source": "src/routes/auth.js",
+      "target": "express",
+      "type": "external",
+      "specifier": "express"
+    },
+    {
+      "source": "src/routes/items.js",
+      "target": "src/middleware/auth.js",
+      "type": "internal",
+      "specifier": "../middleware/auth"
+    },
+    {
+      "source": "src/routes/items.js",
+      "target": "src/models/item.js",
+      "type": "internal",
+      "specifier": "../models/item"
+    },
+    {
+      "source": "src/routes/items.js",
+      "target": "express",
+      "type": "external",
+      "specifier": "express"
+    }
+  ]
+}

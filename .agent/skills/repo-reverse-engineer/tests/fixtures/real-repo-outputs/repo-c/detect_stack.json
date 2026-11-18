@@ -1,0 +1,150 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/real-repos/repo-c",
+  "ecosystems": [
+    "Node/TypeScript"
+  ],
+  "manifests": [
+    {
+      "path": "package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "docs/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "scripts/test-utils/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "scripts/e2e/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "packages/write/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "packages/assemble-release-plan/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "packages/types/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "packages/logger/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "packages/config/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "packages/get-version-range-type/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "packages/should-skip-package/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "packages/color/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "packages/parse/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "packages/read/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "packages/get-release-plan/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "packages/get-dependents-graph/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "packages/cli/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "packages/release-utils/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "packages/changelog-git/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "packages/pre/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "packages/get-github-info/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "packages/errors/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "packages/changelog-github/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "packages/apply-release-plan/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    },
+    {
+      "path": "packages/git/package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    }
+  ],
+  "frameworks": [
+    "Vitest",
+    "Vue"
+  ],
+  "datastores": [],
+  "infra": [
+    {
+      "type": "Netlify",
+      "file": "netlify.toml"
+    }
+  ],
+  "commands": {
+    "install": "pnpm install",
+    "build": "pnpm run build",
+    "test": "pnpm test"
+  },
+  "confidence": "high"
+}
