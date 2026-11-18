@@ -56,6 +56,28 @@ def get_tree_summary(root_path: Path, max_depth: int = 3):
     return tree
 
 
+def get_largest_files(root_path: Path, top_n: int = 15):
+    """List top N largest source files by lines, sorted descending."""
+    files_with_lines = []
+    for file_path in _common.walk_repo(root_path):
+        if _common.is_binary(file_path):
+            continue
+        try:
+            with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                lines = sum(1 for _ in f)
+            rel_path = str(file_path.relative_to(root_path))
+            ext = file_path.suffix.lower()
+            lang = _common.EXT_TO_LANG.get(ext, "Other")
+            files_with_lines.append(
+                {"path": rel_path, "lines": lines, "language": lang}
+            )
+        except Exception:
+            pass
+
+    files_with_lines.sort(key=lambda x: x["lines"], reverse=True)
+    return files_with_lines[:top_n]
+
+
 def count_languages(root_path: Path):
     """Count files and non-blank lines per language."""
     stats = {}
@@ -93,11 +115,13 @@ def main():
 
     languages = count_languages(root_path)
     tree_summary = get_tree_summary(root_path, max_depth=3)
+    largest_files = get_largest_files(root_path, top_n=15)
 
     data = {
         "root": str(root_path),
         "languages": languages,
         "tree": tree_summary,
+        "largest_files": largest_files,
     }
 
     if args.json:

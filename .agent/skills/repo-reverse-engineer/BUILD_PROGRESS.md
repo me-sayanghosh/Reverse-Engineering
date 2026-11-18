@@ -38,7 +38,7 @@
 - [x] Step 29 – Skeleton
 - [x] Step 30 – File counts & LOC by language
 - [x] Step 31 – Tree summary
-- [ ] Step 32 – Largest files
+- [x] Step 32 – Largest files
 - [ ] Step 33 – Churn & age hints
 - [ ] Step 34 – Test/doc/CI presence
 - [ ] Step 35 – Monorepo hint
