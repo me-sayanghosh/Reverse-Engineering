@@ -42,7 +42,7 @@
 - [x] Step 33 – Churn & age hints
 - [x] Step 34 – Test/doc/CI presence
 - [x] Step 35 – Monorepo hint
-- [ ] Step 36 – JSON schema & test
+- [x] Step 36 – JSON schema & test
 - [ ] Step 37 – Skeleton
 - [ ] Step 38 – Manifest detection table
 - [ ] Step 39 – Node/TS framework detection
