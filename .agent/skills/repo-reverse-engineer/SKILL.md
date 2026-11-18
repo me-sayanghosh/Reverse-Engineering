@@ -163,7 +163,28 @@ The skill provides 8 dedicated automation scripts located in `scripts/`:
    - Synthesize architectural topology narrative, cross-cutting concerns, and file index maps citing verified `file:line` locations.
 
 ## Phase 3: Deep Dives & Tracing
-TODO
+
+Execute focused deep-dive investigations across 12 prioritized subsystems:
+1. **API Surface**: Extract routes and endpoints via `python3 scripts/extract_api_surface.py "<repo_path>" --json`.
+2. **Data Model**: Extract schemas and ERDs via `python3 scripts/extract_data_model.py "<repo_path>" --json --mermaid`.
+3. **Authentication & Authorization**: Audit JWT/session issuance, RBAC/ABAC guards, and middleware validation.
+4. **State Management**: Track domain entity lifecycles, frontend stores, and database transaction boundaries.
+5. **Configuration & Secrets**: Inspect runtime variables via `python3 scripts/scan_secrets_env.py "<repo_path>" --json`.
+6. **External Integrations**: Map third-party SDKs, webhook consumers, and outbound HTTP/gRPC clients.
+7. **Background Jobs & Workers**: Analyze queues (Celery/Bull/Sidekiq) and scheduled crons.
+8. **Caching & Acceleration**: Inspect Redis, Memcached, HTTP cache-control headers, and query caching.
+9. **Error Handling & Resilience**: Trace custom exception hierarchies, retry loops, and global error middleware.
+10. **Logging & Observability**: Inspect OpenTelemetry, Prometheus metrics, and structured loggers (Winston/Pino/Zap).
+11. **Testing Strategy**: Audit unit, integration, and E2E coverage, fixtures, and CI automation gates.
+12. **Security Posture**: Identify potential secret exposures, unsafe deserialization, SQL injection, or CORS risks.
+
+### Critical Execution Flows
+Trace 3–5 flows as sequence diagrams in `04-FLOWS.md`:
+- Primary user request lifecycle (e.g. registration/login or order placement).
+- Background worker execution or asynchronous event ingestion.
+- Critical failure / retry recovery pathway.
+- Data synchronization or outbound webhook delivery flow.
+- Core business logic calculation or transaction processing flow.
 
 ## Phase 4: Optional Runtime Observation
 TODO
