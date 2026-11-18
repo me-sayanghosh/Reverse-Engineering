@@ -51,7 +51,7 @@
 - [x] Step 42 – Infra detection
 - [x] Step 43 – Database/queue detection
 - [x] Step 44 – Build/test/run command inference
-- [ ] Step 45 – Output & test
+- [x] Step 45 – Output & test
 - [ ] Step 46 – Skeleton
 - [ ] Step 47 – Manifest-declared entrypoints
 - [ ] Step 48 – Server bootstrap patterns

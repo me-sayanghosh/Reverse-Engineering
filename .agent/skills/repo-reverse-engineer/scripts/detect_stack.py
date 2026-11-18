@@ -412,6 +412,14 @@ def main():
         _common.output_json(data)
     else:
         print(f"Stack Detection for: {root_path}")
+        print(f"Confidence: {data['confidence']}")
+        print(f"Ecosystems: {', '.join(ecosystems) if ecosystems else 'None detected'}")
+        print(f"Frameworks: {', '.join(frameworks) if frameworks else 'None detected'}")
+        print(f"Datastores: {', '.join(datastores) if datastores else 'None detected'}")
+        print(f"Infrastructure: {', '.join(i['type'] for i in infra) if infra else 'None detected'}")
+        print("Inferred Commands:")
+        for k, v in commands.items():
+            print(f"  {k}: {v}")
 
 
 if __name__ == "__main__":
