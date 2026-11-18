@@ -286,6 +286,68 @@ def find_route_definitions(root_path: Path):
     return entries
 
 
+CLI_WORKER_PATTERNS = [
+    # CLI
+    (r"argparse\.ArgumentParser\(", "cli", "Python argparse CLI parser"),
+    (r"@click\.command\(", "cli", "Python click CLI command"),
+    (r"typer\.Typer\(|@app\.command\(", "cli", "Python typer CLI command"),
+    (r"require\(['\"]commander['\"]\)|from ['\"]commander['\"]", "cli", "Node Commander CLI"),
+    (r"require\(['\"]yargs['\"]\)|from ['\"]yargs['\"]", "cli", "Node Yargs CLI"),
+    (r"cobra\.Command\{", "cli", "Go Cobra CLI command"),
+    (r"#\[derive\(Parser\)\]|clap::Parser", "cli", "Rust Clap CLI parser"),
+    # Workers & Queues
+    (r"@(?:celery|app)\.task|Celery\s*\(", "worker", "Python Celery asynchronous task/worker"),
+    (r"new (?:Worker|Queue)\s*\(", "worker", "Node Bull/BullMQ background queue/worker"),
+    (r"include Sidekiq::Worker", "worker", "Ruby Sidekiq background worker"),
+    (r"cron\.schedule\s*\(|@Scheduled\(|@cron", "worker", "Scheduled / cron background task"),
+]
+
+
+def find_cli_and_workers(root_path: Path):
+    """Detect CLI command parsers and background worker/queue patterns."""
+    root_path = Path(root_path).resolve()
+    entries = []
+    import re
+
+    for file_path in _common.walk_repo(root_path):
+        if _common.is_binary(file_path):
+            continue
+        ext = file_path.suffix.lower()
+        if ext not in (
+            ".js",
+            ".ts",
+            ".mjs",
+            ".py",
+            ".go",
+            ".java",
+            ".kt",
+            ".rs",
+            ".rb",
+            ".php",
+        ):
+            continue
+
+        try:
+            with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                for idx, line in enumerate(f, start=1):
+                    for pat, etype, desc in CLI_WORKER_PATTERNS:
+                        if re.search(pat, line):
+                            rel = file_path.relative_to(root_path)
+                            entries.append(
+                                {
+                                    "path": f"{rel}:{idx}",
+                                    "type": etype,
+                                    "confidence": 0.85,
+                                    "reason": desc,
+                                }
+                            )
+                            break
+        except Exception:
+            pass
+
+    return entries
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Locate and rank application entrypoints, server bootstraps, routes, and workers with citations."
@@ -304,8 +366,9 @@ def main():
     manifest_entries = find_manifest_entrypoints(root_path)
     bootstrap_entries = find_server_bootstraps(root_path)
     route_entries = find_route_definitions(root_path)
+    cli_worker_entries = find_cli_and_workers(root_path)
 
-    all_entries = manifest_entries + bootstrap_entries + route_entries
+    all_entries = manifest_entries + bootstrap_entries + route_entries + cli_worker_entries
 
     data = {
         "root": str(root_path),

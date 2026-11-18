@@ -56,7 +56,7 @@
 - [x] Step 47 – Manifest-declared entrypoints
 - [x] Step 48 – Server bootstrap patterns
 - [x] Step 49 – Route definition patterns
-- [ ] Step 50 – CLI & worker detection
+- [x] Step 50 – CLI & worker detection
 - [ ] Step 51 – Frontend entrypoints
 - [ ] Step 52 – Ranking
 - [ ] Step 53 – Line-numbered evidence
