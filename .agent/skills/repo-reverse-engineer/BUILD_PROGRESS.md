@@ -34,7 +34,7 @@
 - [x] Step 25 – Shallow clone
 - [x] Step 26 – Metadata capture
 - [x] Step 27 – License detection
-- [ ] Step 28 – Error handling
+- [x] Step 28 – Error handling
 - [ ] Step 29 – Skeleton
 - [ ] Step 30 – File counts & LOC by language
 - [ ] Step 31 – Tree summary
