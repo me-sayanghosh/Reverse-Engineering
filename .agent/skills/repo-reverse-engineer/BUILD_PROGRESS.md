@@ -131,7 +131,7 @@
 - [x] Step 122 – Large-repo test
 - [x] Step 123 – Script permissions & shebangs
 - [x] Step 124 – Cross-platform check
-- [ ] Step 125 – Write `README.md`
+- [x] Step 125 – Write `README.md`
 - [ ] Step 126 – Add `LICENSE` and `CONTRIBUTING.md`
 - [ ] Step 127 – Token/size audit
 - [ ] Step 128 – Final full test run
