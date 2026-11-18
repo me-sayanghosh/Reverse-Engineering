@@ -1,0 +1,23 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/real-repos/repo-c",
+  "entrypoints": [
+    {
+      "path": "packages/cli/bin.js:1",
+      "type": "cli",
+      "confidence": 1.0,
+      "reason": "CLI command \"changeset\" in packages/cli/package.json"
+    },
+    {
+      "path": "scripts/e2e/publish.test.ts:208",
+      "type": "server",
+      "confidence": 0.9,
+      "reason": "Node http.createServer bootstrap"
+    },
+    {
+      "path": "scripts/e2e/e2e-utils.ts:104",
+      "type": "server",
+      "confidence": 0.9,
+      "reason": "Node http.createServer bootstrap"
+    }
+  ]
+}

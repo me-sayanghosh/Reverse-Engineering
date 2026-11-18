@@ -1,0 +1,363 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/real-repos/repo-c",
+  "routes": [],
+  "openapi": [],
+  "graphql": [],
+  "grpc": [],
+  "cli_commands": [
+    {
+      "file": "packages/cli/src/cli.ts:74",
+      "command": "init"
+    },
+    {
+      "file": "packages/cli/src/cli.ts:82",
+      "command": "add"
+    },
+    {
+      "file": "packages/cli/src/cli.ts:104",
+      "command": "version"
+    },
+    {
+      "file": "packages/cli/src/cli.ts:120",
+      "command": "publish"
+    },
+    {
+      "file": "packages/cli/src/cli.ts:134",
+      "command": "publish-plan"
+    },
+    {
+      "file": "packages/cli/src/cli.ts:146",
+      "command": "pack"
+    },
+    {
+      "file": "packages/cli/src/cli.ts:163",
+      "command": "status"
+    },
+    {
+      "file": "packages/cli/src/cli.ts:175",
+      "command": "git-tag"
+    }
+  ],
+  "public_exports": [
+    {
+      "file": "scripts/test-utils/src/index.ts",
+      "export": "silenceLogsInBlock",
+      "type": "Named export"
+    },
+    {
+      "file": "scripts/test-utils/src/index.ts",
+      "export": "temporarilySilenceLogs",
+      "type": "Named export"
+    },
+    {
+      "file": "scripts/test-utils/src/index.ts",
+      "export": "Fixture",
+      "type": "Named export"
+    },
+    {
+      "file": "scripts/test-utils/src/index.ts",
+      "export": "stubIsTTY",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/assemble-release-plan/src/index.ts",
+      "export": "assembleReleasePlan",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "VersionType",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "DependencyType",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "AccessType",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "Release",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "ComprehensiveRelease",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "Changeset",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "NewChangeset",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "ReleasePlan",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "PackageJSON",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "PackageGroup",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "Fixed",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "Linked",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "PrivatePackages",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "Config",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "WrittenConfig",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "ExperimentalOptions",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "NewChangesetWithCommit",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "ModCompWithPackage",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "GetReleaseLine",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "GetDependencyReleaseLine",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "ChangelogFunctions",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "GetAddMessage",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "GetVersionMessage",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "CommitFunctions",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "PreState",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "Package",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/types/src/index.ts",
+      "export": "Packages",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/logger/src/index.ts",
+      "export": "prefix",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/logger/src/index.ts",
+      "export": "error",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/logger/src/index.ts",
+      "export": "info",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/logger/src/index.ts",
+      "export": "log",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/logger/src/index.ts",
+      "export": "success",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/logger/src/index.ts",
+      "export": "warn",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/config/src/index.ts",
+      "export": "readConfig",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/config/src/index.ts",
+      "export": "validateConfig",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/config/src/index.ts",
+      "export": "defaultWrittenConfig",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/config/src/index.ts",
+      "export": "defaultConfig",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/get-version-range-type/src/index.ts",
+      "export": "getVersionRangeType",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/should-skip-package/src/index.ts",
+      "export": "shouldSkipPackage",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/parse/src/index.ts",
+      "export": "parseChangesetFile",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/get-dependents-graph/src/index.ts",
+      "export": "getDependentsGraph",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/cli/src/commands/init/index.ts",
+      "export": "InitOptions",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/cli/src/commands/git-tag/index.ts",
+      "export": "GitTagOptions",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/cli/src/commands/pack/index.ts",
+      "export": "PackOptions",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/cli/src/commands/pack/index.ts",
+      "export": "PackedRelease",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/cli/src/commands/publish-plan/index.ts",
+      "export": "PublishPlanOptions",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/cli/src/commands/status/index.ts",
+      "export": "StatusOptions",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/cli/src/commands/publish/index.ts",
+      "export": "PublishOptions",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/cli/src/commands/add/index.ts",
+      "export": "AddOptions",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/cli/src/commands/version/index.ts",
+      "export": "VersionOptions",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/cli/src/commands/pre/index.ts",
+      "export": "PreOptions",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/release-utils/src/index.ts",
+      "export": "readChangesetState",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/release-utils/src/index.ts",
+      "export": "runPublish",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/release-utils/src/index.ts",
+      "export": "runVersion",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/errors/src/index.ts",
+      "export": "GitError",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/errors/src/index.ts",
+      "export": "ExitError",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/errors/src/index.ts",
+      "export": "PreExitButNotInPreModeError",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/errors/src/index.ts",
+      "export": "PreEnterButInPreModeError",
+      "type": "Named export"
+    },
+    {
+      "file": "packages/errors/src/index.ts",
+      "export": "InternalError",
+      "type": "Named export"
+    }
+  ]
+}

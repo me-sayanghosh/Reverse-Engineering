@@ -1,0 +1,491 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/real-repos/repo-c",
+  "languages": {
+    "TypeScript": {
+      "files": 158,
+      "lines": 28987
+    },
+    "Markdown": {
+      "files": 67,
+      "lines": 7601
+    },
+    "Other": {
+      "files": 26,
+      "lines": 1388
+    },
+    "JSON": {
+      "files": 31,
+      "lines": 1130
+    },
+    "YAML": {
+      "files": 7,
+      "lines": 379
+    },
+    "JavaScript": {
+      "files": 2,
+      "lines": 126
+    },
+    "TOML": {
+      "files": 1,
+      "lines": 5
+    }
+  },
+  "tree": {
+    ".": {
+      "depth": 0,
+      "files": 16,
+      "subdirs": 5
+    },
+    "wiki": {
+      "depth": 1,
+      "files": 1,
+      "subdirs": 0
+    },
+    "docs": {
+      "depth": 1,
+      "files": 5,
+      "subdirs": 6
+    },
+    "docs/guide": {
+      "depth": 2,
+      "files": 17,
+      "subdirs": 1
+    },
+    "docs/guide/_snippets": {
+      "depth": 3,
+      "files": 6,
+      "subdirs": 0
+    },
+    "docs/blog": {
+      "depth": 2,
+      "files": 3,
+      "subdirs": 0
+    },
+    "docs/public": {
+      "depth": 2,
+      "files": 3,
+      "subdirs": 1
+    },
+    "docs/public/blog": {
+      "depth": 3,
+      "files": 1,
+      "subdirs": 0
+    },
+    "docs/scripts": {
+      "depth": 2,
+      "files": 1,
+      "subdirs": 0
+    },
+    "docs/packages": {
+      "depth": 2,
+      "files": 2,
+      "subdirs": 0
+    },
+    "docs/assets": {
+      "depth": 2,
+      "files": 7,
+      "subdirs": 0
+    },
+    "scripts": {
+      "depth": 1,
+      "files": 0,
+      "subdirs": 2
+    },
+    "scripts/test-utils": {
+      "depth": 2,
+      "files": 2,
+      "subdirs": 1
+    },
+    "scripts/test-utils/src": {
+      "depth": 3,
+      "files": 1,
+      "subdirs": 0
+    },
+    "scripts/e2e": {
+      "depth": 2,
+      "files": 6,
+      "subdirs": 1
+    },
+    "scripts/e2e/__snapshots__": {
+      "depth": 3,
+      "files": 2,
+      "subdirs": 0
+    },
+    "packages": {
+      "depth": 1,
+      "files": 0,
+      "subdirs": 21
+    },
+    "packages/write": {
+      "depth": 2,
+      "files": 4,
+      "subdirs": 1
+    },
+    "packages/write/src": {
+      "depth": 3,
+      "files": 2,
+      "subdirs": 0
+    },
+    "packages/assemble-release-plan": {
+      "depth": 2,
+      "files": 4,
+      "subdirs": 1
+    },
+    "packages/assemble-release-plan/src": {
+      "depth": 3,
+      "files": 12,
+      "subdirs": 0
+    },
+    "packages/types": {
+      "depth": 2,
+      "files": 4,
+      "subdirs": 1
+    },
+    "packages/types/src": {
+      "depth": 3,
+      "files": 1,
+      "subdirs": 0
+    },
+    "packages/logger": {
+      "depth": 2,
+      "files": 4,
+      "subdirs": 1
+    },
+    "packages/logger/src": {
+      "depth": 3,
+      "files": 2,
+      "subdirs": 0
+    },
+    "packages/config": {
+      "depth": 2,
+      "files": 5,
+      "subdirs": 2
+    },
+    "packages/config/scripts": {
+      "depth": 3,
+      "files": 2,
+      "subdirs": 0
+    },
+    "packages/config/src": {
+      "depth": 3,
+      "files": 7,
+      "subdirs": 0
+    },
+    "packages/get-version-range-type": {
+      "depth": 2,
+      "files": 4,
+      "subdirs": 1
+    },
+    "packages/get-version-range-type/src": {
+      "depth": 3,
+      "files": 2,
+      "subdirs": 0
+    },
+    "packages/should-skip-package": {
+      "depth": 2,
+      "files": 3,
+      "subdirs": 1
+    },
+    "packages/should-skip-package/src": {
+      "depth": 3,
+      "files": 1,
+      "subdirs": 0
+    },
+    "packages/color": {
+      "depth": 2,
+      "files": 1,
+      "subdirs": 1
+    },
+    "packages/color/src": {
+      "depth": 3,
+      "files": 1,
+      "subdirs": 0
+    },
+    "packages/parse": {
+      "depth": 2,
+      "files": 4,
+      "subdirs": 1
+    },
+    "packages/parse/src": {
+      "depth": 3,
+      "files": 2,
+      "subdirs": 0
+    },
+    "packages/read": {
+      "depth": 2,
+      "files": 4,
+      "subdirs": 1
+    },
+    "packages/read/src": {
+      "depth": 3,
+      "files": 2,
+      "subdirs": 0
+    },
+    "packages/get-release-plan": {
+      "depth": 2,
+      "files": 4,
+      "subdirs": 1
+    },
+    "packages/get-release-plan/src": {
+      "depth": 3,
+      "files": 1,
+      "subdirs": 0
+    },
+    "packages/get-dependents-graph": {
+      "depth": 2,
+      "files": 4,
+      "subdirs": 1
+    },
+    "packages/get-dependents-graph/src": {
+      "depth": 3,
+      "files": 3,
+      "subdirs": 0
+    },
+    "packages/cli": {
+      "depth": 2,
+      "files": 6,
+      "subdirs": 2
+    },
+    "packages/cli/default-files": {
+      "depth": 3,
+      "files": 1,
+      "subdirs": 0
+    },
+    "packages/cli/src": {
+      "depth": 3,
+      "files": 4,
+      "subdirs": 5
+    },
+    "packages/release-utils": {
+      "depth": 2,
+      "files": 3,
+      "subdirs": 1
+    },
+    "packages/release-utils/src": {
+      "depth": 3,
+      "files": 7,
+      "subdirs": 1
+    },
+    "packages/changelog-git": {
+      "depth": 2,
+      "files": 3,
+      "subdirs": 1
+    },
+    "packages/changelog-git/src": {
+      "depth": 3,
+      "files": 1,
+      "subdirs": 0
+    },
+    "packages/pre": {
+      "depth": 2,
+      "files": 4,
+      "subdirs": 1
+    },
+    "packages/pre/src": {
+      "depth": 3,
+      "files": 2,
+      "subdirs": 0
+    },
+    "packages/get-github-info": {
+      "depth": 2,
+      "files": 4,
+      "subdirs": 1
+    },
+    "packages/get-github-info/src": {
+      "depth": 3,
+      "files": 8,
+      "subdirs": 0
+    },
+    "packages/errors": {
+      "depth": 2,
+      "files": 4,
+      "subdirs": 1
+    },
+    "packages/errors/src": {
+      "depth": 3,
+      "files": 2,
+      "subdirs": 0
+    },
+    "packages/changelog-github": {
+      "depth": 2,
+      "files": 4,
+      "subdirs": 1
+    },
+    "packages/changelog-github/src": {
+      "depth": 3,
+      "files": 4,
+      "subdirs": 0
+    },
+    "packages/apply-release-plan": {
+      "depth": 2,
+      "files": 4,
+      "subdirs": 1
+    },
+    "packages/apply-release-plan/src": {
+      "depth": 3,
+      "files": 8,
+      "subdirs": 1
+    },
+    "packages/git": {
+      "depth": 2,
+      "files": 4,
+      "subdirs": 1
+    },
+    "packages/git/src": {
+      "depth": 3,
+      "files": 2,
+      "subdirs": 0
+    },
+    "assets": {
+      "depth": 1,
+      "files": 1,
+      "subdirs": 1
+    },
+    "assets/images": {
+      "depth": 2,
+      "files": 18,
+      "subdirs": 0
+    }
+  },
+  "largest_files": [
+    {
+      "path": "packages/cli/src/commands/version/version.test.ts",
+      "lines": 4077,
+      "language": "TypeScript"
+    },
+    {
+      "path": "packages/apply-release-plan/src/index.test.ts",
+      "lines": 3615,
+      "language": "TypeScript"
+    },
+    {
+      "path": "packages/cli/CHANGELOG.md",
+      "lines": 2260,
+      "language": "Markdown"
+    },
+    {
+      "path": "scripts/e2e/publish.test.ts",
+      "lines": 2123,
+      "language": "TypeScript"
+    },
+    {
+      "path": "packages/assemble-release-plan/src/index.test.ts",
+      "lines": 1546,
+      "language": "TypeScript"
+    },
+    {
+      "path": "scripts/e2e/__snapshots__/publish.test.ts.snap",
+      "lines": 978,
+      "language": "Other"
+    },
+    {
+      "path": "packages/git/src/index.test.ts",
+      "lines": 973,
+      "language": "TypeScript"
+    },
+    {
+      "path": "packages/cli/src/commands/add/__tests__/add.test.ts",
+      "lines": 851,
+      "language": "TypeScript"
+    },
+    {
+      "path": "packages/apply-release-plan/CHANGELOG.md",
+      "lines": 832,
+      "language": "Markdown"
+    },
+    {
+      "path": "packages/cli/src/commands/publish/__tests__/index.test.ts",
+      "lines": 742,
+      "language": "TypeScript"
+    },
+    {
+      "path": "packages/config/src/parse.test.ts",
+      "lines": 716,
+      "language": "TypeScript"
+    },
+    {
+      "path": "packages/config/CHANGELOG.md",
+      "lines": 689,
+      "language": "Markdown"
+    },
+    {
+      "path": "packages/get-release-plan/CHANGELOG.md",
+      "lines": 684,
+      "language": "Markdown"
+    },
+    {
+      "path": "packages/assemble-release-plan/CHANGELOG.md",
+      "lines": 649,
+      "language": "Markdown"
+    },
+    {
+      "path": "packages/cli/src/commands/status/__tests__/status.test.ts",
+      "lines": 587,
+      "language": "TypeScript"
+    }
+  ],
+  "recently_modified": [
+    ".changeset/README.md",
+    ".changeset/config.json",
+    ".changeset/open-bottles-fry.md",
+    ".editorconfig",
+    ".git-blame-ignore-revs",
+    ".gitattributes",
+    ".github/CODEOWNERS",
+    ".github/ISSUE_TEMPLATE.md",
+    ".github/actions/ci-setup/action.yml",
+    ".github/dependabot.yml"
+  ],
+  "markers": {
+    "tests": {
+      "present": false,
+      "paths": []
+    },
+    "docs": {
+      "present": true,
+      "paths": [
+        "docs",
+        "wiki"
+      ]
+    },
+    "ci": {
+      "present": true,
+      "paths": [
+        ".github/workflows"
+      ]
+    }
+  },
+  "monorepo": {
+    "is_monorepo": true,
+    "signals": [
+      "pnpm workspaces config detected (pnpm-workspace.yaml)",
+      "Multiple package manifests found in subdirectories (24)"
+    ],
+    "packages": [
+      "docs",
+      "packages/apply-release-plan",
+      "packages/assemble-release-plan",
+      "packages/changelog-git",
+      "packages/changelog-github",
+      "packages/cli",
+      "packages/color",
+      "packages/config",
+      "packages/errors",
+      "packages/get-dependents-graph",
+      "packages/get-github-info",
+      "packages/get-release-plan",
+      "packages/get-version-range-type",
+      "packages/git",
+      "packages/logger",
+      "packages/parse",
+      "packages/pre",
+      "packages/read",
+      "packages/release-utils",
+      "packages/should-skip-package",
+      "packages/types",
+      "packages/write",
+      "scripts/e2e",
+      "scripts/test-utils"
+    ]
+  }
+}

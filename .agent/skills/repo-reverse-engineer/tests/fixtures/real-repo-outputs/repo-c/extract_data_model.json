@@ -1,0 +1,39 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/real-repos/repo-c",
+  "entities": [
+    {
+      "name": "json-schema.test",
+      "file": "packages/config/scripts/json-schema.test.ts",
+      "columns": [],
+      "source": "Mongoose"
+    },
+    {
+      "name": "generate-json-schema",
+      "file": "packages/config/scripts/generate-json-schema.ts",
+      "columns": [
+        {
+          "name": "target",
+          "type": "\"draft-2020-12\"",
+          "primary_key": false
+        },
+        {
+          "name": "typeMode",
+          "type": "\"input\"",
+          "primary_key": false
+        },
+        {
+          "name": "errorMode",
+          "type": "\"throw\"",
+          "primary_key": false
+        },
+        {
+          "name": "cause",
+          "type": "result.errors",
+          "primary_key": false
+        }
+      ],
+      "source": "Mongoose"
+    }
+  ],
+  "relations": []
+}
