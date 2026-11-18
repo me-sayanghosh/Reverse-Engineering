@@ -62,6 +62,10 @@ class TestSkillMdStructure(unittest.TestCase):
         for mode in ["quick", "standard", "deep"]:
             self.assertIn(mode, self.content, f"Mode '{mode}' missing from SKILL.md")
 
+    def test_line_count_under_500(self):
+        line_count = len(self.content.splitlines())
+        self.assertLess(line_count, 500, f"SKILL.md is {line_count} lines, must be under 500")
+
 
 if __name__ == "__main__":
     unittest.main()

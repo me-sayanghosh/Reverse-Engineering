@@ -133,7 +133,7 @@
 - [x] Step 124 – Cross-platform check
 - [x] Step 125 – Write `README.md`
 - [x] Step 126 – Add `LICENSE` and `CONTRIBUTING.md`
-- [ ] Step 127 – Token/size audit
+- [x] Step 127 – Token/size audit
 - [ ] Step 128 – Final full test run
 - [ ] Step 129 – Clean up
 - [ ] Step 130 – Final report to me
