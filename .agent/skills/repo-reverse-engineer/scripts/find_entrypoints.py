@@ -167,6 +167,63 @@ def find_manifest_entrypoints(root_path: Path):
     return entries
 
 
+BOOTSTRAP_PATTERNS = [
+    (r"app\.listen\s*\(", "Express/Node app.listen bootstrap"),
+    (r"createServer\s*\(", "Node http.createServer bootstrap"),
+    (r"uvicorn\.run\s*\(", "Python uvicorn.run ASGI bootstrap"),
+    (r"app\.run\s*\(", "Flask/Python app.run server bootstrap"),
+    (r"http\.ListenAndServe\s*\(", "Go http.ListenAndServe server bootstrap"),
+    (r"@SpringBootApplication", "Spring Boot application bootstrap"),
+    (r"HttpServer::new\s*\(", "Rust Actix-web server bootstrap"),
+    (r"axum::serve\s*\(", "Rust Axum server bootstrap"),
+]
+
+
+def find_server_bootstraps(root_path: Path):
+    """Detect server bootstrap invocations and entrypoint listeners."""
+    root_path = Path(root_path).resolve()
+    entries = []
+    import re
+
+    for file_path in _common.walk_repo(root_path):
+        if _common.is_binary(file_path):
+            continue
+        ext = file_path.suffix.lower()
+        if ext not in (
+            ".js",
+            ".ts",
+            ".mjs",
+            ".py",
+            ".go",
+            ".java",
+            ".kt",
+            ".rs",
+            ".rb",
+            ".php",
+        ):
+            continue
+
+        try:
+            with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                for idx, line in enumerate(f, start=1):
+                    for pat, desc in BOOTSTRAP_PATTERNS:
+                        if re.search(pat, line):
+                            rel = file_path.relative_to(root_path)
+                            entries.append(
+                                {
+                                    "path": f"{rel}:{idx}",
+                                    "type": "server",
+                                    "confidence": 0.9,
+                                    "reason": desc,
+                                }
+                            )
+                            break
+        except Exception:
+            pass
+
+    return entries
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Locate and rank application entrypoints, server bootstraps, routes, and workers with citations."
@@ -183,10 +240,13 @@ def main():
         _common.die(f"Repository root does not exist: {root_path}")
 
     manifest_entries = find_manifest_entrypoints(root_path)
+    bootstrap_entries = find_server_bootstraps(root_path)
+
+    all_entries = manifest_entries + bootstrap_entries
 
     data = {
         "root": str(root_path),
-        "entrypoints": manifest_entries,
+        "entrypoints": all_entries,
     }
 
     if args.json:
