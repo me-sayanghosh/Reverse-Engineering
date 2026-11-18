@@ -53,7 +53,7 @@
 - [x] Step 44 – Build/test/run command inference
 - [x] Step 45 – Output & test
 - [x] Step 46 – Skeleton
-- [ ] Step 47 – Manifest-declared entrypoints
+- [x] Step 47 – Manifest-declared entrypoints
 - [ ] Step 48 – Server bootstrap patterns
 - [ ] Step 49 – Route definition patterns
 - [ ] Step 50 – CLI & worker detection

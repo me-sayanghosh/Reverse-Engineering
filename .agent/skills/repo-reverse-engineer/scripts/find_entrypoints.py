@@ -12,6 +12,161 @@ if str(SCRIPT_DIR) not in sys.path:
 import _common
 
 
+def find_manifest_entrypoints(root_path: Path):
+    """Find entrypoints explicitly declared in package manifests or canonical binary paths."""
+    root_path = Path(root_path).resolve()
+    entries = []
+
+    # 1. Node / package.json
+    for file_path in _common.walk_repo(root_path):
+        if file_path.name == "package.json":
+            try:
+                import json
+
+                with open(file_path, "r", encoding="utf-8") as f:
+                    pj = json.load(f)
+                    base_dir = file_path.parent
+                    rel_base = base_dir.relative_to(root_path)
+
+                    # main field
+                    if "main" in pj:
+                        main_file = (base_dir / pj["main"]).resolve()
+                        if main_file.exists():
+                            rel_main = str(main_file.relative_to(root_path))
+                            entries.append(
+                                {
+                                    "path": f"{rel_main}:1",
+                                    "type": "main",
+                                    "confidence": 1.0,
+                                    "reason": f'Declared as "main" in {file_path.relative_to(root_path)}',
+                                }
+                            )
+
+                    # bin field
+                    if "bin" in pj:
+                        bin_val = pj["bin"]
+                        if isinstance(bin_val, str):
+                            bin_file = (base_dir / bin_val).resolve()
+                            if bin_file.exists():
+                                entries.append(
+                                    {
+                                        "path": f"{bin_file.relative_to(root_path)}:1",
+                                        "type": "cli",
+                                        "confidence": 1.0,
+                                        "reason": f'Declared as "bin" in {file_path.relative_to(root_path)}',
+                                    }
+                                )
+                        elif isinstance(bin_val, dict):
+                            for bname, bpath in bin_val.items():
+                                bin_file = (base_dir / bpath).resolve()
+                                if bin_file.exists():
+                                    entries.append(
+                                        {
+                                            "path": f"{bin_file.relative_to(root_path)}:1",
+                                            "type": "cli",
+                                            "confidence": 1.0,
+                                            "reason": f'CLI command "{bname}" in {file_path.relative_to(root_path)}',
+                                        }
+                                    )
+            except Exception:
+                pass
+
+    # 2. Python __main__.py or pyproject.toml scripts
+    for file_path in _common.walk_repo(root_path):
+        if file_path.name == "__main__.py":
+            entries.append(
+                {
+                    "path": f"{file_path.relative_to(root_path)}:1",
+                    "type": "main",
+                    "confidence": 1.0,
+                    "reason": "Canonical Python __main__.py module entrypoint",
+                }
+            )
+
+    pyproject = root_path / "pyproject.toml"
+    if pyproject.exists():
+        try:
+            import re
+
+            content = pyproject.read_text(encoding="utf-8", errors="ignore")
+            # match [project.scripts] or [tool.poetry.scripts]
+            in_scripts = False
+            for idx, line in enumerate(content.splitlines(), start=1):
+                if line.strip().startswith("[project.scripts]") or line.strip().startswith("[tool.poetry.scripts]"):
+                    in_scripts = True
+                    continue
+                elif in_scripts and line.strip().startswith("["):
+                    in_scripts = False
+                    continue
+                if in_scripts and "=" in line:
+                    cmd_name, target = line.split("=", 1)
+                    entries.append(
+                        {
+                            "path": f"pyproject.toml:{idx}",
+                            "type": "cli",
+                            "confidence": 1.0,
+                            "reason": f"CLI command '{cmd_name.strip()}' declared in pyproject.toml",
+                        }
+                    )
+        except Exception:
+            pass
+
+    # 3. Go: cmd/*/main.go or main.go
+    for file_path in _common.walk_repo(root_path):
+        if file_path.suffix == ".go":
+            rel = file_path.relative_to(root_path)
+            parts = rel.parts
+            if (len(parts) >= 3 and parts[0] == "cmd" and parts[-1] == "main.go") or (
+                len(parts) == 1 and parts[0] == "main.go"
+            ):
+                entries.append(
+                    {
+                        "path": f"{rel}:1",
+                        "type": "main",
+                        "confidence": 1.0,
+                        "reason": "Go main package entrypoint",
+                    }
+                )
+
+    # 4. Rust: src/main.rs or src/bin/*.rs
+    for file_path in _common.walk_repo(root_path):
+        if file_path.suffix == ".rs":
+            rel = file_path.relative_to(root_path)
+            parts = rel.parts
+            if (len(parts) == 2 and parts[0] == "src" and parts[1] == "main.rs") or (
+                len(parts) >= 3 and parts[0] == "src" and parts[1] == "bin"
+            ):
+                entries.append(
+                    {
+                        "path": f"{rel}:1",
+                        "type": "main",
+                        "confidence": 1.0,
+                        "reason": "Rust binary crate entrypoint",
+                    }
+                )
+
+    # 5. Java Main methods
+    for file_path in _common.walk_repo(root_path):
+        if file_path.suffix in (".java", ".kt"):
+            try:
+                with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                    for idx, line in enumerate(f, start=1):
+                        if "public static void main" in line or "fun main(" in line:
+                            entries.append(
+                                {
+                                    "path": f"{file_path.relative_to(root_path)}:{idx}",
+                                    "type": "main",
+                                    "confidence": 1.0,
+                                    "reason": "Java/Kotlin static main method",
+                                }
+                            )
+                            break
+            except Exception:
+                pass
+
+    return entries
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Locate and rank application entrypoints, server bootstraps, routes, and workers with citations."
@@ -27,15 +182,19 @@ def main():
     if not root_path.exists():
         _common.die(f"Repository root does not exist: {root_path}")
 
+    manifest_entries = find_manifest_entrypoints(root_path)
+
     data = {
         "root": str(root_path),
-        "entrypoints": [],
+        "entrypoints": manifest_entries,
     }
 
     if args.json:
         _common.output_json(data)
     else:
         print(f"Entrypoint Discovery for: {root_path}")
+        for ep in manifest_entries:
+            print(f"[{ep['type']}] {ep['path']} (confidence: {ep['confidence']}) - {ep['reason']}")
 
 
 if __name__ == "__main__":
