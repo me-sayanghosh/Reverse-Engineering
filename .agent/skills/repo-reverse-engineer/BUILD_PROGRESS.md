@@ -127,7 +127,7 @@
 - [x] Step 118 – Spot-check accuracy
 - [x] Step 119 – Fix script bugs found
 - [x] Step 120 – Fix workflow gaps
-- [ ] Step 121 – Safety test
+- [x] Step 121 – Safety test
 - [ ] Step 122 – Large-repo test
 - [ ] Step 123 – Script permissions & shebangs
 - [ ] Step 124 – Cross-platform check

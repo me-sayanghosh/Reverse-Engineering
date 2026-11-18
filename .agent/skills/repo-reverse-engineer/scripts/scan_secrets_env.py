@@ -185,9 +185,9 @@ SECRET_PATTERNS = [
     (r"\b(gh[pousr]_[a-zA-Z0-9_]{36,})\b", "GitHub Personal Access Token", 4),
     (r"-----BEGIN (?:[A-Z]+ )?PRIVATE KEY-----", "Private Key Header", 11),
     (r"\b(xox[baprs]-[0-9a-zA-Z]{10,48})\b", "Slack Token", 5),
-    (r"\b(sk_live_[0-9a-zA-Z]{24,})\b", "Stripe Live Secret Key", 8),
+    (r"\b(sk_(?:live|test)_[0-9a-zA-Z]{24,})\b", "Stripe Secret Key", 8),
     (
-        r"""(?i)(?:api_key|apikey|secret|password|auth_token)\s*[:=]\s*['"]([a-zA-Z0-9_\-.~!@#$%^&*+=]{12,})['"]""",
+        r"""(?i)(?:api_key|apikey|secret|token|password|auth_token)[a-z0-9_]*\s*[:=]\s*['"]?([a-zA-Z0-9_\-.~!@#$%^&*+=]{12,})['"]?""",
         "Committed Secret / Token",
         4,
     ),

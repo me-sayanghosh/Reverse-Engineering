@@ -376,6 +376,31 @@ def infer_commands(root_path: Path, ecosystems: list):
     return commands
 
 
+def detect_suspicious_scripts(root_path: Path):
+    """Detect high-risk lifecycle hooks (postinstall, preinstall) or suspicious payload commands."""
+    root_path = Path(root_path).resolve()
+    risks = []
+    for pkg_json in _common.walk_repo(root_path):
+        if pkg_json.name == "package.json":
+            try:
+                import json
+                data = json.loads(pkg_json.read_text(encoding="utf-8", errors="ignore"))
+                scripts = data.get("scripts", {})
+                for hook in ["postinstall", "preinstall", "install"]:
+                    if hook in scripts:
+                        val = str(scripts[hook])
+                        rel = str(pkg_json.relative_to(root_path))
+                        risks.append({
+                            "file": rel,
+                            "hook": hook,
+                            "command": val,
+                            "warning": f"Suspicious lifecycle hook '{hook}' in {rel}: {val}"
+                        })
+            except Exception:
+                pass
+    return risks
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Detect repository technology stack, frameworks, databases, and build/run commands."
@@ -401,6 +426,7 @@ def main():
     infra = detect_infra(root_path)
     datastores = detect_datastores_and_queues(root_path)
     commands = infer_commands(root_path, ecosystems)
+    suspicious_scripts = detect_suspicious_scripts(root_path)
 
     data = {
         "root": str(root_path),
@@ -410,6 +436,7 @@ def main():
         "datastores": datastores,
         "infra": infra,
         "commands": commands,
+        "suspicious_scripts": suspicious_scripts,
         "confidence": "high" if (ecosystems or frameworks) else "medium",
     }
 
