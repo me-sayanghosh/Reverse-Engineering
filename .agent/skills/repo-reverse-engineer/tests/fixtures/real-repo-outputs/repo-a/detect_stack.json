@@ -1,0 +1,21 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/real-repos/repo-a",
+  "ecosystems": [
+    "Node/TypeScript"
+  ],
+  "manifests": [
+    {
+      "path": "package.json",
+      "manifest": "package.json",
+      "ecosystem": "Node/TypeScript"
+    }
+  ],
+  "frameworks": [],
+  "datastores": [],
+  "infra": [],
+  "commands": {
+    "install": "npm install",
+    "test": "npm test"
+  },
+  "confidence": "high"
+}

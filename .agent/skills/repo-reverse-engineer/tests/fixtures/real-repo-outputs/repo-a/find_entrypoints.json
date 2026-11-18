@@ -1,0 +1,221 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/real-repos/repo-a",
+  "entrypoints": [
+    {
+      "path": "index.js:1",
+      "type": "main",
+      "confidence": 1.0,
+      "reason": "Declared as \"main\" in package.json"
+    },
+    {
+      "path": "examples/thank.js:5",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/string-util.js:1",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/split.js:1",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/positional-options.js:3",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/pass-through-options.js:3",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/options-variadic.js:5",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/options-required.js:8",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/options-negatable.js:7",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/options-implies.js:2",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/options-extra.js:7",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/options-env.js:2",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/options-defaults.js:6",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/options-custom-processing.js:7",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/options-conflicts.js:2",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/options-common.js:6",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/options-boolean-or-value.js:7",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/nestedCommands.js:3",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/man-style-help.mjs:1",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/hook.js:3",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/help-subcommands-usage.js:1",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/help-groups.js:1",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/help-centered.mjs:1",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/global-options-nested.js:9",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/global-options-added.js:12",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/defaultCommand.js:3",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/custom-help-text.js:5",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/custom-command-class.js:2",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/configure-output.js:1",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/configure-help.js:1",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/color-help.mjs:2",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/color-help-replacement.mjs:9",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/arguments-extra.js:5",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/arguments-custom-processing.js:7",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/argument.js:5",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    },
+    {
+      "path": "examples/action-this.js:5",
+      "type": "cli",
+      "confidence": 0.85,
+      "reason": "Node Commander CLI"
+    }
+  ]
+}

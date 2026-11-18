@@ -1,0 +1,2713 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/real-repos/repo-a",
+  "total_file_imports": 438,
+  "modules": [
+    ".",
+    "lib",
+    "tests",
+    "tests/fixtures",
+    "tests/fixtures-extensions",
+    "typings"
+  ],
+  "module_edges": [
+    {
+      "source": ".",
+      "target": "lib",
+      "weight": 5
+    },
+    {
+      "source": "typings",
+      "target": ".",
+      "weight": 1
+    },
+    {
+      "source": "tests",
+      "target": ".",
+      "weight": 100
+    },
+    {
+      "source": "tests",
+      "target": "lib",
+      "weight": 2
+    },
+    {
+      "source": "tests/fixtures-extensions",
+      "target": ".",
+      "weight": 1
+    },
+    {
+      "source": "tests/fixtures",
+      "target": ".",
+      "weight": 2
+    }
+  ],
+  "centrality": [
+    {
+      "module": ".",
+      "in_degree": 4,
+      "out_degree": 1,
+      "total_degree": 5
+    },
+    {
+      "module": "lib",
+      "in_degree": 2,
+      "out_degree": 0,
+      "total_degree": 2
+    },
+    {
+      "module": "tests",
+      "in_degree": 0,
+      "out_degree": 2,
+      "total_degree": 2
+    },
+    {
+      "module": "tests/fixtures",
+      "in_degree": 0,
+      "out_degree": 1,
+      "total_degree": 1
+    },
+    {
+      "module": "tests/fixtures-extensions",
+      "in_degree": 0,
+      "out_degree": 1,
+      "total_degree": 1
+    },
+    {
+      "module": "typings",
+      "in_degree": 0,
+      "out_degree": 1,
+      "total_degree": 1
+    }
+  ],
+  "cycles": [],
+  "raw_edges": [
+    {
+      "source": "index.js",
+      "target": "lib/argument.js",
+      "type": "internal",
+      "specifier": "./lib/argument.js"
+    },
+    {
+      "source": "index.js",
+      "target": "lib/command.js",
+      "type": "internal",
+      "specifier": "./lib/command.js"
+    },
+    {
+      "source": "index.js",
+      "target": "lib/error.js",
+      "type": "internal",
+      "specifier": "./lib/error.js"
+    },
+    {
+      "source": "index.js",
+      "target": "lib/help.js",
+      "type": "internal",
+      "specifier": "./lib/help.js"
+    },
+    {
+      "source": "index.js",
+      "target": "lib/option.js",
+      "type": "internal",
+      "specifier": "./lib/option.js"
+    },
+    {
+      "source": "eslint.config.js",
+      "target": "@eslint/js",
+      "type": "external",
+      "specifier": "@eslint/js"
+    },
+    {
+      "source": "eslint.config.js",
+      "target": "eslint-config-prettier",
+      "type": "external",
+      "specifier": "eslint-config-prettier"
+    },
+    {
+      "source": "eslint.config.js",
+      "target": "eslint-node-test",
+      "type": "external",
+      "specifier": "eslint-node-test"
+    },
+    {
+      "source": "eslint.config.js",
+      "target": "eslint/config",
+      "type": "external",
+      "specifier": "eslint/config"
+    },
+    {
+      "source": "eslint.config.js",
+      "target": "globals",
+      "type": "external",
+      "specifier": "globals"
+    },
+    {
+      "source": "eslint.config.js",
+      "target": "typescript-eslint",
+      "type": "external",
+      "specifier": "typescript-eslint"
+    },
+    {
+      "source": "typings/index.test-d.ts",
+      "target": "./index.js",
+      "type": "internal",
+      "specifier": "./index.js"
+    },
+    {
+      "source": "typings/index.test-d.ts",
+      "target": "tsd",
+      "type": "external",
+      "specifier": "tsd"
+    },
+    {
+      "source": "tests/command.addHelpOption.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.addHelpOption.test.js",
+      "target": "tests/testHelpers.js",
+      "type": "internal",
+      "specifier": "./testHelpers.js"
+    },
+    {
+      "source": "tests/command.addHelpOption.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.addHelpOption.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/help.longestCommandTermLength.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.longestCommandTermLength.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.longestCommandTermLength.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.createHelp.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.createHelp.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.createHelp.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.parseOptions.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.parseOptions.test.js",
+      "target": "child_process",
+      "type": "stdlib",
+      "specifier": "child_process"
+    },
+    {
+      "source": "tests/command.parseOptions.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.parseOptions.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.parseOptions.test.js",
+      "target": "path",
+      "type": "stdlib",
+      "specifier": "path"
+    },
+    {
+      "source": "tests/command.parseOptions.test.js",
+      "target": "util",
+      "type": "stdlib",
+      "specifier": "util"
+    },
+    {
+      "source": "tests/options.values.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.values.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.values.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.default.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.default.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.default.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/argument.chain.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/argument.chain.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/argument.chain.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.help.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.help.test.js",
+      "target": "tests/testHelpers.js",
+      "type": "internal",
+      "specifier": "./testHelpers.js"
+    },
+    {
+      "source": "tests/command.help.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.help.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.bool.combo.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.bool.combo.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.bool.combo.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.createOption.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.createOption.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.createOption.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/commander.storeOptionsAsProperties.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/commander.storeOptionsAsProperties.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/commander.storeOptionsAsProperties.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.twice.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.twice.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.twice.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.unknownOption.test.js",
+      "target": "tests/testHelpers.js",
+      "type": "internal",
+      "specifier": "./testHelpers.js"
+    },
+    {
+      "source": "tests/command.unknownOption.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.unknownOption.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/help.style.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.style.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.style.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.registerClash.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.registerClash.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.registerClash.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/useColor.test.js",
+      "target": "lib/command.js",
+      "type": "internal",
+      "specifier": "../lib/command.js"
+    },
+    {
+      "source": "tests/useColor.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/useColor.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/help.commandTerm.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.commandTerm.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.commandTerm.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/help.visibleGlobalOptions.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.visibleGlobalOptions.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.visibleGlobalOptions.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.required.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.required.test.js",
+      "target": "tests/testHelpers.js",
+      "type": "internal",
+      "specifier": "./testHelpers.js"
+    },
+    {
+      "source": "tests/options.required.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.required.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.opts.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.opts.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.opts.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.exitOverride.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.exitOverride.test.js",
+      "target": "tests/testHelpers.js",
+      "type": "internal",
+      "specifier": "./testHelpers.js"
+    },
+    {
+      "source": "tests/command.exitOverride.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.exitOverride.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.exitOverride.test.js",
+      "target": "path",
+      "type": "stdlib",
+      "specifier": "path"
+    },
+    {
+      "source": "tests/command.addHelpText.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.addHelpText.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.addHelpText.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/incrementNodeInspectorPort.test.cjs",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../"
+    },
+    {
+      "source": "tests/incrementNodeInspectorPort.test.cjs",
+      "target": "child_process",
+      "type": "stdlib",
+      "specifier": "child_process"
+    },
+    {
+      "source": "tests/incrementNodeInspectorPort.test.cjs",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/incrementNodeInspectorPort.test.cjs",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/incrementNodeInspectorPort.test.cjs",
+      "target": "path",
+      "type": "stdlib",
+      "specifier": "path"
+    },
+    {
+      "source": "tests/help.visibleCommands.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.visibleCommands.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.visibleCommands.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.preset.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.preset.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.preset.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.positionalOptions.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.positionalOptions.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.positionalOptions.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/option.chain.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/option.chain.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/option.chain.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.executableSubcommand.search.test.cjs",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../"
+    },
+    {
+      "source": "tests/command.executableSubcommand.search.test.cjs",
+      "target": "child_process",
+      "type": "stdlib",
+      "specifier": "child_process"
+    },
+    {
+      "source": "tests/command.executableSubcommand.search.test.cjs",
+      "target": "fs",
+      "type": "stdlib",
+      "specifier": "fs"
+    },
+    {
+      "source": "tests/command.executableSubcommand.search.test.cjs",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.executableSubcommand.search.test.cjs",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.executableSubcommand.search.test.cjs",
+      "target": "path",
+      "type": "stdlib",
+      "specifier": "path"
+    },
+    {
+      "source": "tests/command.summary.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.summary.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.summary.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/help.visibleOptions.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.visibleOptions.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.visibleOptions.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.option-misuse.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.option-misuse.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.option-misuse.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.camelcase.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.camelcase.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.camelcase.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.alias.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.alias.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.alias.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.action.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.action.test.js",
+      "target": "tests/testHelpers.js",
+      "type": "internal",
+      "specifier": "./testHelpers.js"
+    },
+    {
+      "source": "tests/command.action.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.action.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.nested.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.nested.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.nested.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.getset.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.getset.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.getset.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.executableSubcommand.inspect.test.js",
+      "target": "child_process",
+      "type": "stdlib",
+      "specifier": "child_process"
+    },
+    {
+      "source": "tests/command.executableSubcommand.inspect.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.executableSubcommand.inspect.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.executableSubcommand.inspect.test.js",
+      "target": "path",
+      "type": "stdlib",
+      "specifier": "path"
+    },
+    {
+      "source": "tests/command.executableSubcommand.inspect.test.js",
+      "target": "util",
+      "type": "stdlib",
+      "specifier": "util"
+    },
+    {
+      "source": "tests/options.conflicts.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.conflicts.test.js",
+      "target": "tests/testHelpers.js",
+      "type": "internal",
+      "specifier": "./testHelpers.js"
+    },
+    {
+      "source": "tests/options.conflicts.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.conflicts.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.conflicts.test.js",
+      "target": "path",
+      "type": "stdlib",
+      "specifier": "path"
+    },
+    {
+      "source": "tests/command.hook.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.hook.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.hook.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/help.minWidthToWrap.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.minWidthToWrap.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.minWidthToWrap.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.implies.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.implies.test.js",
+      "target": "tests/testHelpers.js",
+      "type": "internal",
+      "specifier": "./testHelpers.js"
+    },
+    {
+      "source": "tests/options.implies.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.implies.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.custom-processing.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.custom-processing.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.custom-processing.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/help.longestArgumentTermLength.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.longestArgumentTermLength.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.longestArgumentTermLength.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.executableSubcommand.lookup.test.js",
+      "target": "child_process",
+      "type": "stdlib",
+      "specifier": "child_process"
+    },
+    {
+      "source": "tests/command.executableSubcommand.lookup.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.executableSubcommand.lookup.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.executableSubcommand.lookup.test.js",
+      "target": "path",
+      "type": "stdlib",
+      "specifier": "path"
+    },
+    {
+      "source": "tests/command.executableSubcommand.lookup.test.js",
+      "target": "util",
+      "type": "stdlib",
+      "specifier": "util"
+    },
+    {
+      "source": "tests/argument.variadic.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/argument.variadic.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/argument.variadic.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/negatives.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/negatives.test.js",
+      "target": "tests/testHelpers.js",
+      "type": "internal",
+      "specifier": "./testHelpers.js"
+    },
+    {
+      "source": "tests/negatives.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/negatives.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/help.suggestion.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.suggestion.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.suggestion.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.allowUnknownOption.test.js",
+      "target": "tests/testHelpers.js",
+      "type": "internal",
+      "specifier": "./testHelpers.js"
+    },
+    {
+      "source": "tests/command.allowUnknownOption.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.allowUnknownOption.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.bool.small.combined.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.bool.small.combined.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.bool.small.combined.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.chain.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.chain.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.chain.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.name.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.name.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.name.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.name.test.js",
+      "target": "path",
+      "type": "stdlib",
+      "specifier": "path"
+    },
+    {
+      "source": "tests/help.padWidth.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.padWidth.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.padWidth.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/deprecated.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/deprecated.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/deprecated.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/help.argumentDescription.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.argumentDescription.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.argumentDescription.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/option.bad-flags.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/option.bad-flags.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/option.bad-flags.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.helpCommand.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.helpCommand.test.js",
+      "target": "tests/testHelpers.js",
+      "type": "internal",
+      "specifier": "./testHelpers.js"
+    },
+    {
+      "source": "tests/command.helpCommand.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.helpCommand.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.parse.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.parse.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.parse.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.onCommand.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.onCommand.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.onCommand.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/argument.custom-processing.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/argument.custom-processing.test.js",
+      "target": "tests/testHelpers.js",
+      "type": "internal",
+      "specifier": "./testHelpers.js"
+    },
+    {
+      "source": "tests/argument.custom-processing.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/argument.custom-processing.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.showSuggestionAfterError.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.showSuggestionAfterError.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.showSuggestionAfterError.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/createCommand.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/createCommand.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/createCommand.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.configureOutput.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.configureOutput.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.configureOutput.test.js",
+      "target": "node:process",
+      "type": "stdlib",
+      "specifier": "node:process"
+    },
+    {
+      "source": "tests/command.configureOutput.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.choices.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.choices.test.js",
+      "target": "tests/testHelpers.js",
+      "type": "internal",
+      "specifier": "./testHelpers.js"
+    },
+    {
+      "source": "tests/options.choices.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.choices.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/help.sortOptions.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.sortOptions.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.sortOptions.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.showHelpAfterError.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.showHelpAfterError.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.showHelpAfterError.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/help.longestOptionTermLength.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.longestOptionTermLength.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.longestOptionTermLength.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.helpOption.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.helpOption.test.js",
+      "target": "tests/testHelpers.js",
+      "type": "internal",
+      "specifier": "./testHelpers.js"
+    },
+    {
+      "source": "tests/command.helpOption.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.helpOption.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.optsWithGlobals.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.optsWithGlobals.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.optsWithGlobals.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.executableSubcommand.mock.test.cjs",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../"
+    },
+    {
+      "source": "tests/command.executableSubcommand.mock.test.cjs",
+      "target": "child_process",
+      "type": "stdlib",
+      "specifier": "child_process"
+    },
+    {
+      "source": "tests/command.executableSubcommand.mock.test.cjs",
+      "target": "events",
+      "type": "stdlib",
+      "specifier": "events"
+    },
+    {
+      "source": "tests/command.executableSubcommand.mock.test.cjs",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.executableSubcommand.mock.test.cjs",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/help.preformatted.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.preformatted.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.preformatted.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.copySettings.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.copySettings.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.copySettings.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.unknownCommand.test.js",
+      "target": "tests/testHelpers.js",
+      "type": "internal",
+      "specifier": "./testHelpers.js"
+    },
+    {
+      "source": "tests/command.unknownCommand.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.unknownCommand.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/imports.test.mjs",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/imports.test.mjs",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.description.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.description.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.description.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/help.visibleArguments.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.visibleArguments.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.visibleArguments.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.addCommand.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.addCommand.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.addCommand.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.default.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.default.test.js",
+      "target": "child_process",
+      "type": "stdlib",
+      "specifier": "child_process"
+    },
+    {
+      "source": "tests/command.default.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.default.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.default.test.js",
+      "target": "path",
+      "type": "stdlib",
+      "specifier": "path"
+    },
+    {
+      "source": "tests/command.default.test.js",
+      "target": "util",
+      "type": "stdlib",
+      "specifier": "util"
+    },
+    {
+      "source": "tests/options.dual-options.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.dual-options.test.js",
+      "target": "lib/option.js",
+      "type": "internal",
+      "specifier": "../lib/option.js"
+    },
+    {
+      "source": "tests/options.dual-options.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.dual-options.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/imports.test.cjs",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/imports.test.cjs",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/imports.test.cjs",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/args.variadic.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/args.variadic.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/args.variadic.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/argument.required.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/argument.required.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/argument.required.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.asterisk.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.asterisk.test.js",
+      "target": "tests/testHelpers.js",
+      "type": "internal",
+      "specifier": "./testHelpers.js"
+    },
+    {
+      "source": "tests/command.asterisk.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.asterisk.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.registerClash.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.registerClash.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.registerClash.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.createArgument.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.createArgument.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.createArgument.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.variadic.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.variadic.test.js",
+      "target": "tests/testHelpers.js",
+      "type": "internal",
+      "specifier": "./testHelpers.js"
+    },
+    {
+      "source": "tests/options.variadic.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.variadic.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.commandHelp.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.commandHelp.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.commandHelp.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/testHelpers.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.configureHelp.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.configureHelp.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.configureHelp.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/help.boxWrap.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.boxWrap.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.boxWrap.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.flags.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.flags.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.flags.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/helpGroup.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/helpGroup.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/helpGroup.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/help.sortCommands.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.sortCommands.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.sortCommands.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/help.subcommandDescription.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.subcommandDescription.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.subcommandDescription.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.executableSubcommand.test.js",
+      "target": "tests/testHelpers.js",
+      "type": "internal",
+      "specifier": "./testHelpers.js"
+    },
+    {
+      "source": "tests/command.executableSubcommand.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.executableSubcommand.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.executableSubcommand.signals.test.js",
+      "target": "child_process",
+      "type": "stdlib",
+      "specifier": "child_process"
+    },
+    {
+      "source": "tests/command.executableSubcommand.signals.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.executableSubcommand.signals.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.executableSubcommand.signals.test.js",
+      "target": "path",
+      "type": "stdlib",
+      "specifier": "path"
+    },
+    {
+      "source": "tests/command.argumentVariations.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.argumentVariations.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.argumentVariations.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.error.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.error.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.error.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.bool.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.bool.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.bool.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/help.optionDescription.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.optionDescription.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.optionDescription.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.version.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.version.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.version.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.env.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.env.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.env.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/argument.choices.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/argument.choices.test.js",
+      "target": "tests/testHelpers.js",
+      "type": "internal",
+      "specifier": "./testHelpers.js"
+    },
+    {
+      "source": "tests/argument.choices.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/argument.choices.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/help.commandUsage.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.commandUsage.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.commandUsage.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.allowExcessArguments.test.js",
+      "target": "tests/testHelpers.js",
+      "type": "internal",
+      "specifier": "./testHelpers.js"
+    },
+    {
+      "source": "tests/command.allowExcessArguments.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.allowExcessArguments.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/command.usage.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/command.usage.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/command.usage.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.mandatory.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.mandatory.test.js",
+      "target": "tests/testHelpers.js",
+      "type": "internal",
+      "specifier": "./testHelpers.js"
+    },
+    {
+      "source": "tests/options.mandatory.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.mandatory.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/help.optionTerm.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.optionTerm.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.optionTerm.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/options.optional.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/options.optional.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/options.optional.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/help.showGlobalOptions.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/help.showGlobalOptions.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/help.showGlobalOptions.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/args.literal.test.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../index.js"
+    },
+    {
+      "source": "tests/args.literal.test.js",
+      "target": "node:assert/strict",
+      "type": "stdlib",
+      "specifier": "node:assert/strict"
+    },
+    {
+      "source": "tests/args.literal.test.js",
+      "target": "node:test",
+      "type": "stdlib",
+      "specifier": "node:test"
+    },
+    {
+      "source": "tests/fixtures-extensions/pm.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../../index.js"
+    },
+    {
+      "source": "tests/fixtures/pm-cache.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../../index.js"
+    },
+    {
+      "source": "tests/fixtures/inspect.js",
+      "target": "index.js",
+      "type": "internal",
+      "specifier": "../../index.js"
+    },
+    {
+      "source": "examples/defaultCommand.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/options-custom-processing.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/help-subcommands-usage.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/color-help-replacement.mjs",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/color-help-replacement.mjs",
+      "target": "strip-ansi",
+      "type": "external",
+      "specifier": "strip-ansi"
+    },
+    {
+      "source": "examples/color-help-replacement.mjs",
+      "target": "wrap-ansi",
+      "type": "external",
+      "specifier": "wrap-ansi"
+    },
+    {
+      "source": "examples/options-implies.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/hook.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/action-this.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/alias.cjs",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/string-util.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/argument.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/help-groups.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/global-options-nested.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/options-defaults.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/pass-through-options.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/help-centered.mjs",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/options-common.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/configure-help.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/options-required.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/arguments-custom-processing.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/custom-command-class.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/options-conflicts.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/custom-help-text.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/positional-options.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/thank.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/options-negatable.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/options-env.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/split.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/global-options-added.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/configure-output.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/options-extra.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/nestedCommands.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/options-boolean-or-value.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/color-help.mjs",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/color-help.mjs",
+      "target": "node:util",
+      "type": "stdlib",
+      "specifier": "node:util"
+    },
+    {
+      "source": "examples/arguments-extra.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/man-style-help.mjs",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "examples/options-variadic.js",
+      "target": "commander",
+      "type": "external",
+      "specifier": "commander"
+    },
+    {
+      "source": "lib/argument.js",
+      "target": "lib/error.js",
+      "type": "internal",
+      "specifier": "./error.js"
+    },
+    {
+      "source": "lib/option.js",
+      "target": "lib/error.js",
+      "type": "internal",
+      "specifier": "./error.js"
+    },
+    {
+      "source": "lib/command.js",
+      "target": "lib/argument.js",
+      "type": "internal",
+      "specifier": "./argument.js"
+    },
+    {
+      "source": "lib/command.js",
+      "target": "lib/error.js",
+      "type": "internal",
+      "specifier": "./error.js"
+    },
+    {
+      "source": "lib/command.js",
+      "target": "lib/help.js",
+      "type": "internal",
+      "specifier": "./help.js"
+    },
+    {
+      "source": "lib/command.js",
+      "target": "lib/option.js",
+      "type": "internal",
+      "specifier": "./option.js"
+    },
+    {
+      "source": "lib/command.js",
+      "target": "lib/suggestSimilar.js",
+      "type": "internal",
+      "specifier": "./suggestSimilar.js"
+    },
+    {
+      "source": "lib/command.js",
+      "target": "node:child_process",
+      "type": "stdlib",
+      "specifier": "node:child_process"
+    },
+    {
+      "source": "lib/command.js",
+      "target": "node:events",
+      "type": "stdlib",
+      "specifier": "node:events"
+    },
+    {
+      "source": "lib/command.js",
+      "target": "node:fs",
+      "type": "stdlib",
+      "specifier": "node:fs"
+    },
+    {
+      "source": "lib/command.js",
+      "target": "node:path",
+      "type": "stdlib",
+      "specifier": "node:path"
+    },
+    {
+      "source": "lib/command.js",
+      "target": "node:process",
+      "type": "stdlib",
+      "specifier": "node:process"
+    },
+    {
+      "source": "lib/command.js",
+      "target": "node:util",
+      "type": "stdlib",
+      "specifier": "node:util"
+    },
+    {
+      "source": "lib/help.js",
+      "target": "lib/argument.js",
+      "type": "internal",
+      "specifier": "./argument.js"
+    },
+    {
+      "source": "lib/help.js",
+      "target": "lib/command.js",
+      "type": "internal",
+      "specifier": "./command.js"
+    },
+    {
+      "source": "lib/help.js",
+      "target": "lib/option.js",
+      "type": "internal",
+      "specifier": "./option.js"
+    },
+    {
+      "source": "lib/help.js",
+      "target": "node:util",
+      "type": "stdlib",
+      "specifier": "node:util"
+    }
+  ]
+}

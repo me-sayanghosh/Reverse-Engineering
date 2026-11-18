@@ -1,0 +1,1314 @@
+{
+  "root": "/Users/sayanghosh/Personal Projects/Reverse Engineering/.agent/skills/repo-reverse-engineer/tests/fixtures/real-repos/repo-a",
+  "routes": [],
+  "openapi": [],
+  "graphql": [],
+  "grpc": [],
+  "cli_commands": [
+    {
+      "file": "typings/index.test-d.ts:49",
+      "command": "action"
+    },
+    {
+      "file": "typings/index.test-d.ts:51",
+      "command": "action"
+    },
+    {
+      "file": "typings/index.test-d.ts:53",
+      "command": "exec"
+    },
+    {
+      "file": "typings/index.test-d.ts:55",
+      "command": "exec"
+    },
+    {
+      "file": "typings/index.test-d.ts:519",
+      "command": "sub"
+    },
+    {
+      "file": "typings/index.d.ts:408",
+      "command": "clone <source> [destination]"
+    },
+    {
+      "file": "typings/index.d.ts:432",
+      "command": "start <service>"
+    },
+    {
+      "file": "typings/index.d.ts:433",
+      "command": "stop [service]"
+    },
+    {
+      "file": "typings/index.d.ts:616",
+      "command": "serve"
+    },
+    {
+      "file": "typings/index.d.ts:1012",
+      "command": "watch"
+    },
+    {
+      "file": "typings/index.d.ts:1013",
+      "command": "lint"
+    },
+    {
+      "file": "tests/help.longestCommandTermLength.test.js:42",
+      "command": "before"
+    },
+    {
+      "file": "tests/help.longestCommandTermLength.test.js:44",
+      "command": "after"
+    },
+    {
+      "file": "tests/command.parseOptions.test.js:19",
+      "command": "doit [id]"
+    },
+    {
+      "file": "tests/command.parseOptions.test.js:63",
+      "command": "sub [args...]"
+    },
+    {
+      "file": "tests/command.parseOptions.test.js:203",
+      "command": "sub [args...]"
+    },
+    {
+      "file": "tests/command.help.test.js:15",
+      "command": "my-command <file>"
+    },
+    {
+      "file": "tests/command.help.test.js:33",
+      "command": "simple-command"
+    },
+    {
+      "file": "tests/command.help.test.js:98",
+      "command": "secret"
+    },
+    {
+      "file": "tests/command.help.test.js:105",
+      "command": "secret"
+    },
+    {
+      "file": "tests/command.unknownOption.test.js:10",
+      "command": "info"
+    },
+    {
+      "file": "tests/command.unknownOption.test.js:22",
+      "command": "info <file>"
+    },
+    {
+      "file": "tests/command.unknownOption.test.js:69",
+      "command": "sub"
+    },
+    {
+      "file": "tests/help.style.test.js:26",
+      "command": "subcommand"
+    },
+    {
+      "file": "tests/command.registerClash.test.js:8",
+      "command": "one"
+    },
+    {
+      "file": "tests/command.registerClash.test.js:11",
+      "command": "one"
+    },
+    {
+      "file": "tests/command.registerClash.test.js:19",
+      "command": "one"
+    },
+    {
+      "file": "tests/command.registerClash.test.js:22",
+      "command": "1"
+    },
+    {
+      "file": "tests/command.registerClash.test.js:30",
+      "command": "one"
+    },
+    {
+      "file": "tests/command.registerClash.test.js:33",
+      "command": "1"
+    },
+    {
+      "file": "tests/command.registerClash.test.js:41",
+      "command": "one"
+    },
+    {
+      "file": "tests/command.registerClash.test.js:44",
+      "command": "unity"
+    },
+    {
+      "file": "tests/command.registerClash.test.js:52",
+      "command": "one"
+    },
+    {
+      "file": "tests/command.registerClash.test.js:63",
+      "command": "one"
+    },
+    {
+      "file": "tests/help.visibleGlobalOptions.test.js:9",
+      "command": "sub"
+    },
+    {
+      "file": "tests/help.visibleGlobalOptions.test.js:17",
+      "command": "sub"
+    },
+    {
+      "file": "tests/help.visibleGlobalOptions.test.js:28",
+      "command": "sub"
+    },
+    {
+      "file": "tests/help.visibleGlobalOptions.test.js:39",
+      "command": "sub1"
+    },
+    {
+      "file": "tests/help.visibleGlobalOptions.test.js:40",
+      "command": "sub2"
+    },
+    {
+      "file": "tests/command.exitOverride.test.js:31",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.exitOverride.test.js:97",
+      "command": "compress <arg-name>"
+    },
+    {
+      "file": "tests/command.exitOverride.test.js:160",
+      "command": "speak"
+    },
+    {
+      "file": "tests/command.exitOverride.test.js:198",
+      "command": "compress"
+    },
+    {
+      "file": "tests/command.exitOverride.test.js:245",
+      "command": "silent"
+    },
+    {
+      "file": "tests/command.addHelpText.test.js:113",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.addHelpText.test.js:122",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.addHelpText.test.js:131",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.addHelpText.test.js:140",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.addHelpText.test.js:171",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.addHelpText.test.js:204",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.addHelpText.test.js:233",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.addHelpText.test.js:251",
+      "command": "sub"
+    },
+    {
+      "file": "tests/help.visibleCommands.test.js:17",
+      "command": "sub"
+    },
+    {
+      "file": "tests/help.visibleCommands.test.js:28",
+      "command": "visible"
+    },
+    {
+      "file": "tests/help.visibleCommands.test.js:29",
+      "command": "invisible-executable"
+    },
+    {
+      "file": "tests/help.visibleCommands.test.js:30",
+      "command": "invisible-action"
+    },
+    {
+      "file": "tests/command.positionalOptions.test.js:84",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.positionalOptions.test.js:163",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.positionalOptions.test.js:168",
+      "command": "another"
+    },
+    {
+      "file": "tests/command.positionalOptions.test.js:233",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.positionalOptions.test.js:304",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.positionalOptions.test.js:354",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.positionalOptions.test.js:384",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.positionalOptions.test.js:412",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.positionalOptions.test.js:508",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.alias.test.js:11",
+      "command": "info [thing]"
+    },
+    {
+      "file": "tests/command.alias.test.js:18",
+      "command": "list [thing]"
+    },
+    {
+      "file": "tests/command.alias.test.js:25",
+      "command": "list [thing]"
+    },
+    {
+      "file": "tests/command.alias.test.js:34",
+      "command": "fail"
+    },
+    {
+      "file": "tests/command.alias.test.js:43",
+      "command": "list"
+    },
+    {
+      "file": "tests/command.alias.test.js:51",
+      "command": "list"
+    },
+    {
+      "file": "tests/command.alias.test.js:59",
+      "command": "list"
+    },
+    {
+      "file": "tests/command.alias.test.js:81",
+      "command": "external"
+    },
+    {
+      "file": "tests/command.action.test.js:12",
+      "command": "info"
+    },
+    {
+      "file": "tests/command.action.test.js:22",
+      "command": "info"
+    },
+    {
+      "file": "tests/command.action.test.js:33",
+      "command": "info <file>"
+    },
+    {
+      "file": "tests/command.action.test.js:112",
+      "command": "subcommand"
+    },
+    {
+      "file": "tests/command.action.test.js:130",
+      "command": "subcommand"
+    },
+    {
+      "file": "tests/command.nested.test.js:8",
+      "command": "sub1"
+    },
+    {
+      "file": "tests/options.conflicts.test.js:12",
+      "command": "foo"
+    },
+    {
+      "file": "tests/options.conflicts.test.js:134",
+      "command": "bar"
+    },
+    {
+      "file": "tests/options.conflicts.test.js:156",
+      "command": "bar"
+    },
+    {
+      "file": "tests/options.conflicts.test.js:176",
+      "command": "bar"
+    },
+    {
+      "file": "tests/options.conflicts.test.js:195",
+      "command": "bar"
+    },
+    {
+      "file": "tests/options.conflicts.test.js:212",
+      "command": "bar"
+    },
+    {
+      "file": "tests/options.conflicts.test.js:231",
+      "command": "bar"
+    },
+    {
+      "file": "tests/options.conflicts.test.js:252",
+      "command": "bar"
+    },
+    {
+      "file": "tests/options.conflicts.test.js:273",
+      "command": "bar"
+    },
+    {
+      "file": "tests/options.conflicts.test.js:293",
+      "command": "bar"
+    },
+    {
+      "file": "tests/options.conflicts.test.js:315",
+      "command": "bar"
+    },
+    {
+      "file": "tests/options.conflicts.test.js:331",
+      "command": "bar"
+    },
+    {
+      "file": "tests/options.conflicts.test.js:385",
+      "command": "ext"
+    },
+    {
+      "file": "tests/command.hook.test.js:69",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.hook.test.js:81",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.hook.test.js:98",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.hook.test.js:131",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.hook.test.js:143",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.hook.test.js:169",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.hook.test.js:179",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.hook.test.js:214",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.hook.test.js:226",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.hook.test.js:334",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.hook.test.js:368",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.hook.test.js:390",
+      "command": "first"
+    },
+    {
+      "file": "tests/command.hook.test.js:395",
+      "command": "second"
+    },
+    {
+      "file": "tests/command.hook.test.js:400",
+      "command": "third"
+    },
+    {
+      "file": "tests/options.implies.test.js:186",
+      "command": "sub"
+    },
+    {
+      "file": "tests/argument.variadic.test.js:39",
+      "command": "sub [variadicArg...]"
+    },
+    {
+      "file": "tests/argument.variadic.test.js:50",
+      "command": "sub [variadicArg...]"
+    },
+    {
+      "file": "tests/argument.variadic.test.js:71",
+      "command": "sub <variadicArg...> [optionalArg]"
+    },
+    {
+      "file": "tests/negatives.test.js:192",
+      "command": "leaf"
+    },
+    {
+      "file": "tests/negatives.test.js:207",
+      "command": "leaf"
+    },
+    {
+      "file": "tests/negatives.test.js:219",
+      "command": "leaf"
+    },
+    {
+      "file": "tests/negatives.test.js:233",
+      "command": "leaf"
+    },
+    {
+      "file": "tests/help.suggestion.test.js:84",
+      "command": "xyz"
+    },
+    {
+      "file": "tests/help.suggestion.test.js:91",
+      "command": "xyz"
+    },
+    {
+      "file": "tests/help.suggestion.test.js:98",
+      "command": "aaaaa"
+    },
+    {
+      "file": "tests/help.suggestion.test.js:99",
+      "command": "bat"
+    },
+    {
+      "file": "tests/help.suggestion.test.js:100",
+      "command": "ccccc"
+    },
+    {
+      "file": "tests/help.suggestion.test.js:107",
+      "command": "sub"
+    },
+    {
+      "file": "tests/help.suggestion.test.js:115",
+      "command": "sub"
+    },
+    {
+      "file": "tests/help.suggestion.test.js:145",
+      "command": "rat"
+    },
+    {
+      "file": "tests/help.suggestion.test.js:213",
+      "command": "sub"
+    },
+    {
+      "file": "tests/help.suggestion.test.js:221",
+      "command": "sub"
+    },
+    {
+      "file": "tests/help.suggestion.test.js:230",
+      "command": "sub"
+    },
+    {
+      "file": "tests/help.suggestion.test.js:238",
+      "command": "sub"
+    },
+    {
+      "file": "tests/help.suggestion.test.js:245",
+      "command": "secret"
+    },
+    {
+      "file": "tests/help.suggestion.test.js:259",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.allowUnknownOption.test.js:62",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.allowUnknownOption.test.js:78",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.chain.test.js:11",
+      "command": "foo"
+    },
+    {
+      "file": "tests/command.name.test.js:35",
+      "command": "mycommand <file>"
+    },
+    {
+      "file": "tests/help.padWidth.test.js:13",
+      "command": "sub"
+    },
+    {
+      "file": "tests/help.padWidth.test.js:22",
+      "command": "sub"
+    },
+    {
+      "file": "tests/help.padWidth.test.js:34",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.helpCommand.test.js:23",
+      "command": "foo"
+    },
+    {
+      "file": "tests/command.helpCommand.test.js:30",
+      "command": "foo"
+    },
+    {
+      "file": "tests/command.helpCommand.test.js:44",
+      "command": "foo"
+    },
+    {
+      "file": "tests/command.helpCommand.test.js:71",
+      "command": "sub1"
+    },
+    {
+      "file": "tests/command.helpCommand.test.js:83",
+      "command": "sub1"
+    },
+    {
+      "file": "tests/command.helpCommand.test.js:95",
+      "command": "sub1"
+    },
+    {
+      "file": "tests/command.helpCommand.test.js:107",
+      "command": "sub1"
+    },
+    {
+      "file": "tests/command.helpCommand.test.js:108",
+      "command": "sub2"
+    },
+    {
+      "file": "tests/command.helpCommand.test.js:120",
+      "command": "sub1"
+    },
+    {
+      "file": "tests/command.helpCommand.test.js:133",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.helpCommand.test.js:146",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.helpCommand.test.js:159",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.parse.test.js:329",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.parse.test.js:349",
+      "command": "sub1"
+    },
+    {
+      "file": "tests/command.parse.test.js:350",
+      "command": "sub2"
+    },
+    {
+      "file": "tests/command.parse.test.js:423",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.onCommand.test.js:8",
+      "command": "*"
+    },
+    {
+      "file": "tests/command.onCommand.test.js:12",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.onCommand.test.js:21",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.onCommand.test.js:30",
+      "command": "sub <file>"
+    },
+    {
+      "file": "tests/command.showSuggestionAfterError.test.js:26",
+      "command": "example"
+    },
+    {
+      "file": "tests/command.showSuggestionAfterError.test.js:34",
+      "command": "example"
+    },
+    {
+      "file": "tests/createCommand.test.js:25",
+      "command": "sub"
+    },
+    {
+      "file": "tests/createCommand.test.js:37",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.showHelpAfterError.test.js:95",
+      "command": "sub1"
+    },
+    {
+      "file": "tests/command.helpOption.test.js:103",
+      "command": "foo"
+    },
+    {
+      "file": "tests/options.optsWithGlobals.test.js:26",
+      "command": "sub"
+    },
+    {
+      "file": "tests/options.optsWithGlobals.test.js:40",
+      "command": "sub"
+    },
+    {
+      "file": "tests/options.optsWithGlobals.test.js:42",
+      "command": "subsub"
+    },
+    {
+      "file": "tests/options.optsWithGlobals.test.js:59",
+      "command": "sub"
+    },
+    {
+      "file": "tests/options.optsWithGlobals.test.js:83",
+      "command": "sub"
+    },
+    {
+      "file": "tests/options.optsWithGlobals.test.js:95",
+      "command": "sub"
+    },
+    {
+      "file": "tests/options.optsWithGlobals.test.js:109",
+      "command": "sub"
+    },
+    {
+      "file": "tests/options.optsWithGlobals.test.js:124",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.copySettings.test.js:19",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.unknownCommand.test.js:18",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.unknownCommand.test.js:27",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.unknownCommand.test.js:36",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.unknownCommand.test.js:49",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.addCommand.test.js:20",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.addCommand.test.js:57",
+      "command": "exec"
+    },
+    {
+      "file": "tests/command.default.test.js:34",
+      "command": "other"
+    },
+    {
+      "file": "tests/command.default.test.js:36",
+      "command": "default"
+    },
+    {
+      "file": "tests/command.default.test.js:71",
+      "command": "other"
+    },
+    {
+      "file": "tests/args.variadic.test.js:36",
+      "command": "sub [variadicArg...]"
+    },
+    {
+      "file": "tests/args.variadic.test.js:47",
+      "command": "sub [variadicArg...]"
+    },
+    {
+      "file": "tests/args.variadic.test.js:68",
+      "command": "sub <variadicArg...> [optionalArg]"
+    },
+    {
+      "file": "tests/command.asterisk.test.js:6",
+      "command": "*"
+    },
+    {
+      "file": "tests/command.asterisk.test.js:16",
+      "command": "*"
+    },
+    {
+      "file": "tests/command.asterisk.test.js:20",
+      "command": "*"
+    },
+    {
+      "file": "tests/command.asterisk.test.js:32",
+      "command": "*"
+    },
+    {
+      "file": "tests/command.asterisk.test.js:40",
+      "command": "install"
+    },
+    {
+      "file": "tests/command.asterisk.test.js:41",
+      "command": "*"
+    },
+    {
+      "file": "tests/command.asterisk.test.js:49",
+      "command": "install"
+    },
+    {
+      "file": "tests/command.asterisk.test.js:50",
+      "command": "*"
+    },
+    {
+      "file": "tests/command.asterisk.test.js:59",
+      "command": "install"
+    },
+    {
+      "file": "tests/command.asterisk.test.js:61",
+      "command": "*"
+    },
+    {
+      "file": "tests/command.asterisk.test.js:74",
+      "command": "install"
+    },
+    {
+      "file": "tests/command.asterisk.test.js:75",
+      "command": "*"
+    },
+    {
+      "file": "tests/command.asterisk.test.js:108",
+      "command": "install"
+    },
+    {
+      "file": "tests/command.asterisk.test.js:117",
+      "command": "install"
+    },
+    {
+      "file": "tests/command.asterisk.test.js:129",
+      "command": "install"
+    },
+    {
+      "file": "tests/options.registerClash.test.js:43",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.createArgument.test.js:17",
+      "command": "sub <file>"
+    },
+    {
+      "file": "tests/command.createArgument.test.js:40",
+      "command": "sub <file>"
+    },
+    {
+      "file": "tests/command.commandHelp.test.js:10",
+      "command": "bare"
+    },
+    {
+      "file": "tests/command.commandHelp.test.js:17",
+      "command": "bare [bare-arg]"
+    },
+    {
+      "file": "tests/command.configureHelp.test.js:23",
+      "command": "sub"
+    },
+    {
+      "file": "tests/helpGroup.test.js:28",
+      "command": "alpha"
+    },
+    {
+      "file": "tests/helpGroup.test.js:35",
+      "command": "alpha"
+    },
+    {
+      "file": "tests/helpGroup.test.js:36",
+      "command": "beta"
+    },
+    {
+      "file": "tests/helpGroup.test.js:179",
+      "command": "alpha"
+    },
+    {
+      "file": "tests/helpGroup.test.js:187",
+      "command": "alpha"
+    },
+    {
+      "file": "tests/helpGroup.test.js:188",
+      "command": "beta"
+    },
+    {
+      "file": "tests/helpGroup.test.js:196",
+      "command": "alpha"
+    },
+    {
+      "file": "tests/helpGroup.test.js:198",
+      "command": "unus"
+    },
+    {
+      "file": "tests/helpGroup.test.js:207",
+      "command": "alpha"
+    },
+    {
+      "file": "tests/helpGroup.test.js:215",
+      "command": "unus"
+    },
+    {
+      "file": "tests/helpGroup.test.js:230",
+      "command": "alpha"
+    },
+    {
+      "file": "tests/helpGroup.test.js:237",
+      "command": "foo"
+    },
+    {
+      "file": "tests/helpGroup.test.js:246",
+      "command": "foo"
+    },
+    {
+      "file": "tests/helpGroup.test.js:257",
+      "command": "unus"
+    },
+    {
+      "file": "tests/helpGroup.test.js:258",
+      "command": "duo"
+    },
+    {
+      "file": "tests/helpGroup.test.js:260",
+      "command": "beta"
+    },
+    {
+      "file": "tests/helpGroup.test.js:261",
+      "command": "alpha"
+    },
+    {
+      "file": "tests/helpGroup.test.js:270",
+      "command": "bbb"
+    },
+    {
+      "file": "tests/helpGroup.test.js:271",
+      "command": "ccc"
+    },
+    {
+      "file": "tests/helpGroup.test.js:272",
+      "command": "aaa"
+    },
+    {
+      "file": "tests/help.sortCommands.test.js:12",
+      "command": "ccc"
+    },
+    {
+      "file": "tests/help.sortCommands.test.js:13",
+      "command": "aaa"
+    },
+    {
+      "file": "tests/help.sortCommands.test.js:14",
+      "command": "bbb"
+    },
+    {
+      "file": "tests/help.sortCommands.test.js:26",
+      "command": "ccc"
+    },
+    {
+      "file": "tests/help.sortCommands.test.js:27",
+      "command": "aaa"
+    },
+    {
+      "file": "tests/help.sortCommands.test.js:28",
+      "command": "bbb"
+    },
+    {
+      "file": "tests/command.executableSubcommand.test.js:10",
+      "command": "install"
+    },
+    {
+      "file": "tests/command.argumentVariations.test.js:126",
+      "command": "sub <arg1> <arg2>"
+    },
+    {
+      "file": "tests/options.bool.test.js:43",
+      "command": "sub"
+    },
+    {
+      "file": "tests/options.bool.test.js:56",
+      "command": "sub"
+    },
+    {
+      "file": "tests/options.bool.test.js:69",
+      "command": "sub"
+    },
+    {
+      "file": "tests/options.bool.test.js:82",
+      "command": "sub"
+    },
+    {
+      "file": "tests/options.version.test.js:152",
+      "command": "version"
+    },
+    {
+      "file": "tests/options.version.test.js:167",
+      "command": "version"
+    },
+    {
+      "file": "tests/options.env.test.js:255",
+      "command": "one"
+    },
+    {
+      "file": "tests/options.env.test.js:257",
+      "command": "two"
+    },
+    {
+      "file": "tests/help.commandUsage.test.js:19",
+      "command": "sub"
+    },
+    {
+      "file": "tests/help.commandUsage.test.js:34",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.allowExcessArguments.test.js:78",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.allowExcessArguments.test.js:94",
+      "command": "sub"
+    },
+    {
+      "file": "tests/command.usage.test.js:28",
+      "command": "info"
+    },
+    {
+      "file": "tests/command.usage.test.js:39",
+      "command": "info"
+    },
+    {
+      "file": "tests/command.usage.test.js:66",
+      "command": "foo"
+    },
+    {
+      "file": "tests/command.usage.test.js:88",
+      "command": "beta"
+    },
+    {
+      "file": "tests/options.mandatory.test.js:86",
+      "command": "sub"
+    },
+    {
+      "file": "tests/options.mandatory.test.js:136",
+      "command": "sub"
+    },
+    {
+      "file": "tests/options.mandatory.test.js:153",
+      "command": "sub"
+    },
+    {
+      "file": "tests/options.mandatory.test.js:184",
+      "command": "sub"
+    },
+    {
+      "file": "tests/options.mandatory.test.js:199",
+      "command": "sub"
+    },
+    {
+      "file": "tests/options.mandatory.test.js:202",
+      "command": "sub2"
+    },
+    {
+      "file": "tests/options.mandatory.test.js:227",
+      "command": "sub"
+    },
+    {
+      "file": "tests/help.showGlobalOptions.test.js:9",
+      "command": "sub"
+    },
+    {
+      "file": "tests/help.showGlobalOptions.test.js:16",
+      "command": "sub"
+    },
+    {
+      "file": "tests/help.showGlobalOptions.test.js:23",
+      "command": "sub"
+    },
+    {
+      "file": "tests/help.showGlobalOptions.test.js:30",
+      "command": "sub1"
+    },
+    {
+      "file": "tests/help.showGlobalOptions.test.js:31",
+      "command": "sub2"
+    },
+    {
+      "file": "tests/help.showGlobalOptions.test.js:45",
+      "command": "sub1"
+    },
+    {
+      "file": "tests/help.showGlobalOptions.test.js:46",
+      "command": "sub2"
+    },
+    {
+      "file": "tests/fixtures-extensions/pm.js:6",
+      "command": "try-ts"
+    },
+    {
+      "file": "tests/fixtures-extensions/pm.js:7",
+      "command": "try-cjs"
+    },
+    {
+      "file": "tests/fixtures-extensions/pm.js:8",
+      "command": "try-mjs"
+    },
+    {
+      "file": "tests/fixtures/pm-cache.js:4",
+      "command": "clear"
+    },
+    {
+      "file": "tests/fixtures/pm-cache.js:5",
+      "command": "validate"
+    },
+    {
+      "file": "tests/fixtures/inspect.js:5",
+      "command": "sub"
+    },
+    {
+      "file": "examples/defaultCommand.js:9",
+      "command": "build"
+    },
+    {
+      "file": "examples/defaultCommand.js:16",
+      "command": "deploy"
+    },
+    {
+      "file": "examples/defaultCommand.js:23",
+      "command": "serve"
+    },
+    {
+      "file": "examples/help-subcommands-usage.js:14",
+      "command": "make <FILENAME>"
+    },
+    {
+      "file": "examples/help-subcommands-usage.js:26",
+      "command": "serve <SERVICE>"
+    },
+    {
+      "file": "examples/hook.js:49",
+      "command": "start"
+    },
+    {
+      "file": "examples/action-this.js:9",
+      "command": "serve"
+    },
+    {
+      "file": "examples/string-util.js:12",
+      "command": "split"
+    },
+    {
+      "file": "examples/string-util.js:23",
+      "command": "join"
+    },
+    {
+      "file": "examples/help-groups.js:11",
+      "command": "docker1"
+    },
+    {
+      "file": "examples/help-groups.js:20",
+      "command": "run"
+    },
+    {
+      "file": "examples/help-groups.js:22",
+      "command": "exec"
+    },
+    {
+      "file": "examples/help-groups.js:25",
+      "command": "images"
+    },
+    {
+      "file": "examples/help-groups.js:26",
+      "command": "volumes"
+    },
+    {
+      "file": "examples/help-groups.js:30",
+      "command": "docker2"
+    },
+    {
+      "file": "examples/help-groups.js:47",
+      "command": "run"
+    },
+    {
+      "file": "examples/help-groups.js:49",
+      "command": "exec"
+    },
+    {
+      "file": "examples/help-groups.js:52",
+      "command": "images"
+    },
+    {
+      "file": "examples/help-groups.js:56",
+      "command": "volumes"
+    },
+    {
+      "file": "examples/help-groups.js:62",
+      "command": "built-in"
+    },
+    {
+      "file": "examples/global-options-nested.js:15",
+      "command": "sub"
+    },
+    {
+      "file": "examples/configure-help.js:23",
+      "command": "beaver"
+    },
+    {
+      "file": "examples/arguments-custom-processing.js:25",
+      "command": "add"
+    },
+    {
+      "file": "examples/arguments-custom-processing.js:33",
+      "command": "sum"
+    },
+    {
+      "file": "examples/custom-command-class.js:29",
+      "command": "serve [params...]"
+    },
+    {
+      "file": "examples/custom-command-class.js:35",
+      "command": "build <target>"
+    },
+    {
+      "file": "examples/options-conflicts.js:7",
+      "command": "pay"
+    },
+    {
+      "file": "examples/options-conflicts.js:23",
+      "command": "source"
+    },
+    {
+      "file": "examples/options-conflicts.js:46",
+      "command": "paint"
+    },
+    {
+      "file": "examples/custom-help-text.js:20",
+      "command": "extra"
+    },
+    {
+      "file": "examples/positional-options.js:9",
+      "command": "upload <file>"
+    },
+    {
+      "file": "examples/global-options-added.js:27",
+      "command": "print"
+    },
+    {
+      "file": "examples/global-options-added.js:34",
+      "command": "serve"
+    },
+    {
+      "file": "examples/configure-output.js:17",
+      "command": "sub-command"
+    },
+    {
+      "file": "examples/nestedCommands.js:11",
+      "command": "brew"
+    },
+    {
+      "file": "examples/nestedCommands.js:12",
+      "command": "tea"
+    },
+    {
+      "file": "examples/nestedCommands.js:15",
+      "command": "coffee"
+    },
+    {
+      "file": "examples/nestedCommands.js:23",
+      "command": "jug"
+    },
+    {
+      "file": "examples/nestedCommands.js:26",
+      "command": "pot"
+    },
+    {
+      "file": "lib/command.js:139",
+      "command": "clone <source> [destination]"
+    },
+    {
+      "file": "lib/command.js:147",
+      "command": "start <service>"
+    },
+    {
+      "file": "lib/command.js:148",
+      "command": "stop [service]"
+    },
+    {
+      "file": "lib/command.js:547",
+      "command": "serve"
+    },
+    {
+      "file": "lib/command.js:2370",
+      "command": "watch"
+    },
+    {
+      "file": "lib/command.js:2371",
+      "command": "lint"
+    }
+  ],
+  "public_exports": [
+    {
+      "file": "index.js",
+      "export": "program",
+      "type": "Named export"
+    },
+    {
+      "file": "index.js",
+      "export": "createCommand",
+      "type": "Named export"
+    },
+    {
+      "file": "index.js",
+      "export": "createOption",
+      "type": "Named export"
+    },
+    {
+      "file": "index.js",
+      "export": "createArgument",
+      "type": "Named export"
+    },
+    {
+      "file": "index.js",
+      "export": "Command",
+      "type": "Named export"
+    },
+    {
+      "file": "index.js",
+      "export": "Option",
+      "type": "Named export"
+    },
+    {
+      "file": "index.js",
+      "export": "Argument",
+      "type": "Named export"
+    },
+    {
+      "file": "index.js",
+      "export": "Help",
+      "type": "Named export"
+    },
+    {
+      "file": "index.js",
+      "export": "CommanderError",
+      "type": "Named export"
+    },
+    {
+      "file": "index.js",
+      "export": "InvalidArgumentError",
+      "type": "Named export"
+    },
+    {
+      "file": "index.js",
+      "export": "InvalidArgumentError",
+      "type": "Named export"
+    }
+  ]
+}

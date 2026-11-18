@@ -119,7 +119,7 @@
 - [x] Step 110 – Sample rebuild blueprint
 - [x] Step 111 – Pick test repos
 - [x] Step 112 – Test repo A: clone
-- [ ] Step 113 – Test repo A: scripts
+- [x] Step 113 – Test repo A: scripts
 - [ ] Step 114 – Test repo A: full workflow
 - [ ] Step 115 – Test repo B: clone + scripts
 - [ ] Step 116 – Test repo B: full workflow (deep)
