@@ -23,7 +23,7 @@
 - [x] Step 14 – Add output folder convention
 - [x] Step 15 – Add "no hallucination" rules
 - [x] Step 16 – Add citation format spec
-- [ ] Step 17 – Add script index
+- [x] Step 17 – Add script index
 - [ ] Step 18 – Add placeholders for phases 0–7
 - [ ] Step 19 – Add invocation examples
 - [ ] Step 20 – Lint SKILL.md structure

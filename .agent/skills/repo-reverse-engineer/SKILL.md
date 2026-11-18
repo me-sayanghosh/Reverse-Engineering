@@ -83,3 +83,24 @@ Citations must reference repository files using exact line numbers or line range
 
 - **Valid citation example**: `src/auth/jwt.ts:45-58` references lines 45 through 58 in `src/auth/jwt.ts`.
 - **Invalid citation example**: `User model file (around line 50)` is invalid because it lacks an exact relative file path and concrete line numbers.
+
+## Script Index
+
+The skill provides 8 dedicated automation scripts located in `scripts/`:
+
+1. **`clone_repo.sh`**: Clones a remote repository or prepares a local path, capturing repository metadata and license.
+   - Usage: `bash scripts/clone_repo.sh <url|path> [--branch X] [--subdir Y] [--out DIR] [--max-mb N] [--yes]`
+2. **`repo_stats.py`**: Computes file counts, lines of code per language, directory tree structure, largest files, and monorepo hints.
+   - Usage: `python3 scripts/repo_stats.py <root> [--json]`
+3. **`detect_stack.py`**: Identifies languages, frameworks, package manifests, datastores, queues, and build/run commands.
+   - Usage: `python3 scripts/detect_stack.py <root> [--json]`
+4. **`find_entrypoints.py`**: Locates application bootstrap files, route roots, CLI commands, and worker entrypoints with citations.
+   - Usage: `python3 scripts/find_entrypoints.py <root> [--json]`
+5. **`dep_graph.py`**: Parses imports across languages, computes module-level dependencies, detects cycles, and generates Mermaid diagrams.
+   - Usage: `python3 scripts/dep_graph.py <root> [--json] [--mermaid] [--depth N]`
+6. **`extract_api_surface.py`**: Extracts HTTP endpoints, OpenAPI routes, GraphQL queries/mutations, gRPC services, and CLI commands.
+   - Usage: `python3 scripts/extract_api_surface.py <root> [--json]`
+7. **`extract_data_model.py`**: Analyzes database migrations, ORM models (Prisma, Mongoose, SQLAlchemy, Django), and generates Mermaid ERDs.
+   - Usage: `python3 scripts/extract_data_model.py <root> [--json] [--mermaid]`
+8. **`scan_secrets_env.py`**: Discovers environment variables, config keys, and flags potential secrets while strictly redacting values.
+   - Usage: `python3 scripts/scan_secrets_env.py <root> [--json]`
