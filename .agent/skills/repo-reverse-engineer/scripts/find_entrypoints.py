@@ -386,6 +386,20 @@ def find_frontend_entrypoints(root_path: Path):
     return entries
 
 
+def rank_entrypoints(entries: list):
+    """Rank entrypoints by confidence descending; manifest-declared > bootstrap > filename heuristic."""
+    # Deduplicate by path
+    seen = {}
+    for ep in entries:
+        path = ep["path"]
+        if path not in seen or ep["confidence"] > seen[path]["confidence"]:
+            seen[path] = ep
+
+    deduped = list(seen.values())
+    deduped.sort(key=lambda x: (x["confidence"], x["path"]), reverse=True)
+    return deduped
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Locate and rank application entrypoints, server bootstraps, routes, and workers with citations."
@@ -415,16 +429,18 @@ def main():
         + frontend_entries
     )
 
+    ranked_entries = rank_entrypoints(all_entries)
+
     data = {
         "root": str(root_path),
-        "entrypoints": all_entries,
+        "entrypoints": ranked_entries,
     }
 
     if args.json:
         _common.output_json(data)
     else:
         print(f"Entrypoint Discovery for: {root_path}")
-        for ep in manifest_entries:
+        for ep in ranked_entries:
             print(f"[{ep['type']}] {ep['path']} (confidence: {ep['confidence']}) - {ep['reason']}")
 
 

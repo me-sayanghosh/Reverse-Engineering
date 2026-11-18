@@ -58,7 +58,7 @@
 - [x] Step 49 – Route definition patterns
 - [x] Step 50 – CLI & worker detection
 - [x] Step 51 – Frontend entrypoints
-- [ ] Step 52 – Ranking
+- [x] Step 52 – Ranking
 - [ ] Step 53 – Line-numbered evidence
 - [ ] Step 54 – Test
 - [ ] Step 55 – Skeleton
