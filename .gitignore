@@ -2,3 +2,4 @@
 __pycache__/
 *.py[cod]
 reverse-engineered/
+.agent/skills/repo-reverse-engineer/tests/fixtures/real-repos/

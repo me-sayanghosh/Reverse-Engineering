@@ -118,7 +118,7 @@
 - [x] Step 109 – Hand-write sample reports
 - [x] Step 110 – Sample rebuild blueprint
 - [x] Step 111 – Pick test repos
-- [ ] Step 112 – Test repo A: clone
+- [x] Step 112 – Test repo A: clone
 - [ ] Step 113 – Test repo A: scripts
 - [ ] Step 114 – Test repo A: full workflow
 - [ ] Step 115 – Test repo B: clone + scripts
