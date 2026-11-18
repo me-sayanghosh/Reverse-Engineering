@@ -87,7 +87,7 @@
 - [x] Step 78 – Mermaid ERD output
 - [x] Step 79 – Test
 - [x] Step 80 – Skeleton
-- [ ] Step 81 – Env var usage discovery
+- [x] Step 81 – Env var usage discovery
 - [ ] Step 82 – Config file keys
 - [ ] Step 83 – Secret pattern detection
 - [ ] Step 84 – Redaction guarantee
