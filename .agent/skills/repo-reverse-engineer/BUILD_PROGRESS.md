@@ -36,7 +36,7 @@
 - [x] Step 27 – License detection
 - [x] Step 28 – Error handling
 - [x] Step 29 – Skeleton
-- [ ] Step 30 – File counts & LOC by language
+- [x] Step 30 – File counts & LOC by language
 - [ ] Step 31 – Tree summary
 - [ ] Step 32 – Largest files
 - [ ] Step 33 – Churn & age hints
