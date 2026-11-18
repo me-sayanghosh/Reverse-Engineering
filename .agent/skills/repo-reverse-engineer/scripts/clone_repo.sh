@@ -151,3 +151,40 @@ PYEOF
 }
 
 check_repo_size
+
+REPO_DIR="$OUT_DIR"
+if [[ "$TARGET_TYPE" == "local" ]]; then
+    REPO_DIR="$LOCAL_PATH"
+else
+    CLONE_ARGS=(--depth 1)
+    if [[ -n "$BRANCH" ]]; then
+        CLONE_ARGS+=(--branch "$BRANCH")
+    fi
+    if [[ -n "$SUBDIR" ]]; then
+        CLONE_ARGS+=(--filter=blob:none --sparse)
+    fi
+
+    # Remove empty OUT_DIR if it was created so git clone can populate it
+    if [[ -d "$OUT_DIR" ]] && [[ -z "$(ls -A "$OUT_DIR" 2>/dev/null)" ]]; then
+        rmdir "$OUT_DIR"
+    fi
+
+    CLONE_OUTPUT=""
+    if ! CLONE_OUTPUT=$(git clone "${CLONE_ARGS[@]}" "$CLONE_URL" "$OUT_DIR" 2>&1); then
+        if echo "$CLONE_OUTPUT" | grep -qiE "Could not resolve host|Failed to connect"; then
+            echo "Error: Network failure connecting to remote host." >&2
+        elif echo "$CLONE_OUTPUT" | grep -qiE "Remote branch .* not found"; then
+            echo "Error: Branch '$BRANCH' not found on remote repository." >&2
+        elif echo "$CLONE_OUTPUT" | grep -qiE "Authentication failed|could not read Username|Repository not found"; then
+            echo "Error: Private repository or authentication required for $CLONE_URL." >&2
+        else
+            echo "Error: Failed to clone repository: $CLONE_OUTPUT" >&2
+        fi
+        exit 1
+    fi
+
+    if [[ -n "$SUBDIR" ]]; then
+        git -C "$OUT_DIR" sparse-checkout set "$SUBDIR"
+    fi
+    echo "Cloned into $OUT_DIR (depth 1)"
+fi

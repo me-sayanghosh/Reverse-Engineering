@@ -31,7 +31,7 @@
 - [x] Step 22 – Parse and validate input
 - [x] Step 23 – Local path mode
 - [x] Step 24 – Size pre-check
-- [ ] Step 25 – Shallow clone
+- [x] Step 25 – Shallow clone
 - [ ] Step 26 – Metadata capture
 - [ ] Step 27 – License detection
 - [ ] Step 28 – Error handling
