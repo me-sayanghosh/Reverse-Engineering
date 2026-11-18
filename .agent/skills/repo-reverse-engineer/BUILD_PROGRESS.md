@@ -97,7 +97,7 @@
 - [x] Step 88 – Fill Node/TS and Python sections
 - [x] Step 89 – Fill remaining ecosystems
 - [x] Step 90 – `output-templates.md` for reports 00–04
-- [ ] Step 91 – Templates for reports 05–09
+- [x] Step 91 – Templates for reports 05–09
 - [ ] Step 92 – `large-repo-strategy.md`
 - [ ] Step 93 – `mermaid-cheatsheet.md`
 - [ ] Step 94 – Reference link check

@@ -152,3 +152,149 @@ Placeholders use `{{placeholder}}` markers.
 ## Flow 2: {{flow_2_title}}
 {{flow_2_description}}
 ```
+
+
+---
+
+# Template 05: `05-DEPENDENCIES.md`
+
+```markdown
+# 05 - Dependencies & External Integrations: {{repo_name}}
+
+## Dependency Graph Overview
+
+```mermaid
+{{mermaid_dep_graph}}
+```
+
+## Internal Module Dependencies & Hubs
+- **Most Central Module**: `{{central_module_1}}` (In-degree: {{in_deg_1}}, Out-degree: {{out_deg_1}})
+- **Circular Dependencies**: {{circular_dependency_report}}
+
+## Key External Dependencies & Licenses
+
+| Package / Library | Version | Purpose | License | Risk Level |
+| :--- | :--- | :--- | :--- | :--- |
+| `{{dep_1_name}}` | `{{dep_1_version}}` | {{dep_1_purpose}} | {{dep_1_license}} | {{dep_1_risk}} |
+| `{{dep_2_name}}` | `{{dep_2_version}}` | {{dep_2_purpose}} | {{dep_2_license}} | {{dep_2_risk}} |
+
+## Third-Party Integrations & Services
+- `{{service_1}}`: {{service_1_desc}} (Citing `{{service_1_citation}}`)
+- `{{service_2}}`: {{service_2_desc}} (Citing `{{service_2_citation}}`)
+```
+
+---
+
+# Template 06: `06-CONFIG-AND-OPS.md`
+
+```markdown
+# 06 - Configuration & Operational Infrastructure: {{repo_name}}
+
+## Environment Variables & Configuration Keys
+
+| Variable / Key | Category | Default / Example | Required | Citation |
+| :--- | :--- | :--- | :--- | :--- |
+| `{{env_1_name}}` | {{env_1_category}} | `{{env_1_default}}` | {{env_1_required}} | `{{env_1_citation}}` |
+| `{{env_2_name}}` | {{env_2_category}} | `{{env_2_default}}` | {{env_2_required}} | `{{env_2_citation}}` |
+
+## Infrastructure & Containerization
+- **Docker / Container Specs**: `{{docker_citation}}`
+  - Base Image: `{{base_image}}`
+  - Build Steps: {{docker_build_summary}}
+- **Orchestration & Deployments**: {{orchestration_details}} (`{{orchestration_citation}}`)
+- **CI/CD Pipelines**: `{{ci_pipeline_citation}}` running {{ci_jobs_summary}}
+
+## Operational Observability & Health Checks
+- **Health Check Endpoint**: `{{health_check_endpoint}}` at `{{health_check_citation}}`
+- **Metrics & Logging**: {{metrics_details}}
+```
+
+---
+
+# Template 07: `07-RISKS-AND-DEBT.md`
+
+```markdown
+# 07 - Technical Debt, Vulnerabilities & Risks: {{repo_name}}
+
+## Security & Secrets Audit
+- **Committed Secret Findings**: {{secret_findings_summary}}
+  - Finding: `{{secret_finding_1_masked}}` in `{{secret_finding_1_citation}}`
+- **Authentication & Authorization Gaps**: {{auth_gaps_details}} (Citing `{{auth_gap_citation}}`)
+
+## Architectural Technical Debt & Anti-Patterns
+1. **{{debt_1_title}}**: {{debt_1_desc}} (Citing `{{debt_1_citation}}`)
+2. **{{debt_2_title}}**: {{debt_2_desc}} (Citing `{{debt_2_citation}}`)
+
+## Missing or Fragile Components
+- **Test Coverage Deficiencies**: {{test_gaps_details}}
+- **Documentation Discrepancies**: {{doc_drift_details}}
+```
+
+---
+
+# Template 08: `08-REBUILD-BLUEPRINT.md`
+
+```markdown
+# 08 - Clean-Room Rebuild Blueprint: {{repo_name}}
+
+## System Architecture Blueprint
+{{rebuild_architecture_overview}}
+
+## Rebuild Milestones & Phased Plan
+
+### Milestone 1: {{milestone_1_name}}
+- **Objective**: {{milestone_1_objective}}
+- **Key Deliverables**:
+  - `{{m1_file_1}}`: {{m1_file_1_desc}}
+  - `{{m1_file_2}}`: {{m1_file_2_desc}}
+- **Implementation Prompt for Coding Agent**:
+> {{m1_agent_prompt}}
+
+### Milestone 2: {{milestone_2_name}}
+- **Objective**: {{milestone_2_objective}}
+- **Key Deliverables**:
+  - `{{m2_file_1}}`: {{m2_file_1_desc}}
+- **Implementation Prompt for Coding Agent**:
+> {{m2_agent_prompt}}
+
+### Milestone 3: {{milestone_3_name}}
+- **Objective**: {{milestone_3_objective}}
+- **Implementation Prompt for Coding Agent**:
+> {{m3_agent_prompt}}
+
+### Milestone 4: {{milestone_4_name}}
+- **Objective**: {{milestone_4_objective}}
+- **Implementation Prompt for Coding Agent**:
+> {{m4_agent_prompt}}
+
+## Critical Path & Complexity Pitfalls
+- **Risk 1**: {{rebuild_risk_1}}
+- **Risk 2**: {{rebuild_risk_2}}
+```
+
+---
+
+# Template 09: `09-GLOSSARY-AND-QA.md`
+
+```markdown
+# 09 - Domain Glossary & Interrogation Q&A: {{repo_name}}
+
+## Domain Terminology Glossary
+
+| Term | Technical Definition in this Repository | Canonical File Citation |
+| :--- | :--- | :--- |
+| **`{{term_1}}`** | {{term_1_def}} | `{{term_1_citation}}` |
+| **`{{term_2}}`** | {{term_2_def}} | `{{term_2_citation}}` |
+| **`{{term_3}}`** | {{term_3_def}} | `{{term_3_citation}}` |
+
+## Architecture Decisions & Interrogation Q&A
+
+### Q1: Why does the system structure {{decision_1_topic}} this way?
+**Answer**: {{decision_1_answer}} (Citing `{{decision_1_citation}}`).
+
+### Q2: How does the system handle {{decision_2_topic}}?
+**Answer**: {{decision_2_answer}} (Citing `{{decision_2_citation}}`).
+
+### Q3: What happens when {{decision_3_failure_scenario}} occurs?
+**Answer**: {{decision_3_answer}} (Citing `{{decision_3_citation}}`).
+```
