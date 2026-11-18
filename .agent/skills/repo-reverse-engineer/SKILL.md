@@ -141,3 +141,11 @@ TODO
    > "Reverse engineer `https://github.com/fastify/fastify` in deep mode. I want a complete rebuild blueprint and implementation prompts to recreate it from scratch."
 5. **Beginner Audience Orientation**:
    > "Explain how this GitHub project works for a junior developer: `https://github.com/pallets/flask`. Keep explanations accessible and provide an expanded glossary."
+
+## References
+
+Detailed guides, templates, and reference documentation:
+- [Analysis Playbook](references/analysis-playbook.md): Ecosystem-specific investigation strategies across 10 stacks.
+- [Output Templates](references/output-templates.md): Fill-in templates for reports 00 through 09.
+- [Large Repository Strategy](references/large-repo-strategy.md): Sampling, ranking by import centrality, and disclosure of unanalyzed scope.
+- [Mermaid Cheatsheet](references/mermaid-cheatsheet.md): Diagram syntax and examples for architecture, sequences, and ERDs.
