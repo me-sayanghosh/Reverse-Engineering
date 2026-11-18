@@ -107,7 +107,7 @@
 - [x] Step 98 – Phase 3 body (Deep dives)
 - [x] Step 99 – Phase 4 body (Optional runtime)
 - [x] Step 100 – Phase 5 body (Synthesis)
-- [ ] Step 101 – Phase 6 body (Verification pass)
+- [x] Step 101 – Phase 6 body (Verification pass)
 - [ ] Step 102 – Phase 7 body (Handoff)
 - [ ] Step 103 – Audience flag behavior
 - [ ] Step 104 – Failure & fallback section

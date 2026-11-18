@@ -214,7 +214,12 @@ Generate the formal reverse-engineering report suite in `reverse-engineered/<rep
 *Length constraint*: Cap each generated report file at ~400 lines to avoid fluff and retain maximum actionable density.
 
 ## Phase 6: Verification & Cross-Checking
-TODO
+
+Perform a rigorous QA verification pass across all generated report markdown files before handoff:
+1. **Citations Verification**: Every factual assertion, route listing, and architectural pattern claim must contain an exact `file:line` citation that exists in the analyzed codebase.
+2. **`[inferred]` Labels Check**: Ensure any deduction not explicitly verified by source code is tagged with `[inferred: high|medium|low]` and accompanied by reasoning.
+3. **Mermaid Diagrams Validation**: Re-check all generated Mermaid blocks (`graph LR`, `sequenceDiagram`, `erDiagram`) for syntax errors, unescaped characters, and node count limits (≤ 40 nodes).
+4. **"Not Analyzed" Scope Disclosure**: In large or sampled codebases, verify that the explicit "Scope & Not Analyzed" disclosure list clearly enumerates any skipped directories, unanalyzed tests, or mocked services.
 
 ## Phase 7: Handoff & Next Steps
 TODO
