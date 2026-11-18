@@ -40,22 +40,22 @@ def extract_node_routes(root_path: Path):
                 lines = f.readlines()
 
             for idx, line in enumerate(lines, start=1):
-                # Check for auth middleware in surrounding lines (Step 70 hint)
-                has_auth = False
-                surrounding = " ".join(lines[max(0, idx - 4) : min(len(lines), idx + 2)])
-                if any(
-                    token in surrounding
-                    for token in [
-                        "authenticate",
-                        "requireAuth",
-                        "authMiddleware",
-                        "passport",
-                        "verifyToken",
-                        "jwt",
-                        "@UseGuards",
-                    ]
-                ):
-                    has_auth = True
+                # Check for auth tokens on current line or preceding decorator lines
+                auth_tokens = [
+                    "authenticate",
+                    "requireAuth",
+                    "authMiddleware",
+                    "passport",
+                    "verifyToken",
+                    "jwt",
+                    "@UseGuards",
+                    "checkAuth",
+                ]
+                has_auth = any(tok in line for tok in auth_tokens)
+                if not has_auth and idx > 1:
+                    prev_line = lines[idx - 2].strip()
+                    if prev_line.startswith("@") and any(tok in prev_line for tok in auth_tokens):
+                        has_auth = True
 
                 for pat in NODE_ROUTE_PATTERNS:
                     m = re.search(pat, line)
