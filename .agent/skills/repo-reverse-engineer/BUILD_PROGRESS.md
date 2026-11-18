@@ -39,7 +39,7 @@
 - [x] Step 30 – File counts & LOC by language
 - [x] Step 31 – Tree summary
 - [x] Step 32 – Largest files
-- [ ] Step 33 – Churn & age hints
+- [x] Step 33 – Churn & age hints
 - [ ] Step 34 – Test/doc/CI presence
 - [ ] Step 35 – Monorepo hint
 - [ ] Step 36 – JSON schema & test

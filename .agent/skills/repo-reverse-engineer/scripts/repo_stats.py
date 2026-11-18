@@ -56,6 +56,27 @@ def get_tree_summary(root_path: Path, max_depth: int = 3):
     return tree
 
 
+def get_git_churn_hints(root_path: Path, top_n: int = 10):
+    """If .git has history, return most recently modified files from git log, else empty list."""
+    try:
+        cmd = ["git", "-C", str(root_path), "log", "-n", "20", "--name-only", "--pretty=format:"]
+        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=5)
+        if res.returncode != 0:
+            return []
+        recent_files = []
+        seen = set()
+        for line in res.stdout.splitlines():
+            line = line.strip()
+            if line and line not in seen:
+                seen.add(line)
+                recent_files.append(line)
+                if len(recent_files) >= top_n:
+                    break
+        return recent_files
+    except Exception:
+        return []
+
+
 def get_largest_files(root_path: Path, top_n: int = 15):
     """List top N largest source files by lines, sorted descending."""
     files_with_lines = []
@@ -116,12 +137,14 @@ def main():
     languages = count_languages(root_path)
     tree_summary = get_tree_summary(root_path, max_depth=3)
     largest_files = get_largest_files(root_path, top_n=15)
+    recent_files = get_git_churn_hints(root_path, top_n=10)
 
     data = {
         "root": str(root_path),
         "languages": languages,
         "tree": tree_summary,
         "largest_files": largest_files,
+        "recently_modified": recent_files,
     }
 
     if args.json:
