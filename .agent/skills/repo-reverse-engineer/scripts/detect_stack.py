@@ -214,6 +214,52 @@ def detect_other_frameworks(root_path: Path):
     return sorted(list(frameworks))
 
 
+def detect_infra(root_path: Path):
+    """Detect infrastructure configurations: Docker, Compose, K8s, Terraform, Helm, Serverless, Vercel, Netlify."""
+    root_path = Path(root_path).resolve()
+    infra = []
+    seen_types = set()
+
+    for file_path in _common.walk_repo(root_path):
+        name = file_path.name.lower()
+        rel_path = str(file_path.relative_to(root_path))
+
+        if name == "dockerfile" or name.startswith("dockerfile."):
+            if "Docker" not in seen_types:
+                infra.append({"type": "Docker", "file": rel_path})
+                seen_types.add("Docker")
+        elif name in ("docker-compose.yml", "docker-compose.yaml", "compose.yml", "compose.yaml"):
+            if "Docker Compose" not in seen_types:
+                infra.append({"type": "Docker Compose", "file": rel_path})
+                seen_types.add("Docker Compose")
+        elif file_path.suffix in (".tf", ".tfvars"):
+            if "Terraform" not in seen_types:
+                infra.append({"type": "Terraform", "file": rel_path})
+                seen_types.add("Terraform")
+        elif name == "chart.yaml" or "helm" in file_path.parts:
+            if "Helm" not in seen_types:
+                infra.append({"type": "Helm", "file": rel_path})
+                seen_types.add("Helm")
+        elif name in ("serverless.yml", "serverless.yaml", "serverless.ts"):
+            if "Serverless Framework" not in seen_types:
+                infra.append({"type": "Serverless Framework", "file": rel_path})
+                seen_types.add("Serverless Framework")
+        elif name == "vercel.json":
+            if "Vercel" not in seen_types:
+                infra.append({"type": "Vercel", "file": rel_path})
+                seen_types.add("Vercel")
+        elif name == "netlify.toml":
+            if "Netlify" not in seen_types:
+                infra.append({"type": "Netlify", "file": rel_path})
+                seen_types.add("Netlify")
+        elif "k8s" in file_path.parts or "kubernetes" in file_path.parts or name.endswith(".k8s.yaml"):
+            if "Kubernetes" not in seen_types:
+                infra.append({"type": "Kubernetes", "file": rel_path})
+                seen_types.add("Kubernetes")
+
+    return infra
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Detect repository technology stack, frameworks, databases, and build/run commands."
@@ -236,6 +282,7 @@ def main():
         + detect_other_frameworks(root_path)
     )
     frameworks = sorted(list(set(all_fws)))
+    infra = detect_infra(root_path)
 
     data = {
         "root": str(root_path),
@@ -243,7 +290,7 @@ def main():
         "manifests": manifests,
         "frameworks": frameworks,
         "datastores": [],
-        "infra": [],
+        "infra": infra,
         "commands": {},
         "confidence": "high",
     }

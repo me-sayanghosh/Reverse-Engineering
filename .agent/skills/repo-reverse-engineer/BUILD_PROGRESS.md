@@ -48,7 +48,7 @@
 - [x] Step 39 – Node/TS framework detection
 - [x] Step 40 – Python framework detection
 - [x] Step 41 – Go/Rust/Java/others
-- [ ] Step 42 – Infra detection
+- [x] Step 42 – Infra detection
 - [ ] Step 43 – Database/queue detection
 - [ ] Step 44 – Build/test/run command inference
 - [ ] Step 45 – Output & test
