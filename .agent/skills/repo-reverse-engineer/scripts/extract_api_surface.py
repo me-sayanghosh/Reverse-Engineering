@@ -242,6 +242,33 @@ def extract_other_routes(root_path: Path):
                             }
                         )
                         continue
+
+                # 5. Rust (Actix-web / Axum)
+                elif ext == ".rs":
+                    m_actix = re.search(r"""#\[(get|post|put|delete|patch)\s*\(\s*["']([^"']+)["']\s*\)\]""", line, re.IGNORECASE)
+                    if m_actix:
+                        routes.append(
+                            {
+                                "method": m_actix.group(1).upper(),
+                                "path": m_actix.group(2),
+                                "handler": f"{rel}:{idx}",
+                                "framework": "Rust/Actix",
+                                "auth_required": False,
+                            }
+                        )
+                        continue
+                    m_axum = re.search(r"""\.route\s*\(\s*["']([^"']+)["']\s*,\s*(get|post|put|delete|patch)\s*\(""", line, re.IGNORECASE)
+                    if m_axum:
+                        routes.append(
+                            {
+                                "method": m_axum.group(2).upper(),
+                                "path": m_axum.group(1),
+                                "handler": f"{rel}:{idx}",
+                                "framework": "Rust/Axum",
+                                "auth_required": False,
+                            }
+                        )
+                        continue
         except Exception:
             pass
 
