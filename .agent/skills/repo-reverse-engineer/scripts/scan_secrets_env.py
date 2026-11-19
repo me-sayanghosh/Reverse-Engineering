@@ -47,6 +47,7 @@ def find_env_vars(root_path: Path):
             continue
         rel = str(file_path.relative_to(root_path))
         name = file_path.name.lower()
+        ext = file_path.suffix.lower()
 
         # Check .env.example / sample templates
         if name in (".env.example", ".env.sample", ".env.template", ".env.dist"):
@@ -143,6 +144,7 @@ def find_config_keys(root_path: Path):
             continue
         rel = str(file_path.relative_to(root_path))
         name = file_path.name.lower()
+        ext = file_path.suffix.lower()
 
         # 1. settings.py constants
         if name == "settings.py":
@@ -184,6 +186,16 @@ def find_config_keys(root_path: Path):
                         m_yaml = re.match(r"^\s*([a-zA-Z0-9_.-]+):\s*", line)
                         if m_yaml and not line.strip().startswith("#"):
                             config_keys.append({"key": m_yaml.group(1), "file": f"{rel}:{idx}"})
+            except Exception:
+                pass
+
+        elif ext == ".toml" and ("config" in name or "setting" in name or name in ("wrangler.toml", "netlify.toml")):
+            try:
+                with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                    for idx, line in enumerate(f, start=1):
+                        m_toml = re.match(r"^([a-zA-Z0-9_\-]+)\s*=", line.strip())
+                        if m_toml and not line.strip().startswith("#"):
+                            config_keys.append({"key": m_toml.group(1), "file": f"{rel}:{idx}"})
             except Exception:
                 pass
 

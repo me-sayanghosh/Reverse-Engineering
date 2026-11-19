@@ -228,6 +228,13 @@ Placeholders use `{{placeholder}}` markers.
 ## Missing or Fragile Components
 - **Test Coverage Deficiencies**: {{test_gaps_details}}
 - **Documentation Discrepancies**: {{doc_drift_details}}
+
+## Scope & Not Analyzed Disclosure (For Large or Sampled Codebases)
+- **Sampling Rationale**: {{sampling_rationale}}
+- **Subsystems Excluded**:
+  - `{{excluded_subsystem_1}}`: {{excluded_reason_1}}
+- **Untracked Code Paths**: {{untracked_code_paths}}
+- **External Services Mocked**: {{mocked_services}}
 ```
 
 ---

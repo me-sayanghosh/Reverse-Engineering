@@ -119,6 +119,20 @@ classDiagram
   UserRepository --> User : manages
 ```
 
+## 5. State Diagram (`stateDiagram-v2`)
+
+Used for entity lifecycle state machines (e.g. order statuses, connection states).
+
+```mermaid
+stateDiagram-v2
+  [*] --> Pending
+  Pending --> Active: verifyEmail()
+  Pending --> Cancelled: timeout()
+  Active --> Suspended: violation()
+  Suspended --> Active: appealApproved()
+  Active --> [*]: deleteAccount()
+```
+
 ## Common Mistakes to Avoid
 1. **Unescaped Special Characters**: Do not put unescaped characters like `/`, `-`, `.` inside unquoted node names. Always wrap labels in quotes: `n1["src/models/user.ts"]`.
 2. **Missing autowrap or large diagrams**: Keep diagrams under 40 nodes to prevent rendering timeouts and visual clutter.

@@ -59,6 +59,30 @@ def resolve_js_ts_target(source_file: Path, specifier: str, root_path: Path):
     if specifier in NODE_STDLIB:
         return specifier, "stdlib"
 
+    if specifier.startswith("@/") or specifier.startswith("~/"):
+        sub_spec = specifier[2:]
+        for base in [root_path / "src", root_path / "app", root_path]:
+            target_path = base / sub_spec
+            candidates = [
+                target_path,
+                target_path.with_suffix(".ts"),
+                target_path.with_suffix(".tsx"),
+                target_path.with_suffix(".js"),
+                target_path.with_suffix(".jsx"),
+                target_path / "index.ts",
+                target_path / "index.tsx",
+                target_path / "index.js",
+            ]
+            for c in candidates:
+                c_resolved = c.resolve()
+                if c_resolved.exists() and c_resolved.is_file():
+                    try:
+                        rel = c_resolved.relative_to(root_path)
+                        return str(rel), "internal"
+                    except ValueError:
+                        pass
+        return specifier, "internal"
+
     if specifier.startswith("."):
         # Relative file import
         base = source_file.parent
@@ -428,6 +452,52 @@ def parse_cpp_includes(file_path: Path, root_path: Path):
     return edges
 
 
+def parse_swift_imports(file_path: Path, root_path: Path):
+    """Parse Swift imports and categorize into stdlib or external."""
+    edges = []
+    source_rel = str(file_path.resolve().relative_to(root_path))
+    SWIFT_STDLIB = {"Foundation", "SwiftUI", "UIKit", "AppKit", "Combine", "CoreData", "CoreGraphics", "Dispatch"}
+    try:
+        content = file_path.read_text(encoding="utf-8", errors="ignore")
+        for m in re.finditer(r"^import\s+(?:(?:typealias|struct|class|enum|protocol|let|var|func)\s+)?([a-zA-Z0-9_]+)", content, re.MULTILINE):
+            mod = m.group(1)
+            imp_type = "stdlib" if mod in SWIFT_STDLIB else "external"
+            edges.append(
+                {
+                    "source": source_rel,
+                    "target": mod,
+                    "type": imp_type,
+                    "specifier": mod,
+                }
+            )
+    except Exception:
+        pass
+    return edges
+
+
+def parse_php_imports(file_path: Path, root_path: Path):
+    """Parse PHP use statements."""
+    edges = []
+    source_rel = str(file_path.resolve().relative_to(root_path))
+    try:
+        content = file_path.read_text(encoding="utf-8", errors="ignore")
+        for m in re.finditer(r"^use\s+([^;]+);", content, re.MULTILINE):
+            spec = m.group(1).strip()
+            top_part = spec.split("\\")[0]
+            imp_type = "internal" if (root_path / top_part).exists() or (root_path / "app" / top_part).exists() else "external"
+            edges.append(
+                {
+                    "source": source_rel,
+                    "target": spec,
+                    "type": imp_type,
+                    "specifier": spec,
+                }
+            )
+    except Exception:
+        pass
+    return edges
+
+
 def collect_all_imports(root_path: Path):
     """Walk repository and collect all dependency edges across all supported languages."""
     root_path = root_path.resolve()
@@ -465,6 +535,10 @@ def collect_all_imports(root_path: Path):
             all_edges.extend(parse_java_imports(file_path, root_path))
         elif ext in (".c", ".h", ".cpp", ".cc", ".cxx", ".hpp"):
             all_edges.extend(parse_cpp_includes(file_path, root_path))
+        elif ext == ".swift":
+            all_edges.extend(parse_swift_imports(file_path, root_path))
+        elif ext == ".php":
+            all_edges.extend(parse_php_imports(file_path, root_path))
 
     return all_edges
 

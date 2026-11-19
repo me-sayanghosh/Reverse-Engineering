@@ -9,7 +9,7 @@ An agentic skill for Google Antigravity that reverse engineers any GitHub reposi
 `repo-reverse-engineer` performs automated, multi-phase static architectural reverse engineering on unfamiliar repositories:
 - **Recon & Environment Discovery**: Automatically counts LOC by language, maps directory trees, detects 15+ package manifests, monorepos, frameworks, and datastores.
 - **Entrypoint Identification**: Scans and ranks server bootstraps, HTTP listeners, CLI commands, queue workers, and web entrypoints.
-- **Dependency & Centrality Graphing**: Parses import graphs (Python, JavaScript/TypeScript, Go, Rust, Java), detects circular dependencies, and identifies architectural hub modules.
+- **Dependency & Centrality Graphing**: Parses import graphs (Python, JavaScript/TypeScript, Go, Rust, Java, C/C++, Swift, PHP), detects circular dependencies, and identifies architectural hub modules.
 - **API & Data Surface Extraction**: Discovers REST routes, OpenAPI/Swagger specs, GraphQL schemas, gRPC protobufs, and database ORMs (Prisma, Mongoose, SQLAlchemy, Django, GORM, Diesel, SQL migrations).
 - **Security & Secret Auditing**: Masks sensitive keys (`AKIA****`, `sk_live_****`), scans environment variables, and flags untrusted lifecycle hooks.
 - **Clean-Room Rebuild Blueprints**: Produces phased rebuild blueprints with architectural pseudocode, deliverables, and ready-to-run prompts for coding agents.
@@ -79,7 +79,7 @@ All output reports are written to `./reverse-engineered/<repo-name>/`.
 
 1. **Zero Untrusted Code Execution**: The skill operates via strict static analysis and AST parsing. It **never** executes `npm install`, `pip install`, `make`, build hooks, or test runners from untrusted repositories on the host machine.
 2. **Mandatory Secret Redaction**: Found credentials, API keys, and tokens are recursively masked (e.g. `AKIA****`, `sk_live_****`). Raw secret values are never printed to logs or markdown reports.
-3. **Lifecycle Hook Auditing**: High-risk lifecycle hooks (such as `postinstall` or `preinstall` scripts containing `curl` or `wget`) are flagged in `07-RISKS-AND-RECOMMENDATIONS.md` without running them.
+3. **Lifecycle Hook Auditing**: High-risk lifecycle hooks (such as `postinstall` or `preinstall` scripts containing `curl` or `wget`) are flagged in `07-RISKS-AND-DEBT.md` without running them.
 4. **License Awareness**: The repository license (MIT, Apache, GPL, MPL, etc.) is detected from source and noted with copyleft or commercial usage constraints.
 
 ---
