@@ -185,9 +185,10 @@ def get_git_churn_hints(root_path: Path, top_n: int = 10):
             line = line.strip()
             if line and line not in seen:
                 seen.add(line)
-                recent_files.append(line)
-                if len(recent_files) >= top_n:
-                    break
+                if (root_path / line).exists():
+                    recent_files.append(line)
+                    if len(recent_files) >= top_n:
+                        break
         return recent_files
     except Exception:
         return []
