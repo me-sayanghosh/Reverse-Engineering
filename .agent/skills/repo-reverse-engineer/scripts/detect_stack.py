@@ -285,7 +285,7 @@ def detect_other_frameworks(root_path: Path):
 
 
 def detect_infra(root_path: Path):
-    """Detect infrastructure configurations: Docker, Compose, K8s, Terraform, Helm, Serverless, Vercel, Netlify."""
+    """Detect infrastructure configurations: Docker, Compose, K8s, Terraform, Helm, Serverless, CI, Vercel, Netlify."""
     root_path = Path(root_path).resolve()
     infra = []
     seen_types = set()
@@ -294,7 +294,7 @@ def detect_infra(root_path: Path):
         name = file_path.name.lower()
         rel_path = str(file_path.relative_to(root_path))
 
-        if name == "dockerfile" or name.startswith("dockerfile."):
+        if name == "dockerfile" or name.startswith("dockerfile.") or name == "containerfile":
             if "Docker" not in seen_types:
                 infra.append({"type": "Docker", "file": rel_path})
                 seen_types.add("Docker")
@@ -322,6 +322,26 @@ def detect_infra(root_path: Path):
             if "Netlify" not in seen_types:
                 infra.append({"type": "Netlify", "file": rel_path})
                 seen_types.add("Netlify")
+        elif ".github" in file_path.parts and "workflows" in file_path.parts and (name.endswith(".yml") or name.endswith(".yaml")):
+            if "GitHub Actions" not in seen_types:
+                infra.append({"type": "GitHub Actions", "file": rel_path})
+                seen_types.add("GitHub Actions")
+        elif name in (".gitlab-ci.yml", ".gitlab-ci.yaml"):
+            if "GitLab CI" not in seen_types:
+                infra.append({"type": "GitLab CI", "file": rel_path})
+                seen_types.add("GitLab CI")
+        elif ".circleci" in file_path.parts:
+            if "CircleCI" not in seen_types:
+                infra.append({"type": "CircleCI", "file": rel_path})
+                seen_types.add("CircleCI")
+        elif name in ("azure-pipelines.yml", "azure-pipelines.yaml"):
+            if "Azure Pipelines" not in seen_types:
+                infra.append({"type": "Azure Pipelines", "file": rel_path})
+                seen_types.add("Azure Pipelines")
+        elif name in ("cloudbuild.yaml", "cloudbuild.yml"):
+            if "Cloud Build" not in seen_types:
+                infra.append({"type": "Cloud Build", "file": rel_path})
+                seen_types.add("Cloud Build")
         elif "k8s" in file_path.parts or "kubernetes" in file_path.parts or name.endswith(".k8s.yaml"):
             if "Kubernetes" not in seen_types:
                 infra.append({"type": "Kubernetes", "file": rel_path})
