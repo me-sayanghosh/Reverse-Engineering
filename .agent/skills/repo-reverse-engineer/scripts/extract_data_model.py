@@ -80,10 +80,11 @@ def parse_sql_migrations(root_path: Path):
                     if first_token in ("CONSTRAINT", "PRIMARY", "FOREIGN", "INDEX", "KEY", "UNIQUE", "CHECK"):
                         continue
 
-                    # Column definition: name type ...
-                    if len(col_parts) >= 2:
-                        col_name = col_parts[0].strip('"`\'[]')
-                        col_type = col_parts[1].upper()
+                    # Column definition: name type (handling parameters like DECIMAL(10, 2))
+                    col_match = re.match(r"""^['"`]?(\w+)['"`]?\s+([A-Za-z0-9_]+(?:\s*\([^)]+\))?)""", line)
+                    if col_match:
+                        col_name = col_match.group(1)
+                        col_type = re.sub(r"\s+", "", col_match.group(2)).upper()
                         is_pk = "PRIMARY KEY" in line.upper()
 
                         # In-line REFERENCES other_table(other_col)
