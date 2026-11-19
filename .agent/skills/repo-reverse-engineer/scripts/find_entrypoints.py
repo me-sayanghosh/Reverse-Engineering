@@ -377,6 +377,19 @@ def find_server_bootstraps(root_path: Path):
         except Exception:
             pass
 
+        # Check root or src server.js / server.ts files
+        if file_path.name in ("server.js", "server.ts", "server.mjs", "server.cjs") and len(file_path.relative_to(root_path).parts) <= 2:
+            rel = file_path.relative_to(root_path)
+            if not any(e["path"].startswith(f"{rel}:") for e in entries):
+                entries.append(
+                    {
+                        "path": f"{rel}:1",
+                        "type": "server",
+                        "confidence": 0.88,
+                        "reason": f"Canonical custom {file_path.name} server script",
+                    }
+                )
+
     return entries
 
 
