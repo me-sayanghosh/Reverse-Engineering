@@ -258,7 +258,19 @@ def detect_potential_secrets(root_path: Path):
                             # Ignore obvious placeholder templates
                             if any(
                                 ph in raw_val.lower()
-                                for ph in ["your_", "insert_", "<token>", "<secret>", "replace_me"]
+                                for ph in [
+                                    "your_",
+                                    "insert_",
+                                    "<token>",
+                                    "<secret>",
+                                    "replace_me",
+                                    "changeme",
+                                    "dummy",
+                                    "placeholder",
+                                    "sample_key",
+                                    "sample_token",
+                                    "test_secret",
+                                ]
                             ):
                                 continue
                             masked = mask_secret(raw_val, pfx_len)
