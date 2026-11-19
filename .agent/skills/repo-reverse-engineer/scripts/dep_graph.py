@@ -434,8 +434,8 @@ def parse_rust_imports(file_path: Path, root_path: Path):
     matches = re.findall(r"use\s+([^;]+);", content)
     for m in matches:
         raw = m.strip()
-        if raw.startswith("crate::") or raw.startswith("super::"):
-            clean = raw.replace("crate::", "").replace("super::", "").strip()
+        if raw.startswith("crate::") or raw.startswith("super::") or raw.startswith("self::"):
+            clean = raw.replace("crate::", "").replace("super::", "").replace("self::", "").strip()
             if clean.startswith("{"):
                 for item in clean.strip("{}").split(","):
                     p = item.strip().split("::")[0].strip()
