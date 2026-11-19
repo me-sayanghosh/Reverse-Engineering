@@ -59,6 +59,30 @@ def resolve_js_ts_target(source_file: Path, specifier: str, root_path: Path):
     if specifier in NODE_STDLIB:
         return specifier, "stdlib"
 
+    if specifier.startswith("@/") or specifier.startswith("~/"):
+        sub_spec = specifier[2:]
+        for base in [root_path / "src", root_path / "app", root_path]:
+            target_path = base / sub_spec
+            candidates = [
+                target_path,
+                target_path.with_suffix(".ts"),
+                target_path.with_suffix(".tsx"),
+                target_path.with_suffix(".js"),
+                target_path.with_suffix(".jsx"),
+                target_path / "index.ts",
+                target_path / "index.tsx",
+                target_path / "index.js",
+            ]
+            for c in candidates:
+                c_resolved = c.resolve()
+                if c_resolved.exists() and c_resolved.is_file():
+                    try:
+                        rel = c_resolved.relative_to(root_path)
+                        return str(rel), "internal"
+                    except ValueError:
+                        pass
+        return specifier, "internal"
+
     if specifier.startswith("."):
         # Relative file import
         base = source_file.parent
