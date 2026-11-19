@@ -130,15 +130,35 @@ def find_manifest_entrypoints(root_path: Path):
             except Exception:
                 pass
 
-    # 2. Python __main__.py or pyproject.toml scripts
+    # 2. Python __main__.py, manage.py, wsgi/asgi, or pyproject.toml scripts
     for file_path in _common.walk_repo(root_path):
-        if file_path.name == "__main__.py":
+        name = file_path.name
+        rel = file_path.relative_to(root_path)
+        if name == "__main__.py":
             entries.append(
                 {
-                    "path": f"{file_path.relative_to(root_path)}:1",
+                    "path": f"{rel}:1",
                     "type": "main",
                     "confidence": 1.0,
                     "reason": "Canonical Python __main__.py module entrypoint",
+                }
+            )
+        elif name == "manage.py":
+            entries.append(
+                {
+                    "path": f"{rel}:1",
+                    "type": "cli",
+                    "confidence": 1.0,
+                    "reason": "Django manage.py CLI and server entrypoint",
+                }
+            )
+        elif name in ("wsgi.py", "asgi.py"):
+            entries.append(
+                {
+                    "path": f"{rel}:1",
+                    "type": "server",
+                    "confidence": 0.95,
+                    "reason": f"Python {name.replace('.py', '').upper()} application server entrypoint",
                 }
             )
 
