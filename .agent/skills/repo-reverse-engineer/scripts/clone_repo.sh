@@ -281,7 +281,9 @@ try:
         elif "bsd 3-clause" in head_lower or "redistribution and use in source and binary forms" in head_lower:
             spdx = "BSD"
         elif "mozilla public license" in head_lower:
-            spdx = "MPL-2.0"
+            spdx = "MPL-2.0" if "2.0" in head_lower else "MPL-1.1"
+        elif "wtfpl" in head_lower or "do what the fuck you want to public license" in head_lower:
+            spdx = "WTFPL"
         elif "isc license" in head_lower or "permission to use, copy, modify, and/or distribute this software" in head_lower:
             spdx = "ISC"
         elif "unlicense" in head_lower or "free and unencumbered software released into the public domain" in head_lower:
