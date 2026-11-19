@@ -32,18 +32,34 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         --branch)
+            if [[ $# -lt 2 || "$2" == -* ]]; then
+                echo "Error: Invalid or missing branch argument" >&2
+                exit 1
+            fi
             BRANCH="$2"
             shift 2
             ;;
         --subdir)
+            if [[ $# -lt 2 || "$2" == -* ]]; then
+                echo "Error: Invalid or missing subdir argument" >&2
+                exit 1
+            fi
             SUBDIR="$2"
             shift 2
             ;;
         --out)
+            if [[ $# -lt 2 || "$2" == -* ]]; then
+                echo "Error: Invalid or missing out argument" >&2
+                exit 1
+            fi
             OUT_DIR="$2"
             shift 2
             ;;
         --max-mb)
+            if [[ $# -lt 2 ]] || ! [[ "$2" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+                echo "Error: Invalid or missing --max-mb argument '$2'" >&2
+                exit 1
+            fi
             MAX_MB="$2"
             shift 2
             ;;
