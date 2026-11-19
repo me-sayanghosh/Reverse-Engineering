@@ -395,6 +395,18 @@ def detect_infra(root_path: Path):
             if "Cloud Build" not in seen_types:
                 infra.append({"type": "Cloud Build", "file": rel_path})
                 seen_types.add("Cloud Build")
+        elif name == "jenkinsfile" or name.startswith("jenkinsfile."):
+            if "Jenkins" not in seen_types:
+                infra.append({"type": "Jenkins", "file": rel_path})
+                seen_types.add("Jenkins")
+        elif name in (".drone.yml", ".drone.yaml"):
+            if "Drone CI" not in seen_types:
+                infra.append({"type": "Drone CI", "file": rel_path})
+                seen_types.add("Drone CI")
+        elif name in ("appveyor.yml", ".appveyor.yml"):
+            if "AppVeyor" not in seen_types:
+                infra.append({"type": "AppVeyor", "file": rel_path})
+                seen_types.add("AppVeyor")
         elif "k8s" in file_path.parts or "kubernetes" in file_path.parts or name.endswith(".k8s.yaml"):
             if "Kubernetes" not in seen_types:
                 infra.append({"type": "Kubernetes", "file": rel_path})
