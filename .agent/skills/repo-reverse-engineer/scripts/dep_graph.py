@@ -242,27 +242,14 @@ def resolve_python_module(mod: str, root_path: Path) -> tuple[str, str]:
     if hasattr(sys, "stdlib_module_names") and top_pkg in sys.stdlib_module_names:
         return mod, "stdlib"
 
-    mod_path_str = mod.replace(".", "/")
-    candidates = [
-        root_path / f"{mod_path_str}.py",
-        root_path / mod_path_str,
-        root_path / mod_path_str / "__init__.py",
-        root_path / "src" / f"{mod_path_str}.py",
-        root_path / "src" / mod_path_str,
-        root_path / "src" / mod_path_str / "__init__.py",
-        root_path / "lib" / f"{mod_path_str}.py",
-        root_path / "lib" / mod_path_str,
-        root_path / "lib" / mod_path_str / "__init__.py",
-        root_path / f"{top_pkg}.py",
-        root_path / top_pkg,
-        root_path / top_pkg / "__init__.py",
-        root_path / "src" / f"{top_pkg}.py",
-        root_path / "src" / top_pkg,
-        root_path / "src" / top_pkg / "__init__.py",
-        root_path / "lib" / f"{top_pkg}.py",
-        root_path / "lib" / top_pkg,
-        root_path / "lib" / top_pkg / "__init__.py",
-    ]
+    parts = mod.split(".")
+    sub_paths = ["/".join(parts[:i]) for i in range(len(parts), 0, -1)]
+    candidates = []
+    for sp in sub_paths:
+        for prefix in [root_path, root_path / "src", root_path / "lib"]:
+            candidates.append(prefix / f"{sp}.py")
+            candidates.append(prefix / sp)
+            candidates.append(prefix / sp / "__init__.py")
     for cand in candidates:
         if cand.exists():
             try:
