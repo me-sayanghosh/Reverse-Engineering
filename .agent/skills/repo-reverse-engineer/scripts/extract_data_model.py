@@ -311,7 +311,13 @@ def parse_mongoose_schemas(root_path: Path):
 
                         # Extract type
                         type_m = re.search(r"""type\s*:\s*([a-zA-Z0-9_.]+)""", f_def)
-                        col_type = type_m.group(1) if type_m else f_def.split()[0].rstrip(",{}")
+                        if type_m:
+                            col_type = type_m.group(1)
+                        elif f_def.strip().startswith("["):
+                            inner_tok = f_def.strip().lstrip("[").split()[0].rstrip("],{}")
+                            col_type = f"Array<{inner_tok}>" if inner_tok else "Array"
+                        else:
+                            col_type = f_def.split()[0].rstrip(",{}")
                         columns.append(
                             {
                                 "name": f_name,
