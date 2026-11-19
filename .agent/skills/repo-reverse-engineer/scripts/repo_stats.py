@@ -69,6 +69,8 @@ def detect_monorepo(root_path: Path):
         "nx.json": "Nx",
         "turbo.json": "Turborepo",
         "go.work": "Go workspaces",
+        "MODULE.bazel": "Bazel workspace",
+        "WORKSPACE": "Bazel workspace",
     }
     for wf, name in workspace_files.items():
         if (root_path / wf).exists():
