@@ -16,17 +16,30 @@ MANIFEST_TO_ECOSYSTEM: dict[str, str] = {
     "pyproject.toml": "Python",
     "requirements.txt": "Python",
     "Pipfile": "Python",
+    "setup.py": "Python",
+    "setup.cfg": "Python",
     "go.mod": "Go",
     "Cargo.toml": "Rust",
     "pom.xml": "Java/Maven",
     "build.gradle": "Java/Gradle",
     "build.gradle.kts": "Kotlin/Gradle",
+    "build.sbt": "Scala",
     "Gemfile": "Ruby",
     "composer.json": "PHP",
     "pubspec.yaml": "Dart/Flutter",
     "Package.swift": "Swift",
     "mix.exs": "Elixir",
+    "rebar.config": "Erlang",
+    "deno.json": "Deno/TypeScript",
+    "deno.jsonc": "Deno/TypeScript",
+    "bunfig.toml": "Bun",
+    "stack.yaml": "Haskell",
+    "cabal.project": "Haskell",
+    "shard.yml": "Crystal",
+    "dune-project": "OCaml",
     ".csproj": ".NET/C#",
+    ".fsproj": ".NET/F#",
+    ".sln": ".NET",
 }
 
 
@@ -51,8 +64,8 @@ def detect_manifests(root_path: Path):
             found_manifests.append({"path": rel_path, "manifest": name, "ecosystem": eco})
             ecosystems.add(eco)
             matched = True
-        elif file_path.suffix == ".csproj":
-            eco = MANIFEST_TO_ECOSYSTEM[".csproj"]
+        elif file_path.suffix in (".csproj", ".fsproj", ".sln"):
+            eco = MANIFEST_TO_ECOSYSTEM.get(file_path.suffix, ".NET")
             found_manifests.append({"path": rel_path, "manifest": name, "ecosystem": eco})
             ecosystems.add(eco)
             matched = True
