@@ -509,10 +509,11 @@ def extract_cli_and_exports(root_path: Path):
                 with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
                     file_lines = f.readlines()
                 for idx, line in enumerate(file_lines, start=1):
-                    # Commander: .command('foo')
+                    # Commander: .command('foo [arg]')
                     m_cmd = re.search(r"""\.command\s*\(\s*['"]([^'"]+)['"]""", line)
                     if m_cmd:
-                        cli_commands.append({"file": f"{rel}:{idx}", "command": m_cmd.group(1)})
+                        cmd_word = m_cmd.group(1).strip().split()[0]
+                        cli_commands.append({"file": f"{rel}:{idx}", "command": cmd_word})
                     # Click / Typer: @cli.command('foo'), @click.command(), or @app.command()
                     m_click = re.search(
                         r"""@(?:cli|app|click|main|[a-zA-Z0-9_]*cli)\.(?:command|group)\s*(?:\(\s*['"]?([^'")\s]*)['"]?)?""",
