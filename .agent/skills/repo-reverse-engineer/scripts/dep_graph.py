@@ -272,6 +272,21 @@ def parse_python_imports(file_path: Path, root_path: Path):
         content = file_path.read_text(encoding="utf-8", errors="ignore")
         tree = ast.parse(content, filename=str(file_path))
     except Exception:
+        # Fallback to regex-based import parsing if AST syntax fails (e.g. templates or older python versions)
+        try:
+            for m in re.finditer(r"^\s*import\s+([a-zA-Z0-9_.,\s]+)", content, re.MULTILINE):
+                for item in m.group(1).split(","):
+                    mod = item.strip().split()[0]
+                    if mod:
+                        target_rel, imp_type = resolve_python_module(mod, root_path)
+                        edges.append({"source": source_rel, "target": target_rel, "type": imp_type, "specifier": mod})
+            for m in re.finditer(r"^\s*from\s+([a-zA-Z0-9_.]+)\s+import", content, re.MULTILINE):
+                mod = m.group(1).strip()
+                if mod:
+                    target_rel, imp_type = resolve_python_module(mod, root_path)
+                    edges.append({"source": source_rel, "target": target_rel, "type": imp_type, "specifier": mod})
+        except Exception:
+            pass
         return edges
 
     for node in ast.walk(tree):
