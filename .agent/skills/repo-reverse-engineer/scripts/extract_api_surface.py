@@ -147,15 +147,30 @@ def extract_other_routes(root_path: Path):
                         )
                         continue
 
-                    # Django: path('users/', views.user_list)
-                    m_django = re.search(r"""path\s*\(\s*['"]([^'"]+)['"]""", line)
+                    # Django: path('users/', views.user_list) or re_path(r'^users/', ...)
+                    m_django = re.search(r"""(?:path|re_path)\s*\(\s*r?['"]([^'"]+)['"]""", line)
                     if m_django and "urls" in name:
+                        clean_p = m_django.group(1).lstrip("^/").rstrip("$")
                         routes.append(
                             {
                                 "method": "ANY",
-                                "path": f"/{m_django.group(1).lstrip('/')}",
+                                "path": f"/{clean_p}",
                                 "handler": f"{rel}:{idx}",
                                 "framework": "Django",
+                                "auth_required": False,
+                            }
+                        )
+                        continue
+
+                    # Django REST Framework router.register('users', UserViewSet)
+                    m_drf = re.search(r"""router\.register\s*\(\s*r?['"]([^'"]+)['"]""", line)
+                    if m_drf:
+                        routes.append(
+                            {
+                                "method": "CRUD",
+                                "path": f"/{m_drf.group(1).strip('/')}",
+                                "handler": f"{rel}:{idx}",
+                                "framework": "Django/DRF",
                                 "auth_required": False,
                             }
                         )
