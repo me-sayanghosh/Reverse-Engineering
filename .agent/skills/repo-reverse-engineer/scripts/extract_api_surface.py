@@ -121,7 +121,7 @@ def extract_other_routes(root_path: Path):
                                 "path": m_fastapi.group(2),
                                 "handler": f"{rel}:{idx}",
                                 "framework": "FastAPI",
-                                "auth_required": "login_required" in combined_py or "Depends(" in combined_py,
+                                "auth_required": any(tok in combined_py for tok in ["login_required", "Depends(", "Security(", "OAuth2", "HTTPBearer"]),
                             }
                         )
                         continue
@@ -136,13 +136,17 @@ def extract_other_routes(root_path: Path):
                             method_str = "/".join(methods_list).upper() if methods_list else "GET"
                         else:
                             method_str = "GET"
+                        has_flask_auth = any(
+                            tok in combined_py
+                            for tok in ["login_required", "jwt_required", "token_required", "requires_auth", "permission_required", "auth_required"]
+                        )
                         routes.append(
                             {
                                 "method": method_str,
                                 "path": route_path,
                                 "handler": f"{rel}:{idx}",
                                 "framework": "Flask",
-                                "auth_required": "login_required" in combined_py,
+                                "auth_required": has_flask_auth,
                             }
                         )
                         continue
