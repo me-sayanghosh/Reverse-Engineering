@@ -51,16 +51,16 @@ def extract_node_routes(root_path: Path):
                     "@UseGuards",
                     "checkAuth",
                 ]
-                has_auth = any(tok in line for tok in auth_tokens)
-                if not has_auth and idx > 1:
-                    prev_line = lines[idx - 2].strip()
-                    if prev_line.startswith("@") and any(tok in prev_line for tok in auth_tokens):
-                        has_auth = True
-
                 combined = line
                 # Look ahead up to 4 lines if method call spans multiple lines
                 if re.search(r"""(?:app|router|fastify|server)\.(?:get|post|put|delete|patch|options|head)\s*\(""", line):
                     combined = " ".join(l.strip() for l in lines[idx - 1 : min(len(lines), idx + 4)])
+
+                has_auth = any(tok in combined for tok in auth_tokens)
+                if not has_auth and idx > 1:
+                    prev_line = lines[idx - 2].strip()
+                    if prev_line.startswith("@") and any(tok in prev_line for tok in auth_tokens):
+                        has_auth = True
 
                 for pat in NODE_ROUTE_PATTERNS:
                     m = re.search(pat, combined)
