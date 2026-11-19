@@ -570,6 +570,14 @@ def infer_commands(root_path: Path, ecosystems: list):
     if "C/C++" in ecosystems:
         commands.setdefault("build", "cmake -B build && cmake --build build")
         commands.setdefault("test", "ctest --test-dir build")
+    if any("Maven" in e for e in ecosystems):
+        commands.setdefault("build", "mvn compile")
+        commands.setdefault("test", "mvn test")
+        commands.setdefault("start", "mvn exec:java")
+    if any("Gradle" in e for e in ecosystems):
+        commands.setdefault("build", "./gradlew build")
+        commands.setdefault("test", "./gradlew test")
+        commands.setdefault("start", "./gradlew run")
 
     return commands
 
