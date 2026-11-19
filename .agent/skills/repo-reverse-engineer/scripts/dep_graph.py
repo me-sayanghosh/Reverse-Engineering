@@ -384,7 +384,10 @@ def parse_go_imports(file_path: Path, root_path: Path, go_module: str = ""):
     all_imports = list(single_imports)
     for block in block_matches:
         for line in block.splitlines():
-            m = re.search(r'"([^"]+)"', line)
+            clean_l = line.split("//")[0].strip()
+            if not clean_l or clean_l.startswith("/*"):
+                continue
+            m = re.search(r'"([^"]+)"', clean_l)
             if m:
                 all_imports.append(m.group(1))
 
