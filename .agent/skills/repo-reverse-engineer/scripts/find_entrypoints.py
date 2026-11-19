@@ -162,6 +162,22 @@ def find_manifest_entrypoints(root_path: Path):
                     "reason": f"Python {name.replace('.py', '').upper()} application server entrypoint",
                 }
             )
+        elif file_path.suffix == ".py":
+            try:
+                with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                    for idx, line in enumerate(f, start=1):
+                        if re.search(r"""if\s+__name__\s*==\s*['"]__main__['"]\s*:""", line):
+                            entries.append(
+                                {
+                                    "path": f"{rel}:{idx}",
+                                    "type": "main",
+                                    "confidence": 0.95,
+                                    "reason": "Python __name__ == '__main__' script entrypoint guard",
+                                }
+                            )
+                            break
+            except Exception:
+                pass
 
     pyproject = root_path / "pyproject.toml"
     if pyproject.exists():
