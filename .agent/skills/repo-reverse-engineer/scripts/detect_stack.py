@@ -651,6 +651,10 @@ def detect_suspicious_scripts(root_path: Path):
         (r"wget\s+.*?\|\s*(?:ba)?sh", "Piped wget execution"),
         (r"eval\s*\(", "Eval invocation in script"),
         (r"base64\s+(?:-d|--decode)", "Base64 payload decoding"),
+        (r"nc\s+-[el]\s+", "Netcat reverse shell"),
+        (r"/dev/tcp/\d+\.\d+\.\d+\.\d+", "Bash raw TCP socket reverse shell"),
+        (r"powershell\s+.*-(?:enc|encodedcommand)\b", "PowerShell encoded command execution"),
+        (r"python\s+-c\s+['\"].*import\s+(?:socket|pty)", "Python reverse shell payload"),
     ]
 
     for pkg_json in _common.walk_repo(root_path):
