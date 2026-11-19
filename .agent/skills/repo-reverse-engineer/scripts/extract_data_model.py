@@ -418,9 +418,10 @@ def parse_python_models(root_path: Path):
 
                             # SQLAlchemy 2.0 / SQLModel / Peewee ForeignKey check
                             if "ForeignKey" in val_str or "foreign_key" in val_str:
-                                fk_m = re.search(r"""(?:ForeignKeyField|ForeignKey|foreign_key)\s*(?:\(\s*|=)\s*['"]?([a-zA-Z0-9_]+)(?:\.[a-zA-Z0-9_]+)?['"]?""", val_str)
-                                if fk_m:
-                                    target_model = fk_m.group(1).split(".")[0]
+                                fk_m = re.search(r"""(?:ForeignKeyField|ForeignKey|foreign_key)\s*(?:\(\s*|=)\s*['"]?([a-zA-Z0-9_.]+)?['"]?""", val_str)
+                                if fk_m and fk_m.group(1):
+                                    fk_parts = fk_m.group(1).split(".")
+                                    target_model = fk_parts[-1] if fk_parts[-1] and fk_parts[-1][0].isupper() else fk_parts[0]
                                     relations.append(
                                         {
                                             "from": model_name,
@@ -455,9 +456,10 @@ def parse_python_models(root_path: Path):
 
                                     # Foreign key check
                                     if "ForeignKey" in val_str or "foreign_key" in val_str:
-                                        fk_m = re.search(r"""(?:ForeignKeyField|ForeignKey|foreign_key)\s*(?:\(\s*|=)\s*['"]?([a-zA-Z0-9_]+)(?:\.[a-zA-Z0-9_]+)?['"]?""", val_str)
-                                        if fk_m:
-                                            target_model = fk_m.group(1).split(".")[0]
+                                        fk_m = re.search(r"""(?:ForeignKeyField|ForeignKey|foreign_key)\s*(?:\(\s*|=)\s*['"]?([a-zA-Z0-9_.]+)?['"]?""", val_str)
+                                        if fk_m and fk_m.group(1):
+                                            fk_parts = fk_m.group(1).split(".")
+                                            target_model = fk_parts[-1] if fk_parts[-1] and fk_parts[-1][0].isupper() else fk_parts[0]
                                             relations.append(
                                                 {
                                                     "from": model_name,
