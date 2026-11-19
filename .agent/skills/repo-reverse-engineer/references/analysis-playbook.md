@@ -17,7 +17,7 @@ Guidance on where to look first, common patterns, and architecture pitfalls acro
 
 - **Where to look first (Entrypoints)**: Check `pyproject.toml` (`[project.scripts]`), `setup.py`, `wsgi.py`, `asgi.py`, or `__main__.py`. For Django, start at `manage.py` and `wsgi.py`.
 - **Routing & Views**: For FastAPI, inspect `APIRouter` instances in `app/routers/`. For Flask, check `Blueprint` files in `app/views/`. For Django, inspect `urls.py` in the root configuration directory.
-- **Data Models & ORM**: Inspect SQLAlchemy models in `models.py` or `db/base.py`, Django models in `app/models.py`, or Tortoise/SQLModel classes.
+- **Data Models & ORM**: Inspect SQLAlchemy models in `models.py` or `db/base.py`, Django models in `app/models.py`, SQLModel entities, or Beanie/MongoEngine `Document` schemas.
 - **Application Configuration**: Check `settings.py` (Django), `pydantic-settings` (`BaseSettings`), `config.py`, or environment variable reads via `os.environ` / `os.getenv`.
 - **Background Jobs & Tasks**: Inspect Celery task definitions (`@celery.task`), Dramatiq actors, or RQ worker queues in `tasks.py` or `workers/`.
 - **Common Architectural Patterns**: FastAPI dependency injection (`Depends()`), Django MVT (Model-View-Template) with class-based views, application factories (`create_app()`).
@@ -27,7 +27,7 @@ Guidance on where to look first, common patterns, and architecture pitfalls acro
 ## 3. Go Ecosystem
 
 - **Where to look first (Entrypoints)**: Check `cmd/<app>/main.go` or root `main.go`. Read `go.mod` to identify module path and dependencies.
-- **Routing & HTTP**: Look for Gin (`gin.Default()`), Echo (`echo.New()`), Chi, or standard library `net/http` handlers in `internal/api/` or `pkg/`.
+- **Routing & HTTP**: Look for Gin (`gin.Default()`), Echo (`echo.New()`), Chi (`r.Get()`, `r.Post()`), Fiber, or standard library `net/http` handlers (`http.HandleFunc`) in `internal/api/` or `pkg/`.
 - **Package Layout & Domain**: Standard Go layout splits code into `cmd/` (executables), `internal/` (private app logic), and `pkg/` (exported libraries).
 - **Concurrency & Goroutines**: Look for channel communication (`chan`), `sync.WaitGroup`, worker pools, and context cancellation propagation (`ctx context.Context`).
 - **Data Access Layer**: Check for GORM models, sqlx query definitions, ent schemas, or raw database migration files in `migrations/`.
