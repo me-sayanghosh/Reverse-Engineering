@@ -193,9 +193,17 @@ def find_config_keys(root_path: Path):
 SECRET_PATTERNS = [
     (r"\b(AKIA[0-9A-Z]{16})\b", "AWS Access Key ID", 4),
     (r"\b(gh[pousr]_[a-zA-Z0-9_]{36,})\b", "GitHub Personal Access Token", 4),
+    (r"\b(github_pat_[a-zA-Z0-9_]{60,})\b", "GitHub Fine-Grained PAT", 11),
+    (r"\b(sk-(?:proj-|live-|test-)?[a-zA-Z0-9_-]{32,})\b", "OpenAI / AI Secret Key", 5),
+    (r"\b(hf_[a-zA-Z0-9]{34,})\b", "Hugging Face Token", 5),
     (r"-----BEGIN (?:[A-Z]+ )?PRIVATE KEY-----", "Private Key Header", 11),
     (r"\b(xox[baprs]-[0-9a-zA-Z]{10,48})\b", "Slack Token", 5),
     (r"\b(sk_(?:live|test)_[0-9a-zA-Z]{24,})\b", "Stripe Secret Key", 8),
+    (
+        r"""(?i)(?:postgres|postgresql|mysql|mongodb|redis)://[a-zA-Z0-9_.-]+:([a-zA-Z0-9_\-.~!@#$%^&*+=]{4,})@""",
+        "Database Connection URI Password",
+        2,
+    ),
     (
         r"""(?i)(?:api_key|apikey|secret|token|password|auth_token)[a-z0-9_]*\s*[:=]\s*['"]?([a-zA-Z0-9_\-.~!@#$%^&*+=]{12,})['"]?""",
         "Committed Secret / Token",
