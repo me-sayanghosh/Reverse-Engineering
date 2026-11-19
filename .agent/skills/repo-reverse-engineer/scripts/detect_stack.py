@@ -427,6 +427,14 @@ def detect_infra(root_path: Path):
             if "Render" not in seen_types:
                 infra.append({"type": "Render", "file": rel_path})
                 seen_types.add("Render")
+        elif name in ("ansible.cfg", "playbook.yml", "playbook.yaml", "site.yml", "site.yaml"):
+            if "Ansible" not in seen_types:
+                infra.append({"type": "Ansible", "file": rel_path})
+                seen_types.add("Ansible")
+        elif name == "vagrantfile":
+            if "Vagrant" not in seen_types:
+                infra.append({"type": "Vagrant", "file": rel_path})
+                seen_types.add("Vagrant")
         elif "k8s" in file_path.parts or "kubernetes" in file_path.parts or name.endswith(".k8s.yaml"):
             if "Kubernetes" not in seen_types:
                 infra.append({"type": "Kubernetes", "file": rel_path})
