@@ -39,6 +39,8 @@ ENV_PATTERNS = [
     r"""c\.env\.([A-Za-z0-9_]+)""",
     r"""@Value\(['"]\$\{([A-Za-z0-9_.-]+)(?::[^}]*)?\}['"]\)""",
     r"""viper\.(?:GetString|Get|GetInt|GetBool)\(['"]([A-Za-z0-9_.-]+)['"]\)""",
+    r"""\bconfig\(['"]([A-Za-z0-9_]+)['"]\)""",
+    r"""\benv(?:\.(?:str|int|bool|list|tuple|float|bytes|json))?\(['"]([A-Za-z0-9_]+)['"]\)""",
 ]
 
 
