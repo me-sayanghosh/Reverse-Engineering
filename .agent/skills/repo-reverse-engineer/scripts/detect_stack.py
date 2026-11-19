@@ -649,6 +649,8 @@ def detect_suspicious_scripts(root_path: Path):
     suspicious_patterns = [
         (r"curl\s+.*?\|\s*(?:ba)?sh", "Piped curl execution"),
         (r"wget\s+.*?\|\s*(?:ba)?sh", "Piped wget execution"),
+        (r"(?:ba)?sh\s+-[c]\s+['\"]?\$\((?:curl|wget)", "Subshell command substitution curl execution"),
+        (r"(?:ba)?sh\s+<\((?:curl|wget)", "Process substitution curl execution"),
         (r"eval\s*\(", "Eval invocation in script"),
         (r"base64\s+(?:-d|--decode)", "Base64 payload decoding"),
         (r"nc\s+-[el]\s+", "Netcat reverse shell"),
