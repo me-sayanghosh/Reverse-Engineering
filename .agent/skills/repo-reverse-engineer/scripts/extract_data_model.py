@@ -443,6 +443,17 @@ def parse_python_models(root_path: Path):
                                         "type": "relationship",
                                     }
                                 )
+                            elif "relationship" in val_str:
+                                m_inner = re.search(r"""(?:list|set|Sequence|Optional)?\[?([a-zA-Z0-9_]+)\]?""", f_type)
+                                if m_inner and m_inner.group(1) not in ("any", "list", "set", "dict", "int", "str"):
+                                    relations.append(
+                                        {
+                                            "from": model_name,
+                                            "to": m_inner.group(1),
+                                            "from_column": f_name,
+                                            "type": "relationship",
+                                        }
+                                    )
 
                             columns.append({"name": f_name, "type": f_type, "primary_key": is_pk})
 
