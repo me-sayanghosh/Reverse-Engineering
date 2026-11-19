@@ -319,7 +319,19 @@ def walk_repo(root: str | Path) -> Generator[Path, None, None]:
             d
             for d in dirnames
             if d not in DEFAULT_IGNORED_DIRS
-            and (not d.startswith(".") or d in (".github", ".circleci", ".gitlab", ".azure-pipelines"))
+            and (
+                not d.startswith(".")
+                or d in (
+                    ".github",
+                    ".circleci",
+                    ".gitlab",
+                    ".azure-pipelines",
+                    ".drone",
+                    ".buildkite",
+                    ".husky",
+                    ".gitea",
+                )
+            )
         ]
 
         for f in filenames:
