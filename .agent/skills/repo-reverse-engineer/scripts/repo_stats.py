@@ -279,12 +279,14 @@ def count_languages(root_path: Path):
             continue
         ext = file_path.suffix.lower()
         name = file_path.name.lower()
-        if name == "dockerfile":
+        if name in ("dockerfile", "containerfile"):
             lang = "Docker"
         elif name == "makefile":
             lang = "Makefile"
         elif name == "cmakelists.txt":
             lang = "C/C++"
+        elif name in ("gemfile", "rakefile", "podfile", "vagrantfile"):
+            lang = "Ruby"
         elif not ext:
             lang = "Other"
             try:
