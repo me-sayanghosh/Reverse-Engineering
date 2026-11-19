@@ -105,9 +105,22 @@ def detect_monorepo(root_path: Path):
     cargo_toml = root_path / "Cargo.toml"
     if cargo_toml.exists():
         try:
-            with open(cargo_toml, "r", encoding="utf-8") as f:
-                if "[workspace]" in f.read():
-                    signals.append("Cargo workspace in Cargo.toml")
+            content = cargo_toml.read_text(encoding="utf-8", errors="ignore")
+            if "[workspace]" in content:
+                signals.append("Cargo workspace in Cargo.toml")
+                import re
+                m_members = re.search(r"""members\s*=\s*\[(.*?)\]""", content, re.DOTALL)
+                if m_members:
+                    for mem in re.findall(r"""['"]([^'"]+)['"]""", m_members.group(1)):
+                        mem_clean = mem.rstrip("/*")
+                        cand = root_path / mem_clean
+                        if cand.exists() and cand.is_dir():
+                            if "*" in mem:
+                                for child in cand.iterdir():
+                                    if child.is_dir() and not child.name.startswith("."):
+                                        packages.append(str(child.relative_to(root_path)))
+                            else:
+                                packages.append(str(cand.relative_to(root_path)))
         except Exception:
             pass
 
