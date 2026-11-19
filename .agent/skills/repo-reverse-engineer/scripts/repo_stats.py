@@ -32,7 +32,8 @@ def get_tree_summary(root_path: Path, max_depth: int = 3):
         dirnames[:] = [
             d
             for d in dirnames
-            if d not in _common.DEFAULT_IGNORED_DIRS and not d.startswith(".")
+            if d not in _common.DEFAULT_IGNORED_DIRS
+            and (not d.startswith(".") or d in (".github", ".circleci", ".gitlab", ".azure-pipelines", ".drone"))
         ]
 
         rel = Path(dirpath).relative_to(root_path)
@@ -162,7 +163,8 @@ def detect_monorepo(root_path: Path):
         dirnames[:] = [
             d
             for d in dirnames
-            if d not in _common.DEFAULT_IGNORED_DIRS and not d.startswith(".")
+            if d not in _common.DEFAULT_IGNORED_DIRS
+            and (not d.startswith(".") or d in (".github", ".circleci", ".gitlab", ".azure-pipelines", ".drone"))
         ]
         if Path(dirpath) == root_path:
             continue
