@@ -782,7 +782,7 @@ def render_mermaid_graph(modules: list, edges: list, max_nodes: int = 40) -> str
                 conn_count[s] += e.get("weight", 1)
             if t in conn_count:
                 conn_count[t] += e.get("weight", 1)
-        ranked = sorted(modules, key=lambda m: (conn_count.get(m, 0), m), reverse=True)
+        ranked = sorted(modules, key=lambda m: (-conn_count.get(m, 0), m))
         top_modules = set(ranked[: max_nodes - 1])
     else:
         top_modules = set(modules)
