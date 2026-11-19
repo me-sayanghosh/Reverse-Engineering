@@ -257,6 +257,8 @@ def count_languages(root_path: Path):
             lang = "Docker"
         elif name == "makefile":
             lang = "Makefile"
+        elif name == "cmakelists.txt":
+            lang = "C/C++"
         elif not ext:
             lang = "Other"
             try:
@@ -276,6 +278,12 @@ def count_languages(root_path: Path):
                         lang = "Perl"
                     elif "php" in fl_lower:
                         lang = "PHP"
+                    elif "julia" in fl_lower:
+                        lang = "Julia"
+                    elif "elixir" in fl_lower:
+                        lang = "Elixir"
+                    elif "lua" in fl_lower:
+                        lang = "Lua"
             except Exception:
                 pass
         else:
