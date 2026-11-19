@@ -228,6 +228,13 @@ EXT_TO_LANG: dict[str, str] = {
     ".mli": "OCaml",
     ".re": "ReasonML",
     ".rei": "ReasonML",
+    ".cu": "CUDA",
+    ".cuh": "CUDA",
+    ".metal": "Metal",
+    ".glsl": "GLSL",
+    ".vert": "GLSL",
+    ".frag": "GLSL",
+    ".hlsl": "HLSL",
 }
 
 
