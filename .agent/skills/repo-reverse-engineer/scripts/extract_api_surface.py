@@ -286,26 +286,31 @@ def extract_openapi_specs(root_path: Path):
                                         }
                                     )
                 else:
-                    # YAML parsing via regex
+                    # YAML parsing with indentation tracking
                     content = file_path.read_text(encoding="utf-8", errors="ignore")
                     curr_path = None
+                    curr_path_indent = -1
                     for line in content.splitlines():
-                        # Match path line: e.g. "  /users:" or "  '/users':"
-                        m_path = re.match(r"""^\s{2}['"]?(/[a-zA-Z0-9_{}/.-]+)['"]?:\s*$""", line)
+                        if not line.strip() or line.strip().startswith("#"):
+                            continue
+                        m_path = re.match(r"""^(\s*)(?:['"]?)(/[a-zA-Z0-9_{}/.-]+)(?:['"]?):\s*$""", line)
                         if m_path:
-                            curr_path = m_path.group(1)
+                            curr_path_indent = len(m_path.group(1))
+                            curr_path = m_path.group(2)
                             continue
                         if curr_path:
-                            m_method = re.match(r"""^\s{4}(get|post|put|delete|patch|options):\s*$""", line)
-                            if m_method:
+                            m_method = re.match(r"""^(\s+)(get|post|put|delete|patch|options|head):\s*$""", line, re.IGNORECASE)
+                            if m_method and len(m_method.group(1)) > curr_path_indent:
                                 endpoints.append(
                                     {
                                         "spec_file": rel,
                                         "path": curr_path,
-                                        "method": m_method.group(1).upper(),
+                                        "method": m_method.group(2).upper(),
                                         "summary": "",
                                     }
                                 )
+                            elif len(line) - len(line.lstrip()) <= curr_path_indent:
+                                curr_path = None
             except Exception:
                 pass
 
