@@ -137,9 +137,9 @@ def extract_other_routes(root_path: Path):
                     if line.strip().startswith("@"):
                         combined_py = " ".join(l.strip() for l in lines[idx - 1 : min(len(lines), idx + 4)])
 
-                    # FastAPI: @app.get('/path')
+                    # FastAPI: @app.get('/path') or @app.websocket('/ws')
                     m_fastapi = re.search(
-                        r"""@(?:app|router|api)\.(get|post|put|delete|patch)\s*\(\s*['"]([^'"]+)['"]""",
+                        r"""@(?:app|router|api)\.(get|post|put|delete|patch|websocket|head|options)\s*\(\s*['"]([^'"]+)['"]""",
                         combined_py,
                     )
                     if m_fastapi:
