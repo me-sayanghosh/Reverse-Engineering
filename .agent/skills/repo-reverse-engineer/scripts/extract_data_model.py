@@ -369,7 +369,7 @@ def parse_python_models(root_path: Path):
                             base_names.append(b.attr)
 
                     is_model = any(
-                        b in ("Base", "Model", "BaseModel", "DeclarativeBase")
+                        b in ("Base", "Model", "BaseModel", "DeclarativeBase", "SQLModel", "Document")
                         for b in base_names
                     )
                     if not is_model:
@@ -439,7 +439,14 @@ def parse_python_models(root_path: Path):
 
                                     columns.append({"name": f_name, "type": col_type, "primary_key": is_pk})
 
-                    source_type = "Pydantic" if "BaseModel" in base_names else "SQLAlchemy/Django"
+                    if "SQLModel" in base_names:
+                        source_type = "SQLModel"
+                    elif "Document" in base_names:
+                        source_type = "Document/Beanie"
+                    elif "BaseModel" in base_names:
+                        source_type = "Pydantic"
+                    else:
+                        source_type = "SQLAlchemy/Django"
                     entities[model_name] = {
                         "name": model_name,
                         "file": rel,
