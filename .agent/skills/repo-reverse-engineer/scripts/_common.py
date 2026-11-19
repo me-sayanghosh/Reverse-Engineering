@@ -235,6 +235,15 @@ EXT_TO_LANG: dict[str, str] = {
     ".vert": "GLSL",
     ".frag": "GLSL",
     ".hlsl": "HLSL",
+    ".lisp": "Common Lisp",
+    ".cl": "Common Lisp",
+    ".lsp": "Common Lisp",
+    ".scm": "Scheme",
+    ".ss": "Scheme",
+    ".rkt": "Racket",
+    ".purs": "PureScript",
+    ".edn": "Clojure",
+    ".hrl": "Erlang",
 }
 
 
