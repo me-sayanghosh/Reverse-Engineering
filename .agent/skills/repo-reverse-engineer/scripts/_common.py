@@ -229,15 +229,18 @@ def output_json(data: Any) -> None:
 
 
 def walk_repo(root: str | Path) -> Generator[Path, None, None]:
-    """Walk repository root directory, yielding Path objects for non-ignored files."""
-    root_path = Path(root).resolve()
+    """Walk repository root directory, yielding Path objects for non-ignored regular files."""
+    root_path = Path(root).expanduser().resolve()
     if not root_path.exists():
         die(f"Path does not exist: {root_path}")
     if root_path.is_file():
         yield root_path
         return
 
-    for dirpath, dirnames, filenames in os.walk(root_path):
+    def on_walk_error(err: OSError) -> None:
+        pass
+
+    for dirpath, dirnames, filenames in os.walk(root_path, onerror=on_walk_error):
         # Prune ignored directories in-place (allow .github and .circleci for CI configs)
         dirnames[:] = [
             d
@@ -250,4 +253,9 @@ def walk_repo(root: str | Path) -> Generator[Path, None, None]:
             if is_lockfile(f) or is_minified(f):
                 continue
             full_path = Path(dirpath) / f
-            yield full_path
+            try:
+                # Ensure it exists and is a regular file (not broken symlink, FIFO, or socket)
+                if full_path.is_file():
+                    yield full_path
+            except OSError:
+                continue
