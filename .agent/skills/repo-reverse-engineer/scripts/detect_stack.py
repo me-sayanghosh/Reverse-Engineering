@@ -259,6 +259,41 @@ def detect_other_frameworks(root_path: Path):
             except Exception:
                 pass
 
+        # Elixir (mix.exs)
+        if name == "mix.exs":
+            try:
+                content = file_path.read_text(encoding="utf-8", errors="ignore")
+                if ":phoenix" in content or '"phoenix"' in content:
+                    frameworks.add("Phoenix")
+                if ":ecto" in content or '"ecto"' in content:
+                    frameworks.add("Ecto")
+                if ":absinthe" in content:
+                    frameworks.add("Absinthe")
+            except Exception:
+                pass
+
+        # Swift (Package.swift)
+        if name == "Package.swift":
+            try:
+                content = file_path.read_text(encoding="utf-8", errors="ignore")
+                if "vapor/vapor" in content:
+                    frameworks.add("Vapor")
+                if "swift-nio" in content:
+                    frameworks.add("SwiftNIO")
+            except Exception:
+                pass
+
+        # Dart / Flutter (pubspec.yaml)
+        if name == "pubspec.yaml":
+            try:
+                content = file_path.read_text(encoding="utf-8", errors="ignore")
+                if "sdk: flutter" in content or "flutter:" in content:
+                    frameworks.add("Flutter")
+                if "shelf:" in content:
+                    frameworks.add("Shelf")
+            except Exception:
+                pass
+
         # Java / Kotlin (pom.xml, build.gradle, build.gradle.kts)
         if name in ("pom.xml", "build.gradle", "build.gradle.kts"):
             try:
