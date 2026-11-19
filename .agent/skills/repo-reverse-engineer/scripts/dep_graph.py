@@ -652,8 +652,9 @@ def main():
     if not root_path.exists():
         _common.die(f"Repository root does not exist: {root_path}")
 
+    depth = max(1, args.depth)
     all_edges = collect_all_imports(root_path)
-    modules, module_edges = aggregate_module_edges(all_edges, depth=args.depth)
+    modules, module_edges = aggregate_module_edges(all_edges, depth=depth)
     centrality, cycles = compute_centrality_and_cycles(modules, module_edges)
 
     data = {
