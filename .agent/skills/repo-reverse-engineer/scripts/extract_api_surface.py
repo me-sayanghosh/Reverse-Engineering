@@ -16,7 +16,7 @@ import re
 
 NODE_ROUTE_PATTERNS = [
     # (app|router).get('/path', ...)
-    r"""(?:app|router|fastify|server)\.(get|post|put|delete|patch|options|head)\s*\(\s*['"`]([^'"`]+)['"`]""",
+    r"""(?:app|router|[a-zA-Z0-9_]*router|fastify|server|api|v[0-9]+|route)\.(get|post|put|delete|patch|options|head)\s*\(\s*['"`]([^'"`]+)['"`]""",
     # @Get('/path') in NestJS
     r"""@(Get|Post|Put|Delete|Patch)\s*\(\s*['"`]?([^'"`]*)['"`]?\s*\)""",
 ]
@@ -81,7 +81,7 @@ def extract_node_routes(root_path: Path):
                 ]
                 combined = line
                 # Look ahead up to 4 lines if method call spans multiple lines
-                if re.search(r"""(?:app|router|fastify|server)\.(?:get|post|put|delete|patch|options|head)\s*\(""", line):
+                if re.search(r"""(?:app|router|[a-zA-Z0-9_]*router|fastify|server|api|v[0-9]+|route)\.(?:get|post|put|delete|patch|options|head)\s*\(""", line):
                     combined = " ".join(l.strip() for l in lines[idx - 1 : min(len(lines), idx + 4)])
 
                 has_auth = any(tok in combined for tok in auth_tokens)
