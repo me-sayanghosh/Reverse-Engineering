@@ -31,7 +31,7 @@ def extract_node_routes(root_path: Path):
         if _common.is_binary(file_path):
             continue
         ext = file_path.suffix.lower()
-        if ext not in (".js", ".ts", ".mjs", ".cjs"):
+        if ext not in (".js", ".ts", ".mjs", ".cjs", ".jsx", ".tsx", ".mts", ".cts"):
             continue
 
         rel = str(file_path.relative_to(root_path))
