@@ -536,6 +536,19 @@ def parse_other_data_models(root_path: Path):
                                 f_type = parts[1]
                                 is_pk = "primaryKey" in line or f_name in ("ID", "Id")
                                 columns.append({"name": f_name, "type": f_type, "primary_key": is_pk})
+                                if (
+                                    f_type not in ("string", "int", "int64", "uint", "uint64", "bool", "float64", "time.Time", "gorm.Model")
+                                    and f_type[0].isupper()
+                                ):
+                                    target_struct = f_type.lstrip("[]*")
+                                    relations.append(
+                                        {
+                                            "from": struct_name,
+                                            "to": target_struct,
+                                            "from_column": f_name,
+                                            "type": "gorm_relation",
+                                        }
+                                    )
                         entities[struct_name] = {
                             "name": struct_name,
                             "file": rel,
