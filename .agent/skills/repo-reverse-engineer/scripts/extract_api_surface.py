@@ -176,10 +176,10 @@ def extract_other_routes(root_path: Path):
                         )
                         continue
 
-                # 2. Go (Gin, Echo, Chi): r.GET('/path', handler)
+                # 2. Go (Gin, Echo, Chi, net/http): r.GET('/path', handler) or r.Get('/path', handler)
                 elif ext == ".go":
                     m_go = re.search(
-                        r"""(?:r|router|app|g|api)\.(GET|POST|PUT|DELETE|PATCH)\s*\(\s*['"]([^'"]+)['"]""",
+                        r"""(?:r|router|app|g|api)\.(GET|POST|PUT|DELETE|PATCH|Get|Post|Put|Delete|Patch)\s*\(\s*['"]([^'"]+)['"]""",
                         line,
                     )
                     if m_go:
@@ -188,7 +188,23 @@ def extract_other_routes(root_path: Path):
                                 "method": m_go.group(1).upper(),
                                 "path": m_go.group(2),
                                 "handler": f"{rel}:{idx}",
-                                "framework": "Go/Gin/Echo",
+                                "framework": "Go/Gin/Echo/Chi",
+                                "auth_required": False,
+                            }
+                        )
+                        continue
+
+                    m_http = re.search(
+                        r"""(?:http|mux|router|r|srv)\.HandleFunc\s*\(\s*['"]([^'"]+)['"]""",
+                        line,
+                    )
+                    if m_http:
+                        routes.append(
+                            {
+                                "method": "ANY",
+                                "path": m_http.group(1),
+                                "handler": f"{rel}:{idx}",
+                                "framework": "Go/net-http",
                                 "auth_required": False,
                             }
                         )
