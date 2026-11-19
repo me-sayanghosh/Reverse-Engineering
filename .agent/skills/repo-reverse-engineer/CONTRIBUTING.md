@@ -8,8 +8,8 @@ To support an additional programming language or framework ecosystem, follow the
 
 ### 1. Update Ecosystem Detection (`scripts/detect_stack.py`)
 - Add your ecosystem name to the detection heuristics if not present.
-- Register new package manifest files in `MANIFEST_MAP` (for example, `pubspec.yaml`, `build.gradle`, or `mix.exs`).
-- Add framework identification tokens in `FRAMEWORK_PATTERNS`.
+- Register new package manifest files in `MANIFEST_TO_ECOSYSTEM` (for example, `pubspec.yaml`, `build.gradle`, or `mix.exs`).
+- Add framework identification tokens in `NODE_PKG_TO_FRAMEWORK`, `PYTHON_PKG_TO_FRAMEWORK`, or `OTHER_FRAMEWORKS_MAP`.
 - Extend `detect_datastores_and_queues` if the ecosystem uses dedicated configuration formats.
 
 ### 2. Update File Extension Mapping (`scripts/_common.py`)
