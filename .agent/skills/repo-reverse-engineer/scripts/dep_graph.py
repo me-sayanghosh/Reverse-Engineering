@@ -389,6 +389,45 @@ def parse_java_imports(file_path: Path, root_path: Path, pkg_prefix: str = ""):
     return edges
 
 
+def parse_cpp_includes(file_path: Path, root_path: Path):
+    """Parse C/C++ #include directives and resolve local headers."""
+    edges = []
+    source_rel = str(file_path.resolve().relative_to(root_path))
+    try:
+        content = file_path.read_text(encoding="utf-8", errors="ignore")
+        for m in re.finditer(r'#include\s+([<"])([^>"]+)[>"]', content):
+            quote_type = m.group(1)
+            header = m.group(2)
+            if quote_type == '"':
+                cand = file_path.parent / header
+                rel_target = header
+                if cand.exists():
+                    try:
+                        rel_target = str(cand.resolve().relative_to(root_path))
+                    except ValueError:
+                        pass
+                edges.append(
+                    {
+                        "source": source_rel,
+                        "target": rel_target,
+                        "type": "internal",
+                        "specifier": header,
+                    }
+                )
+            else:
+                edges.append(
+                    {
+                        "source": source_rel,
+                        "target": header,
+                        "type": "stdlib",
+                        "specifier": header,
+                    }
+                )
+    except Exception:
+        pass
+    return edges
+
+
 def collect_all_imports(root_path: Path):
     """Walk repository and collect all dependency edges across all supported languages."""
     root_path = root_path.resolve()
@@ -424,6 +463,8 @@ def collect_all_imports(root_path: Path):
             all_edges.extend(parse_rust_imports(file_path, root_path))
         elif ext in (".java", ".kt"):
             all_edges.extend(parse_java_imports(file_path, root_path))
+        elif ext in (".c", ".h", ".cpp", ".cc", ".cxx", ".hpp"):
+            all_edges.extend(parse_cpp_includes(file_path, root_path))
 
     return all_edges
 
