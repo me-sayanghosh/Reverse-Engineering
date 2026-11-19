@@ -31,16 +31,26 @@ def parse_sql_migrations(root_path: Path):
         rel = str(file_path.relative_to(root_path))
         try:
             content = file_path.read_text(encoding="utf-8", errors="ignore")
-            # Match CREATE TABLE statements (handling optional table options like ENGINE=InnoDB)
-            create_table_matches = re.finditer(
-                r"""CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?(?:['"`]?\w+['"`]?\.)?['"`]?(\w+)['"`]?\s*\((.*?)\)(?:\s*[^;]*)?;""",
-                content,
-                re.IGNORECASE | re.DOTALL,
+            # Match CREATE TABLE statements with depth-balanced parentheses to support nested constraints and types
+            create_table_start_pattern = re.compile(
+                r"""CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?(?:['"`]?\w+['"`]?\.)?['"`]?(\w+)['"`]?\s*\(""",
+                re.IGNORECASE,
             )
 
-            for tm in create_table_matches:
+            for tm in create_table_start_pattern.finditer(content):
                 table_name = tm.group(1)
-                body = tm.group(2)
+                start_idx = tm.end()
+                depth = 1
+                i = start_idx
+                while i < len(content) and depth > 0:
+                    if content[i] == "(":
+                        depth += 1
+                    elif content[i] == ")":
+                        depth -= 1
+                    i += 1
+                if depth != 0:
+                    continue
+                body = content[start_idx : i - 1]
                 columns = []
                 fks = []
 
