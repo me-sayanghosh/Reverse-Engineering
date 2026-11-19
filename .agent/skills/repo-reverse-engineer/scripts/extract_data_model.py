@@ -408,6 +408,19 @@ def parse_python_models(root_path: Path):
                                         }
                                     )
 
+                            # Relationship / ManyToMany / OneToOne check
+                            rel_check = re.search(r"""(?:relationship|ManyToManyField|OneToOneField)\s*\(\s*['"]?([a-zA-Z0-9_]+)['"]?""", val_str)
+                            if rel_check:
+                                target_model = rel_check.group(1)
+                                relations.append(
+                                    {
+                                        "from": model_name,
+                                        "to": target_model,
+                                        "from_column": f_name,
+                                        "type": "relationship",
+                                    }
+                                )
+
                             columns.append({"name": f_name, "type": f_type, "primary_key": is_pk})
 
                         # 2. SQLAlchemy / Django style assignments: col = Column(...)
@@ -431,6 +444,19 @@ def parse_python_models(root_path: Path):
                                                     "type": "foreign_key",
                                                 }
                                             )
+
+                                    # Relationship / ManyToMany / OneToOne check
+                                    rel_check = re.search(r"""(?:relationship|ManyToManyField|OneToOneField)\s*\(\s*['"]?([a-zA-Z0-9_]+)['"]?""", val_str)
+                                    if rel_check:
+                                        target_model = rel_check.group(1)
+                                        relations.append(
+                                            {
+                                                "from": model_name,
+                                                "to": target_model,
+                                                "from_column": f_name,
+                                                "type": "relationship",
+                                            }
+                                        )
 
                                     col_type = "Column"
                                     if "models." in val_str:
