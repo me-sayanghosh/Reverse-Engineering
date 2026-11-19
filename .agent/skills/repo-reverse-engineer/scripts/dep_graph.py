@@ -530,7 +530,7 @@ def collect_all_imports(root_path: Path):
             continue
         ext = file_path.suffix.lower()
 
-        if ext in (".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs"):
+        if ext in (".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".mts", ".cts"):
             all_edges.extend(parse_js_ts_imports(file_path, root_path))
         elif ext in (".py", ".pyi"):
             all_edges.extend(parse_python_imports(file_path, root_path))
