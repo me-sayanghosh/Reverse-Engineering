@@ -284,20 +284,32 @@ fi
 
 CLONE_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-python3 - << PYEOF
-import json
+META_OUT_DIR="$OUT_DIR" \
+META_URL="${CLONE_URL:-$LOCAL_PATH}" \
+META_SHA="$COMMIT_SHA" \
+META_BRANCH="${BRANCH:-$DETECTED_BRANCH}" \
+META_DATE="$CLONE_DATE" \
+META_LIC_FILE="$LIC_FILE" \
+META_LIC_SPDX="$LIC_SPDX" \
+META_DEF_BRANCH="$DEFAULT_BRANCH" \
+python3 - << 'PYEOF'
+import json, os
+
+out_dir = os.environ.get("META_OUT_DIR", "")
+lic_file = os.environ.get("META_LIC_FILE", "none")
 
 meta = {
-    "url": "${CLONE_URL:-$LOCAL_PATH}",
-    "commit_sha": "$COMMIT_SHA",
-    "branch": "${BRANCH:-$DETECTED_BRANCH}",
-    "clone_date": "$CLONE_DATE",
-    "license_file_detected": "$LIC_FILE" if "$LIC_FILE" != "none" else None,
-    "license_spdx": "$LIC_SPDX",
-    "default_branch": "$DEFAULT_BRANCH"
+    "url": os.environ.get("META_URL", ""),
+    "commit_sha": os.environ.get("META_SHA", "unknown"),
+    "branch": os.environ.get("META_BRANCH", "unknown"),
+    "clone_date": os.environ.get("META_DATE", ""),
+    "license_file_detected": lic_file if lic_file != "none" else None,
+    "license_spdx": os.environ.get("META_LIC_SPDX", "none"),
+    "default_branch": os.environ.get("META_DEF_BRANCH", "unknown"),
 }
 
-with open("$OUT_DIR/repo_meta.json", "w", encoding="utf-8") as f:
+target_path = os.path.join(out_dir, "repo_meta.json")
+with open(target_path, "w", encoding="utf-8") as f:
     json.dump(meta, f, indent=2)
-print("Wrote metadata to $OUT_DIR/repo_meta.json")
+print(f"Wrote metadata to {target_path}")
 PYEOF
