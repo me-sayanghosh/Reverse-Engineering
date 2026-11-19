@@ -382,7 +382,7 @@ def extract_openapi_specs(root_path: Path):
                     for line in content.splitlines():
                         if not line.strip() or line.strip().startswith("#"):
                             continue
-                        m_path = re.match(r"""^(\s*)(?:['"]?)(/[a-zA-Z0-9_{}/.-]+)(?:['"]?):\s*$""", line)
+                        m_path = re.match(r"""^(\s*)(?:['"]?)(/[a-zA-Z0-9_{}/.:~@-]+)(?:['"]?):\s*$""", line)
                         if m_path:
                             curr_path_indent = len(m_path.group(1))
                             curr_path = m_path.group(2)
