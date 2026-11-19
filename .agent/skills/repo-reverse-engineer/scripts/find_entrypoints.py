@@ -321,6 +321,8 @@ BOOTSTRAP_PATTERNS = [
     (r"app\.run\s*\(", "Flask/Python app.run server bootstrap"),
     (r"http\.ListenAndServe\s*\(", "Go http.ListenAndServe server bootstrap"),
     (r"(?:router|r)\.Run\s*\(", "Go Gin server router.Run bootstrap"),
+    (r"app\.Listen\s*\(", "Go Fiber server app.Listen bootstrap"),
+    (r"e\.Start\s*\(", "Go Echo server e.Start bootstrap"),
     (r"@SpringBootApplication", "Spring Boot application bootstrap"),
     (r"HttpServer::new\s*\(", "Rust Actix-web server bootstrap"),
     (r"axum::serve\s*\(", "Rust Axum server bootstrap"),
