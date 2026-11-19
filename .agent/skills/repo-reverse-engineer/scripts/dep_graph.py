@@ -678,7 +678,7 @@ def aggregate_module_edges(edges: list, depth: int = 2):
 
     result_edges = [
         {"source": src, "target": tgt, "weight": weight}
-        for (src, tgt), weight in module_edges.items()
+        for (src, tgt), weight in sorted(module_edges.items(), key=lambda x: (-x[1], x[0][0], x[0][1]))
     ]
     return sorted(list(modules)), result_edges
 
