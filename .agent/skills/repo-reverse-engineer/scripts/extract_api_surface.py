@@ -305,16 +305,16 @@ def extract_other_routes(root_path: Path):
                             )
                             continue
 
-                # 5. Rust (Actix-web / Axum)
+                # 5. Rust (Actix-web / Rocket / Axum)
                 elif ext == ".rs":
-                    m_actix = re.search(r"""#\[(get|post|put|delete|patch)\s*\(\s*["']([^"']+)["']\s*\)\]""", line, re.IGNORECASE)
+                    m_actix = re.search(r"""#\[(get|post|put|delete|patch|head|options)\s*\(\s*["']([^"']+)["'](?:\s*,[^)]*)?\s*\)\]""", line, re.IGNORECASE)
                     if m_actix:
                         routes.append(
                             {
                                 "method": m_actix.group(1).upper(),
                                 "path": m_actix.group(2),
                                 "handler": f"{rel}:{idx}",
-                                "framework": "Rust/Actix",
+                                "framework": "Rust/Actix/Rocket",
                                 "auth_required": False,
                             }
                         )
