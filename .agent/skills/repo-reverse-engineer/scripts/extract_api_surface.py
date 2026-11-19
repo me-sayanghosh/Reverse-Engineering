@@ -331,6 +331,18 @@ def extract_other_routes(root_path: Path):
                             }
                         )
                         continue
+                    m_nest = re.search(r"""\.nest\s*\(\s*["']([^"']+)["']\s*,""", line)
+                    if m_nest:
+                        routes.append(
+                            {
+                                "method": "NEST",
+                                "path": m_nest.group(1),
+                                "handler": f"{rel}:{idx}",
+                                "framework": "Rust/Axum",
+                                "auth_required": False,
+                            }
+                        )
+                        continue
         except Exception:
             pass
 
