@@ -243,6 +243,36 @@ def find_manifest_entrypoints(root_path: Path):
             except Exception:
                 pass
 
+    # 6. Swift main.swift or @main
+    for file_path in _common.walk_repo(root_path):
+        if file_path.suffix == ".swift":
+            rel = file_path.relative_to(root_path)
+            if file_path.name == "main.swift":
+                entries.append(
+                    {
+                        "path": f"{rel}:1",
+                        "type": "main",
+                        "confidence": 1.0,
+                        "reason": "Swift main.swift executable entrypoint",
+                    }
+                )
+            else:
+                try:
+                    with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                        for idx, line in enumerate(f, start=1):
+                            if line.strip().startswith("@main"):
+                                entries.append(
+                                    {
+                                        "path": f"{rel}:{idx}",
+                                        "type": "main",
+                                        "confidence": 1.0,
+                                        "reason": "Swift @main application entrypoint",
+                                    }
+                                )
+                                break
+                except Exception:
+                    pass
+
     return entries
 
 
