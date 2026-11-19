@@ -567,6 +567,24 @@ def find_frontend_entrypoints(root_path: Path):
                 }
             )
 
+    # Check common monorepo and multi-package frontend directories
+    monorepo_subdirs = ["frontend", "client", "ui", "web", "apps/web", "apps/frontend", "packages/web", "packages/client"]
+    for sdir in monorepo_subdirs:
+        sub_root = root_path / sdir
+        if sub_root.exists() and sub_root.is_dir():
+            for rel_str, desc in frontend_targets:
+                target_file = sub_root / rel_str
+                if target_file.exists():
+                    full_rel = f"{sdir}/{rel_str}"
+                    entries.append(
+                        {
+                            "path": f"{full_rel}:1",
+                            "type": "frontend",
+                            "confidence": 0.85,
+                            "reason": f"{desc} in {sdir}",
+                        }
+                    )
+
     return entries
 
 
