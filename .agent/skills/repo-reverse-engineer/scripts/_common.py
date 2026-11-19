@@ -82,12 +82,12 @@ def is_too_large(path: str | Path, limit_bytes: int = 1024 * 1024) -> bool:
 
 
 def read_text_safe(path: str | Path, max_bytes: int = 1024 * 1024) -> str:
-    """Safely read text from file up to max_bytes, handling encodings and suppressing errors."""
+    """Safely read text from file up to max_bytes, handling encodings, BOMs, and suppressing errors."""
     try:
         with open(path, "rb") as f:
             data = f.read(max_bytes)
         try:
-            return data.decode("utf-8")
+            return data.decode("utf-8-sig")
         except UnicodeDecodeError:
             try:
                 return data.decode("utf-16")
