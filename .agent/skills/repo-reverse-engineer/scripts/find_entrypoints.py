@@ -317,6 +317,8 @@ BOOTSTRAP_PATTERNS = [
     (r"fastify\.listen\s*\(", "Fastify server listen bootstrap"),
     (r"NestFactory\.create\s*\(", "NestJS NestFactory application bootstrap"),
     (r"createServer\s*\(", "Node http.createServer bootstrap"),
+    (r"Bun\.serve\s*\(", "Bun HTTP server Bun.serve bootstrap"),
+    (r"Deno\.serve\s*\(", "Deno HTTP server Deno.serve bootstrap"),
     (r"uvicorn\.run\s*\(", "Python uvicorn.run ASGI bootstrap"),
     (r"app\.run\s*\(", "Flask/Python app.run server bootstrap"),
     (r"http\.ListenAndServe\s*\(", "Go http.ListenAndServe server bootstrap"),
