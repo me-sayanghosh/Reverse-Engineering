@@ -207,6 +207,7 @@ def find_config_keys(root_path: Path):
 
 SECRET_PATTERNS = [
     (r"\b(AKIA[0-9A-Z]{16})\b", "AWS Access Key ID", 4),
+    (r"\b(AIza[0-9A-Za-z\-_]{35})\b", "Google API Key", 4),
     (r"\b(gh[pousr]_[a-zA-Z0-9_]{36,})\b", "GitHub Personal Access Token", 4),
     (r"\b(github_pat_[a-zA-Z0-9_]{60,})\b", "GitHub Fine-Grained PAT", 11),
     (r"\b(sk-(?:proj-|live-|test-)?[a-zA-Z0-9_-]{32,})\b", "OpenAI / AI Secret Key", 5),
