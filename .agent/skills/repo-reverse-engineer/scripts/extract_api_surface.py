@@ -39,6 +39,34 @@ def extract_node_routes(root_path: Path):
             with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
                 lines = f.readlines()
 
+            # Check Next.js App Router route handlers: app/**/route.(ts|js|mjs)
+            if file_path.name in ("route.ts", "route.js", "route.mjs", "route.cjs"):
+                parts = file_path.parent.parts
+                if "app" in parts:
+                    app_idx = len(parts) - 1 - list(reversed(parts)).index("app")
+                    route_subpath = "/".join(parts[app_idx + 1 :])
+                    inferred_path = f"/{route_subpath}" if route_subpath else "/"
+                    for idx, line in enumerate(lines, start=1):
+                        m_export = re.search(
+                            r"""export\s+(?:async\s+)?(?:function|const)\s+(GET|POST|PUT|DELETE|PATCH|HEAD|OPTIONS)\b""",
+                            line,
+                        )
+                        if m_export:
+                            method = m_export.group(1).upper()
+                            has_auth = any(
+                                tok in line
+                                for tok in ["auth", "session", "token", "jwt", "getServerSession", "verify"]
+                            )
+                            routes.append(
+                                {
+                                    "method": method,
+                                    "path": inferred_path,
+                                    "handler": f"{rel}:{idx}",
+                                    "framework": "Next.js App Router",
+                                    "auth_required": has_auth,
+                                }
+                            )
+
             for idx, line in enumerate(lines, start=1):
                 # Check for auth tokens on current line or preceding decorator lines
                 auth_tokens = [
