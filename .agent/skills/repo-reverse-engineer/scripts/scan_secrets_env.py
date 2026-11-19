@@ -39,8 +39,8 @@ ENV_PATTERNS = [
     r"""c\.env\.([A-Za-z0-9_]+)""",
     r"""@Value\(['"]\$\{([A-Za-z0-9_.-]+)(?::[^}]*)?\}['"]\)""",
     r"""viper\.(?:GetString|Get|GetInt|GetBool)\(['"]([A-Za-z0-9_.-]+)['"]\)""",
-    r"""\bconfig\(['"]([A-Za-z0-9_]+)['"]\)""",
-    r"""\benv(?:\.(?:str|int|bool|list|tuple|float|bytes|json))?\(['"]([A-Za-z0-9_]+)['"]\)""",
+    r"""\bconfig\(['"]([A-Za-z0-9_]+)['"]""",
+    r"""\benv(?:\.(?:str|int|bool|list|tuple|float|bytes|json))?\(['"]([A-Za-z0-9_]+)['"]""",
 ]
 
 
@@ -232,8 +232,8 @@ SECRET_PATTERNS = [
     (r"\b(AIza[0-9A-Za-z\-_]{35})\b", "Google API Key", 4),
     (r"\b(gh[pousr]_[a-zA-Z0-9_]{36,})\b", "GitHub Personal Access Token", 4),
     (r"\b(github_pat_[a-zA-Z0-9_]{60,})\b", "GitHub Fine-Grained PAT", 11),
-    (r"\b(sk-(?:proj-|live-|test-)?[a-zA-Z0-9_-]{32,})\b", "OpenAI / AI Secret Key", 5),
     (r"\b(sk-ant-[a-zA-Z0-9_\-]{32,})\b", "Anthropic API Key", 7),
+    (r"\b(sk-(?:proj-|live-|test-)?[a-zA-Z0-9_-]{32,})\b", "OpenAI / AI Secret Key", 5),
     (r"\b(hf_[a-zA-Z0-9]{34,})\b", "Hugging Face Token", 5),
     (r"-----BEGIN (?:[A-Z]+ )?PRIVATE KEY-----", "Private Key Header", 11),
     (r"\b(xox[baprs]-[0-9a-zA-Z]{10,48})\b", "Slack Token", 5),
