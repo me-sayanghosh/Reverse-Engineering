@@ -156,8 +156,13 @@ def parse_python_imports(file_path: Path, root_path: Path):
                 if hasattr(sys, "stdlib_module_names") and top_pkg in sys.stdlib_module_names:
                     imp_type = "stdlib"
                 else:
-                    # Check if internal to root
+                    # Check if internal to root or inside src/ / lib/
                     possible_pkg = root_path / top_pkg
+                    if not possible_pkg.exists() and (root_path / "src" / top_pkg).exists():
+                        possible_pkg = root_path / "src" / top_pkg
+                    elif not possible_pkg.exists() and (root_path / "lib" / top_pkg).exists():
+                        possible_pkg = root_path / "lib" / top_pkg
+
                     if possible_pkg.exists():
                         target_rel = str(possible_pkg.relative_to(root_path))
                         imp_type = "internal"
@@ -235,6 +240,11 @@ def parse_python_imports(file_path: Path, root_path: Path):
                     imp_type = "stdlib"
                 else:
                     possible_pkg = root_path / top_pkg
+                    if not possible_pkg.exists() and (root_path / "src" / top_pkg).exists():
+                        possible_pkg = root_path / "src" / top_pkg
+                    elif not possible_pkg.exists() and (root_path / "lib" / top_pkg).exists():
+                        possible_pkg = root_path / "lib" / top_pkg
+
                     if possible_pkg.exists():
                         target_rel = str(possible_pkg.relative_to(root_path))
                         imp_type = "internal"
