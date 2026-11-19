@@ -463,6 +463,10 @@ DATASTORE_PATTERNS = {
     "Meilisearch": ["meilisearch", "meilisearch-js", "meilisearch-python"],
     "Supabase": ["@supabase/supabase-js", "supabase-py"],
     "Firebase": ["firebase", "firebase-admin"],
+    "Qdrant": ["qdrant-client", "@qdrant/js-client-rest", "qdrant"],
+    "ChromaDB": ["chromadb", "chroma-client"],
+    "Milvus": ["pymilvus", "@zilliz/milvus2-sdk-node"],
+    "Weaviate": ["weaviate-client", "weaviate-ts-client"],
 }
 
 
