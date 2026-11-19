@@ -579,6 +579,13 @@ def main():
     commands = infer_commands(root_path, ecosystems)
     suspicious_scripts = detect_suspicious_scripts(root_path)
 
+    if ecosystems and frameworks:
+        confidence = "high"
+    elif ecosystems or frameworks or manifests or infra or datastores:
+        confidence = "medium"
+    else:
+        confidence = "low"
+
     data = {
         "root": str(root_path),
         "ecosystems": ecosystems,
@@ -588,7 +595,7 @@ def main():
         "infra": infra,
         "commands": commands,
         "suspicious_scripts": suspicious_scripts,
-        "confidence": "high" if (ecosystems or frameworks) else "medium",
+        "confidence": confidence,
     }
 
     if args.json:
