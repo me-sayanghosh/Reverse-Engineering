@@ -333,8 +333,8 @@ def extract_schemas_and_rpc(root_path: Path):
         if ext in (".graphql", ".gql"):
             try:
                 content = file_path.read_text(encoding="utf-8", errors="ignore")
-                # Find queries and mutations
-                for m in re.finditer(r"(?:type\s+(Query|Mutation|Subscription)\s*\{([^}]+)\})", content):
+                # Find queries and mutations (including extend type)
+                for m in re.finditer(r"(?:(?:extend\s+)?type\s+(Query|Mutation|Subscription)\s*\{([^}]+)\})", content):
                     op_type = m.group(1)
                     body = m.group(2)
                     for line in body.splitlines():
