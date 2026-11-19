@@ -194,7 +194,7 @@ def extract_other_routes(root_path: Path):
                         )
                         continue
 
-                # 3. Java/Kotlin (Spring): @GetMapping('/path')
+                # 3. Java/Kotlin (Spring): @GetMapping('/path') or @RequestMapping
                 elif ext in (".java", ".kt"):
                     m_spring = re.search(
                         r"""@(Get|Post|Put|Delete|Patch)Mapping\s*\(\s*(?:(?:value|path)\s*=\s*)?['"]?([^'")]*)['"]?\s*\)""",
@@ -205,6 +205,22 @@ def extract_other_routes(root_path: Path):
                             {
                                 "method": m_spring.group(1).upper(),
                                 "path": m_spring.group(2) or "/",
+                                "handler": f"{rel}:{idx}",
+                                "framework": "Spring",
+                                "auth_required": "@PreAuthorize" in line or "@Secured" in line,
+                            }
+                        )
+                        continue
+
+                    m_req_map = re.search(
+                        r"""@RequestMapping\s*\(\s*(?:(?:value|path)\s*=\s*)?['"]?([^'",)]*)['"]?(?:.*method\s*=\s*(?:RequestMethod\.)?([A-Z]+))?""",
+                        line,
+                    )
+                    if m_req_map:
+                        routes.append(
+                            {
+                                "method": m_req_map.group(2) or "ANY",
+                                "path": m_req_map.group(1) or "/",
                                 "handler": f"{rel}:{idx}",
                                 "framework": "Spring",
                                 "auth_required": "@PreAuthorize" in line or "@Secured" in line,
