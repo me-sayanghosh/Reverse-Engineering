@@ -42,6 +42,47 @@ def find_manifest_entrypoints(root_path: Path):
                                 }
                             )
 
+                    # exports field
+                    if "exports" in pj:
+                        exp = pj["exports"]
+                        cand_files = []
+                        if isinstance(exp, str):
+                            cand_files.append(exp)
+                        elif isinstance(exp, dict):
+                            for k in [".", "import", "default", "node"]:
+                                if k in exp and isinstance(exp[k], str):
+                                    cand_files.append(exp[k])
+                                elif k in exp and isinstance(exp[k], dict):
+                                    for sub_k in ["import", "default", "node"]:
+                                        if sub_k in exp[k] and isinstance(exp[k][sub_k], str):
+                                            cand_files.append(exp[k][sub_k])
+                        for cf in cand_files:
+                            cf_path = (base_dir / cf).resolve()
+                            if cf_path.exists() and cf_path.is_file():
+                                rel_cf = str(cf_path.relative_to(root_path))
+                                entries.append(
+                                    {
+                                        "path": f"{rel_cf}:1",
+                                        "type": "main",
+                                        "confidence": 1.0,
+                                        "reason": f'Declared in "exports" of {file_path.relative_to(root_path)}',
+                                    }
+                                )
+                                break
+
+                    # module field
+                    if "module" in pj and isinstance(pj["module"], str):
+                        mod_file = (base_dir / pj["module"]).resolve()
+                        if mod_file.exists() and mod_file.is_file():
+                            entries.append(
+                                {
+                                    "path": f"{mod_file.relative_to(root_path)}:1",
+                                    "type": "main",
+                                    "confidence": 1.0,
+                                    "reason": f'Declared as "module" in {file_path.relative_to(root_path)}',
+                                }
+                            )
+
                     # bin field
                     if "bin" in pj:
                         bin_val = pj["bin"]
