@@ -407,6 +407,14 @@ def detect_infra(root_path: Path):
             if "AppVeyor" not in seen_types:
                 infra.append({"type": "AppVeyor", "file": rel_path})
                 seen_types.add("AppVeyor")
+        elif name in ("bitbucket-pipelines.yml", "bitbucket-pipelines.yaml"):
+            if "Bitbucket Pipelines" not in seen_types:
+                infra.append({"type": "Bitbucket Pipelines", "file": rel_path})
+                seen_types.add("Bitbucket Pipelines")
+        elif name in ("pulumi.yaml", "pulumi.yml"):
+            if "Pulumi" not in seen_types:
+                infra.append({"type": "Pulumi", "file": rel_path})
+                seen_types.add("Pulumi")
         elif "k8s" in file_path.parts or "kubernetes" in file_path.parts or name.endswith(".k8s.yaml"):
             if "Kubernetes" not in seen_types:
                 infra.append({"type": "Kubernetes", "file": rel_path})
