@@ -150,15 +150,20 @@ def parse_prisma_and_orm_entities(root_path: Path):
                     body = m.group(2)
                     columns = []
 
+                    composite_pk_match = re.search(r"@@id\s*\(\s*\[(.*?)\]\s*\)", body)
+                    composite_pks = set()
+                    if composite_pk_match:
+                        composite_pks = {f.strip() for f in composite_pk_match.group(1).split(",") if f.strip()}
+
                     for raw_line in body.splitlines():
                         line = raw_line.strip()
-                        if not line or line.startswith("//"):
+                        if not line or line.startswith("//") or line.startswith("@@"):
                             continue
                         parts = line.split()
                         if len(parts) >= 2:
                             f_name = parts[0]
                             f_type = parts[1]
-                            is_pk = "@id" in line
+                            is_pk = "@id" in line or f_name in composite_pks
 
                             # Check relation: e.g. author User @relation(fields: [authorId], references: [id])
                             rel_m = re.search(r"@relation\s*\((.*?)\)", line)
