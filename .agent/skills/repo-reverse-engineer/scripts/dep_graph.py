@@ -542,7 +542,16 @@ def compute_centrality_and_cycles(modules: list, edges: list):
         visited[m] = 0
 
     cycles = []
+    seen_cycle_tuples = set()
     path = []
+
+    def normalize_cycle(nodes: list) -> tuple:
+        cycle = nodes[:-1] if len(nodes) > 1 and nodes[0] == nodes[-1] else nodes
+        if not cycle:
+            return ()
+        min_idx = cycle.index(min(cycle))
+        rotated = cycle[min_idx:] + cycle[:min_idx]
+        return tuple(rotated + [rotated[0]])
 
     def dfs(curr):
         visited[curr] = 1
@@ -553,7 +562,10 @@ def compute_centrality_and_cycles(modules: list, edges: list):
                 # Cycle found!
                 cycle_start_idx = path.index(neighbor)
                 cycle_path = path[cycle_start_idx:] + [neighbor]
-                cycles.append(cycle_path)
+                norm = normalize_cycle(cycle_path)
+                if norm not in seen_cycle_tuples:
+                    seen_cycle_tuples.add(norm)
+                    cycles.append(list(norm))
             elif visited.get(neighbor) == 0:
                 dfs(neighbor)
 
