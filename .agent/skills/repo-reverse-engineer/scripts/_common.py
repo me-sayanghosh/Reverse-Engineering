@@ -184,14 +184,21 @@ def is_lockfile(filename: str) -> bool:
     return filename in LOCKFILES
 
 
-def is_minified(filename: str) -> bool:
-    lower = filename.lower()
+def is_minified(filename: str | Path) -> bool:
+    name = str(filename).replace("\\", "/").split("/")[-1].lower()
     return (
-        lower.endswith(".min.js")
-        or lower.endswith(".min.css")
-        or lower.endswith(".bundle.js")
-        or lower.endswith(".bundle.css")
-        or lower.endswith(".map")
+        name.endswith(".min.js")
+        or name.endswith(".min.mjs")
+        or name.endswith(".min.cjs")
+        or name.endswith(".min.css")
+        or name.endswith(".bundle.js")
+        or name.endswith(".bundle.mjs")
+        or name.endswith(".bundle.cjs")
+        or name.endswith(".bundle.css")
+        or name.endswith(".chunk.js")
+        or name.endswith(".chunk.css")
+        or name.endswith(".chunk.mjs")
+        or name.endswith(".map")
     )
 
 
