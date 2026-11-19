@@ -73,6 +73,22 @@ def detect_monorepo(root_path: Path):
         if (root_path / wf).exists():
             signals.append(f"{name} config detected ({wf})")
 
+    # Discover pnpm workspace packages directly from config
+    pnpm_ws = root_path / "pnpm-workspace.yaml"
+    if pnpm_ws.exists():
+        try:
+            content = pnpm_ws.read_text(encoding="utf-8", errors="ignore")
+            import re
+            for m in re.finditer(r"""-\s*['"]?([a-zA-Z0-9_\-\.\*\/]+)['"]?""", content):
+                glob_pat = m.group(1).rstrip("/*")
+                cand_dir = root_path / glob_pat
+                if cand_dir.exists() and cand_dir.is_dir():
+                    for child in cand_dir.iterdir():
+                        if child.is_dir() and not child.name.startswith("."):
+                            packages.append(str(child.relative_to(root_path)))
+        except Exception:
+            pass
+
     # 2. Root manifest checks (package.json workspaces, Cargo.toml [workspace])
     pkg_json = root_path / "package.json"
     if pkg_json.exists():
