@@ -24,6 +24,7 @@ DEFAULT_IGNORED_DIRS = {
     ".pytest_cache",
     ".mypy_cache",
     ".ruff_cache",
+    ".hypothesis",
     "coverage",
     ".nyc_output",
     ".next",
@@ -35,6 +36,20 @@ DEFAULT_IGNORED_DIRS = {
     "out",
     "bin",
     "obj",
+    ".yarn",
+    ".pnpm-store",
+    ".bundle",
+    ".gradle",
+    ".cargo",
+    "Pods",
+    ".dart_tool",
+    ".serverless",
+    ".terraform",
+    "dist-ssr",
+    "storybook-static",
+    ".angular",
+    ".svelte-kit",
+    ".docusaurus",
 }
 
 LOCKFILES = {
