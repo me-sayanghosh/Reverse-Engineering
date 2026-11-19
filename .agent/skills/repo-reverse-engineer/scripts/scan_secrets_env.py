@@ -28,6 +28,12 @@ ENV_PATTERNS = [
     r"""std::env::var\(['"]([A-Za-z0-9_]+)['"]""",
     r"""ENV\[['"]([A-Za-z0-9_]+)['"]\]""",
     r"""ENV\.fetch\(['"]([A-Za-z0-9_]+)['"]\)""",
+    r"""Environment\.GetEnvironmentVariable\(['"]([A-Za-z0-9_]+)['"]\)""",
+    r"""getenv\(['"]([A-Za-z0-9_]+)['"]\)""",
+    r"""\$_ENV\['([A-Za-z0-9_]+)'\]""",
+    r"""\$_ENV\["([A-Za-z0-9_]+)"\]""",
+    r"""System\.getProperty\(['"]([A-Za-z0-9_]+)['"]\)""",
+    r"""os\.environ\.setdefault\(['"]([A-Za-z0-9_]+)['"]""",
 ]
 
 
