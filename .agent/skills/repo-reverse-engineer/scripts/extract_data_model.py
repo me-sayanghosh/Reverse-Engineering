@@ -394,9 +394,9 @@ def parse_python_models(root_path: Path):
                             val_str = ast.unparse(item.value) if (item.value and hasattr(ast, "unparse")) else ""
                             is_pk = "primary_key=True" in val_str or f_name == "id"
 
-                            # SQLAlchemy 2.0 ForeignKey check
-                            if "ForeignKey" in val_str:
-                                fk_m = re.search(r"""ForeignKey\s*\(\s*['"]([a-zA-Z0-9_.]+)(?:\.[a-zA-Z0-9_]+)?['"]""", val_str)
+                            # SQLAlchemy 2.0 / SQLModel ForeignKey check
+                            if "ForeignKey" in val_str or "foreign_key" in val_str:
+                                fk_m = re.search(r"""(?:ForeignKey|foreign_key)\s*(?:\(\s*|=)\s*['"]?([a-zA-Z0-9_]+)(?:\.[a-zA-Z0-9_]+)?['"]?""", val_str)
                                 if fk_m:
                                     target_model = fk_m.group(1).split(".")[0]
                                     relations.append(
@@ -419,17 +419,18 @@ def parse_python_models(root_path: Path):
                                     is_pk = "primary_key=True" in val_str or f_name == "id"
 
                                     # Foreign key check
-                                    fk_m = re.search(r"""ForeignKey\s*\(\s*['"]([a-zA-Z0-9_.]+)(?:\.[a-zA-Z0-9_]+)?['"]""", val_str)
-                                    if fk_m:
-                                        target_model = fk_m.group(1).split(".")[0]
-                                        relations.append(
-                                            {
-                                                "from": model_name,
-                                                "to": target_model,
-                                                "from_column": f_name,
-                                                "type": "foreign_key",
-                                            }
-                                        )
+                                    if "ForeignKey" in val_str or "foreign_key" in val_str:
+                                        fk_m = re.search(r"""(?:ForeignKey|foreign_key)\s*(?:\(\s*|=)\s*['"]?([a-zA-Z0-9_]+)(?:\.[a-zA-Z0-9_]+)?['"]?""", val_str)
+                                        if fk_m:
+                                            target_model = fk_m.group(1).split(".")[0]
+                                            relations.append(
+                                                {
+                                                    "from": model_name,
+                                                    "to": target_model,
+                                                    "from_column": f_name,
+                                                    "type": "foreign_key",
+                                                }
+                                            )
 
                                     col_type = "Column"
                                     if "models." in val_str:
