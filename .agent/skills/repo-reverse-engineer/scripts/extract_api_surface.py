@@ -211,7 +211,7 @@ def extract_other_routes(root_path: Path):
                 # 2. Go (Gin, Echo, Chi, net/http): r.GET('/path', handler) or r.Get('/path', handler)
                 elif ext == ".go":
                     m_go = re.search(
-                        r"""(?:r|router|app|g|api)\.(GET|POST|PUT|DELETE|PATCH|Get|Post|Put|Delete|Patch)\s*\(\s*['"]([^'"]+)['"]""",
+                        r"""(?:r|router|app|g|api|e|srv|server|v[0-9]+)\.(GET|POST|PUT|DELETE|PATCH|Get|Post|Put|Delete|Patch)\s*\(\s*['"]([^'"]+)['"]""",
                         line,
                     )
                     if m_go:
