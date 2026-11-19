@@ -244,6 +244,17 @@ EXT_TO_LANG: dict[str, str] = {
     ".purs": "PureScript",
     ".edn": "Clojure",
     ".hrl": "Erlang",
+    ".cbl": "COBOL",
+    ".cob": "COBOL",
+    ".f": "Fortran",
+    ".f90": "Fortran",
+    ".f95": "Fortran",
+    ".f03": "Fortran",
+    ".f08": "Fortran",
+    ".pas": "Pascal",
+    ".pp": "Pascal",
+    ".d": "D",
+    ".vb": "Visual Basic",
 }
 
 
