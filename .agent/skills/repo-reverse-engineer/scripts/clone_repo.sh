@@ -222,7 +222,11 @@ detect_license() {
 import os, sys, glob, re
 
 target_dir = "$target_dir"
-candidates = glob.glob(os.path.join(target_dir, "LICENSE*")) + glob.glob(os.path.join(target_dir, "COPYING*"))
+patterns = ["LICENSE*", "LICENCE*", "COPYING*", "UNLICENSE*", "license*", "licence*", "copying*", "unlicense*"]
+candidates = []
+for pat in patterns:
+    candidates.extend(glob.glob(os.path.join(target_dir, pat)))
+candidates = sorted(list(set(candidates)))
 if not candidates:
     print("none\tnone")
     sys.exit(0)
