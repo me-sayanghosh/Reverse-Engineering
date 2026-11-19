@@ -248,20 +248,34 @@ def extract_other_routes(root_path: Path):
                         )
                         continue
 
-                # 4. Ruby (Rails): get '/path', to: 'controller#action'
-                elif ext == ".rb" and "routes" in name:
-                    m_rails = re.search(r"""(get|post|put|delete|patch)\s+['"]([^'"]+)['"]""", line)
-                    if m_rails:
-                        routes.append(
-                            {
-                                "method": m_rails.group(1).upper(),
-                                "path": m_rails.group(2),
-                                "handler": f"{rel}:{idx}",
-                                "framework": "Rails",
-                                "auth_required": False,
-                            }
-                        )
-                        continue
+                # 4. Ruby (Rails / Sinatra): get '/path', to: 'controller#action' or get '/path' do
+                elif ext == ".rb":
+                    if "routes" in name:
+                        m_rails = re.search(r"""(get|post|put|delete|patch)\s+['"]([^'"]+)['"]""", line)
+                        if m_rails:
+                            routes.append(
+                                {
+                                    "method": m_rails.group(1).upper(),
+                                    "path": m_rails.group(2),
+                                    "handler": f"{rel}:{idx}",
+                                    "framework": "Rails",
+                                    "auth_required": False,
+                                }
+                            )
+                            continue
+                    else:
+                        m_sinatra = re.search(r"""^\s*(get|post|put|delete|patch)\s+['"]([^'"]+)['"]\s+do""", line)
+                        if m_sinatra:
+                            routes.append(
+                                {
+                                    "method": m_sinatra.group(1).upper(),
+                                    "path": m_sinatra.group(2),
+                                    "handler": f"{rel}:{idx}",
+                                    "framework": "Sinatra",
+                                    "auth_required": False,
+                                }
+                            )
+                            continue
 
                 # 5. Rust (Actix-web / Axum)
                 elif ext == ".rs":
