@@ -235,17 +235,32 @@ lic_file = os.path.basename(candidates[0])
 spdx = "none"
 try:
     with open(candidates[0], "r", encoding="utf-8", errors="ignore") as f:
-        head = "".join([f.readline() for _ in range(30)])
-        if "MIT License" in head or "Permission is hereby granted, free of charge" in head:
+        head = "".join([f.readline() for _ in range(40)])
+        head_lower = head.lower()
+        if "mit license" in head_lower or "permission is hereby granted, free of charge" in head_lower:
             spdx = "MIT"
-        elif "Apache License" in head and "2.0" in head:
+        elif "apache license" in head_lower and "2.0" in head_lower:
             spdx = "Apache-2.0"
-        elif "GNU GENERAL PUBLIC LICENSE" in head or "GNU General Public License" in head:
+        elif "affero general public license" in head_lower:
+            spdx = "AGPL-3.0"
+        elif "lesser general public license" in head_lower:
+            spdx = "LGPL"
+        elif "gnu general public license" in head_lower:
             spdx = "GPL"
-        elif "BSD 3-Clause" in head or "BSD-3-Clause" in head or "Redistribution and use in source and binary forms" in head:
+        elif "bsd 2-clause" in head_lower:
+            spdx = "BSD-2-Clause"
+        elif "bsd 3-clause" in head_lower or "redistribution and use in source and binary forms" in head_lower:
             spdx = "BSD"
-        elif "Mozilla Public License" in head:
+        elif "mozilla public license" in head_lower:
             spdx = "MPL-2.0"
+        elif "isc license" in head_lower or "permission to use, copy, modify, and/or distribute this software" in head_lower:
+            spdx = "ISC"
+        elif "unlicense" in head_lower or "free and unencumbered software released into the public domain" in head_lower:
+            spdx = "Unlicense"
+        elif "creative commons zero" in head_lower or "cc0 1.0" in head_lower:
+            spdx = "CC0-1.0"
+        elif "eclipse public license" in head_lower:
+            spdx = "EPL-2.0"
         else:
             spdx = "Custom"
 except Exception:
