@@ -18,6 +18,11 @@ Options:
 EOF
 }
 
+if ! command -v git >/dev/null 2>&1; then
+    echo "Error: 'git' command not found in PATH." >&2
+    exit 1
+fi
+
 TARGET=""
 BRANCH=""
 SUBDIR=""
