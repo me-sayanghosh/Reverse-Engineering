@@ -578,6 +578,15 @@ def infer_commands(root_path: Path, ecosystems: list):
         commands.setdefault("build", "./gradlew build")
         commands.setdefault("test", "./gradlew test")
         commands.setdefault("start", "./gradlew run")
+    if "Ruby" in ecosystems:
+        commands.setdefault("install", "bundle install")
+        commands.setdefault("test", "bundle exec rspec")
+    if "PHP" in ecosystems:
+        commands.setdefault("install", "composer install")
+        commands.setdefault("test", "composer test")
+    if "Elixir" in ecosystems:
+        commands.setdefault("install", "mix deps.get")
+        commands.setdefault("test", "mix test")
 
     return commands
 
