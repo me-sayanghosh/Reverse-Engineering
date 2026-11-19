@@ -380,7 +380,7 @@ def parse_python_models(root_path: Path):
 
                     # Parse fields in class body
                     for item in node.body:
-                        # 1. Pydantic style type annotations: name: str
+                        # 1. Type annotated models (Pydantic, SQLAlchemy 2.0 Mapped, Dataclasses)
                         if isinstance(item, ast.AnnAssign) and isinstance(item.target, ast.Name):
                             f_name = item.target.id
                             f_type = "any"
@@ -388,7 +388,26 @@ def parse_python_models(root_path: Path):
                                 f_type = item.annotation.id
                             elif isinstance(item.annotation, ast.Attribute):
                                 f_type = item.annotation.attr
-                            is_pk = f_name == "id"
+                            elif isinstance(item.annotation, ast.Subscript) and hasattr(ast, "unparse"):
+                                f_type = ast.unparse(item.annotation.slice)
+
+                            val_str = ast.unparse(item.value) if (item.value and hasattr(ast, "unparse")) else ""
+                            is_pk = "primary_key=True" in val_str or f_name == "id"
+
+                            # SQLAlchemy 2.0 ForeignKey check
+                            if "ForeignKey" in val_str:
+                                fk_m = re.search(r"""ForeignKey\s*\(\s*['"]([a-zA-Z0-9_.]+)(?:\.[a-zA-Z0-9_]+)?['"]""", val_str)
+                                if fk_m:
+                                    target_model = fk_m.group(1).split(".")[0]
+                                    relations.append(
+                                        {
+                                            "from": model_name,
+                                            "to": target_model,
+                                            "from_column": f_name,
+                                            "type": "foreign_key",
+                                        }
+                                    )
+
                             columns.append({"name": f_name, "type": f_type, "primary_key": is_pk})
 
                         # 2. SQLAlchemy / Django style assignments: col = Column(...)
