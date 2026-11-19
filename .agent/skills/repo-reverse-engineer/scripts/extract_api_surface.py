@@ -57,11 +57,19 @@ def extract_node_routes(root_path: Path):
                     if prev_line.startswith("@") and any(tok in prev_line for tok in auth_tokens):
                         has_auth = True
 
+                combined = line
+                # Look ahead up to 4 lines if method call spans multiple lines
+                if re.search(r"""(?:app|router|fastify|server)\.(?:get|post|put|delete|patch|options|head)\s*\(""", line):
+                    combined = " ".join(l.strip() for l in lines[idx - 1 : min(len(lines), idx + 4)])
+
                 for pat in NODE_ROUTE_PATTERNS:
-                    m = re.search(pat, line)
+                    m = re.search(pat, combined)
                     if m:
                         method = m.group(1).upper()
                         route_path = m.group(2) if m.group(2) else "/"
+                        # Ignore non-path patterns (e.g. variable identifiers without slash)
+                        if not route_path.startswith("/") and not route_path.startswith("*"):
+                            continue
                         routes.append(
                             {
                                 "method": method,
