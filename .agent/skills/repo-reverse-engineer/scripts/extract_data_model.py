@@ -553,6 +553,7 @@ def render_mermaid_erd(entities: list, relations: list, max_entities: int = 25) 
     # Cap entities at max_entities
     selected_entities = entities[:max_entities]
     selected_names = {e["name"] for e in selected_entities}
+    name_map = {e["name"]: re.sub(r"[^a-zA-Z0-9_]", "_", e["name"]).strip("_") or "Entity" for e in selected_entities}
 
     # Render relationships for selected entities
     rendered_relations = set()
@@ -560,21 +561,23 @@ def render_mermaid_erd(entities: list, relations: list, max_entities: int = 25) 
         src = rel.get("from")
         tgt = rel.get("to")
         if src in selected_names and tgt in selected_names:
-            rel_key = (src, tgt)
+            safe_src = name_map[src]
+            safe_tgt = name_map[tgt]
+            rel_key = (safe_src, safe_tgt)
             if rel_key not in rendered_relations:
                 rendered_relations.add(rel_key)
                 # Mermaid ERD syntax: A ||--o{ B : "references"
-                lines.append(f'  {src} ||--o{{ {tgt} : "references"')
+                lines.append(f'  {safe_src} ||--o{{ {safe_tgt} : "references"')
 
     # Render entity field blocks
     for ent in selected_entities:
-        name = ent["name"]
+        name = name_map[ent["name"]]
         cols = ent.get("columns", [])
         if cols:
             lines.append(f"  {name} {{")
             for c in cols[:12]:  # cap columns per entity to keep readable
-                c_name = re.sub(r"[^a-zA-Z0-9_]", "_", c["name"])
-                c_type = re.sub(r"[^a-zA-Z0-9_]", "_", c.get("type", "string"))
+                c_name = re.sub(r"[^a-zA-Z0-9_]", "_", c["name"]).strip("_") or "field"
+                c_type = re.sub(r"[^a-zA-Z0-9_]", "_", c.get("type", "string")).strip("_") or "string"
                 pk_marker = " PK" if c.get("primary_key") else ""
                 lines.append(f"    {c_type} {c_name}{pk_marker}")
             lines.append("  }")
