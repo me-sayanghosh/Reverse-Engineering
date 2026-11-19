@@ -215,9 +215,9 @@ def parse_prisma_and_orm_entities(root_path: Path):
                         entity_name = m_entity.group(1)
                         columns = []
                         # Detect columns
-                        for col_m in re.finditer(r"@(Column|PrimaryGeneratedColumn)\s*\([^\)]*\)\s*([a-zA-Z0-9_]+)(?:\s*[:=]\s*([a-zA-Z0-9_]+))?", content):
+                        for col_m in re.finditer(r"@(Column|PrimaryColumn|PrimaryGeneratedColumn|ObjectIdColumn|CreateDateColumn|UpdateDateColumn|DeleteDateColumn)\s*\([^\)]*\)\s*([a-zA-Z0-9_]+)(?:\s*[:=]\s*([a-zA-Z0-9_]+))?", content):
                             col_type = col_m.group(3) or "any"
-                            is_pk = col_m.group(1) == "PrimaryGeneratedColumn"
+                            is_pk = col_m.group(1) in ("PrimaryGeneratedColumn", "PrimaryColumn", "ObjectIdColumn")
                             columns.append({"name": col_m.group(2), "type": col_type, "primary_key": is_pk})
 
                         # Detect relations
