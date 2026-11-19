@@ -283,8 +283,15 @@ def redact_all_secrets_filter(data):
         for pat, _, pfx_len in SECRET_PATTERNS:
             # Replace any unmasked secrets with masked representation
             def repl(match):
-                raw = match.group(1) if match.groups() else match.group(0)
-                return mask_secret(raw, pfx_len)
+                if match.groups() and match.group(1):
+                    raw = match.group(1)
+                    full = match.group(0)
+                    start, end = match.span(1)
+                    m_start, _ = match.span(0)
+                    rel_start = start - m_start
+                    rel_end = end - m_start
+                    return full[:rel_start] + mask_secret(raw, pfx_len) + full[rel_end:]
+                return mask_secret(match.group(0), pfx_len)
 
             cleaned = re.sub(pat, repl, cleaned)
         return cleaned
