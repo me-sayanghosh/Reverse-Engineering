@@ -359,6 +359,13 @@ DATASTORE_PATTERNS = {
     "Kafka": ["kafka", "kafkajs", "confluent-kafka", "aiokafka", "sarama"],
     "RabbitMQ": ["amqp", "amqplib", "pika", "rabbitmq"],
     "SQS": ["client-sqs", "sqs"],
+    "Elasticsearch": ["elasticsearch", "@elastic/elasticsearch", "opensearch"],
+    "ClickHouse": ["clickhouse", "clickhouse-driver", "@clickhouse/client"],
+    "Cassandra": ["cassandra", "cassandra-driver", "scylladb", "gocql"],
+    "Neo4j": ["neo4j", "neomodel", "py2neo"],
+    "DynamoDB": ["dynamodb", "client-dynamodb"],
+    "CouchDB": ["couchdb", "couchbase"],
+    "CockroachDB": ["cockroach", "cockroachdb"],
 }
 
 
