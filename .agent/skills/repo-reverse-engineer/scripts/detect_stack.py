@@ -587,6 +587,13 @@ def infer_commands(root_path: Path, ecosystems: list):
     if "Elixir" in ecosystems:
         commands.setdefault("install", "mix deps.get")
         commands.setdefault("test", "mix test")
+    if any("Flutter" in e or "Dart" in e for e in ecosystems):
+        commands.setdefault("install", "flutter pub get" if any("Flutter" in e for e in ecosystems) else "dart pub get")
+        commands.setdefault("test", "flutter test" if any("Flutter" in e for e in ecosystems) else "dart test")
+    if any(".NET" in e for e in ecosystems):
+        commands.setdefault("build", "dotnet build")
+        commands.setdefault("test", "dotnet test")
+        commands.setdefault("start", "dotnet run")
 
     return commands
 
