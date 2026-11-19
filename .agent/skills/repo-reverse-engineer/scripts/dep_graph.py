@@ -126,6 +126,37 @@ def resolve_js_ts_target(source_file: Path, specifier: str, root_path: Path):
         # Unresolved relative
         return specifier, "internal"
 
+    # Check if specifier directly matches an internal path relative to root or src
+    for base in [root_path, root_path / "src"]:
+        target_path = base / specifier
+        candidates = [
+            target_path,
+            target_path.with_suffix(".ts"),
+            target_path.with_suffix(".tsx"),
+            target_path.with_suffix(".mts"),
+            target_path.with_suffix(".cts"),
+            target_path.with_suffix(".js"),
+            target_path.with_suffix(".jsx"),
+            target_path.with_suffix(".mjs"),
+            target_path.with_suffix(".cjs"),
+            target_path / "index.ts",
+            target_path / "index.tsx",
+            target_path / "index.mts",
+            target_path / "index.cts",
+            target_path / "index.js",
+            target_path / "index.jsx",
+            target_path / "index.mjs",
+            target_path / "index.cjs",
+        ]
+        for c in candidates:
+            c_resolved = c.resolve()
+            if c_resolved.exists() and c_resolved.is_file():
+                try:
+                    rel = c_resolved.relative_to(root_path)
+                    return str(rel), "internal"
+                except ValueError:
+                    pass
+
     return specifier, "external"
 
 
