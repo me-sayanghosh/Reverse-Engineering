@@ -16,17 +16,30 @@ MANIFEST_TO_ECOSYSTEM: dict[str, str] = {
     "pyproject.toml": "Python",
     "requirements.txt": "Python",
     "Pipfile": "Python",
+    "setup.py": "Python",
+    "setup.cfg": "Python",
     "go.mod": "Go",
     "Cargo.toml": "Rust",
     "pom.xml": "Java/Maven",
     "build.gradle": "Java/Gradle",
     "build.gradle.kts": "Kotlin/Gradle",
+    "build.sbt": "Scala",
     "Gemfile": "Ruby",
     "composer.json": "PHP",
     "pubspec.yaml": "Dart/Flutter",
     "Package.swift": "Swift",
     "mix.exs": "Elixir",
+    "rebar.config": "Erlang",
+    "deno.json": "Deno/TypeScript",
+    "deno.jsonc": "Deno/TypeScript",
+    "bunfig.toml": "Bun",
+    "stack.yaml": "Haskell",
+    "cabal.project": "Haskell",
+    "shard.yml": "Crystal",
+    "dune-project": "OCaml",
     ".csproj": ".NET/C#",
+    ".fsproj": ".NET/F#",
+    ".sln": ".NET",
 }
 
 
@@ -51,8 +64,8 @@ def detect_manifests(root_path: Path):
             found_manifests.append({"path": rel_path, "manifest": name, "ecosystem": eco})
             ecosystems.add(eco)
             matched = True
-        elif file_path.suffix == ".csproj":
-            eco = MANIFEST_TO_ECOSYSTEM[".csproj"]
+        elif file_path.suffix in (".csproj", ".fsproj", ".sln"):
+            eco = MANIFEST_TO_ECOSYSTEM.get(file_path.suffix, ".NET")
             found_manifests.append({"path": rel_path, "manifest": name, "ecosystem": eco})
             ecosystems.add(eco)
             matched = True
@@ -83,6 +96,26 @@ NODE_PKG_TO_FRAMEWORK: dict[str, str] = {
     "vitest": "Vitest",
     "tailwindcss": "Tailwind CSS",
     "@trpc/server": "tRPC",
+    "astro": "Astro",
+    "@remix-run/react": "Remix",
+    "@remix-run/node": "Remix",
+    "gatsby": "Gatsby",
+    "solid-js": "Solid",
+    "@builder.io/qwik": "Qwik",
+    "electron": "Electron",
+    "playwright": "Playwright",
+    "@playwright/test": "Playwright",
+    "cypress": "Cypress",
+    "graphql": "GraphQL",
+    "@apollo/server": "Apollo GraphQL",
+    "bull": "Bull",
+    "bullmq": "BullMQ",
+    "typeorm": "TypeORM",
+    "sequelize": "Sequelize",
+    "knex": "Knex",
+    "drizzle-orm": "Drizzle ORM",
+    "commander": "Commander",
+    "yargs": "Yargs",
 }
 
 
@@ -113,6 +146,8 @@ PYTHON_PKG_TO_FRAMEWORK: dict[str, str] = {
     "django": "Django",
     "flask": "Flask",
     "fastapi": "FastAPI",
+    "starlette": "Starlette",
+    "litestar": "Litestar",
     "sqlalchemy": "SQLAlchemy",
     "celery": "Celery",
     "pydantic": "Pydantic",
@@ -123,18 +158,34 @@ PYTHON_PKG_TO_FRAMEWORK: dict[str, str] = {
     "tornado": "Tornado",
     "sanic": "Sanic",
     "aiohttp": "aiohttp",
+    "gunicorn": "Gunicorn",
+    "uvicorn": "Uvicorn",
+    "alembic": "Alembic",
+    "peewee": "Peewee",
+    "tortoise": "Tortoise-ORM",
+    "beanie": "Beanie",
+    "click": "Click",
+    "typer": "Typer",
+    "polars": "Polars",
+    "pandas": "Pandas",
+    "scipy": "SciPy",
+    "numpy": "NumPy",
+    "scrapy": "Scrapy",
 }
 
 
 def detect_python_frameworks(root_path: Path):
-    """Parse requirements.txt, pyproject.toml, Pipfile for known Python frameworks."""
+    """Parse requirements.txt, pyproject.toml, Pipfile, setup.py, setup.cfg for known Python frameworks."""
     root_path = Path(root_path).resolve()
     frameworks = set()
     import re
 
     for file_path in _common.walk_repo(root_path):
         name = file_path.name.lower()
-        if name.startswith("requirements") and name.endswith(".txt") or name in ("pyproject.toml", "pipfile", "setup.cfg"):
+        if (
+            (name.startswith("requirements") and name.endswith(".txt"))
+            or name in ("pyproject.toml", "pipfile", "setup.cfg", "setup.py")
+        ):
             try:
                 with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
                     content = f.read().lower()
@@ -155,6 +206,12 @@ OTHER_FRAMEWORKS_MAP = {
         "github.com/gin-gonic/gin": "Gin",
         "github.com/labstack/echo": "Echo",
         "github.com/gofiber/fiber": "Fiber",
+        "github.com/go-chi/chi": "Chi",
+        "github.com/gorilla/mux": "Gorilla Mux",
+        "github.com/spf13/cobra": "Cobra",
+        "gorm.io/gorm": "GORM",
+        "github.com/jmoiron/sqlx": "Sqlx",
+        "entgo.io/ent": "Ent",
         "google.golang.org/grpc": "gRPC",
     },
     # Rust (Cargo.toml)
@@ -163,6 +220,14 @@ OTHER_FRAMEWORKS_MAP = {
         "axum": "Axum",
         "tokio": "Tokio",
         "rocket": "Rocket",
+        "warp": "Warp",
+        "poem": "Poem",
+        "diesel": "Diesel",
+        "sea-orm": "SeaORM",
+        "sqlx": "SQLx",
+        "clap": "Clap",
+        "serde": "Serde",
+        "tonic": "Tonic (gRPC)",
     },
     # Ruby (Gemfile)
     "Gemfile": {
@@ -220,7 +285,7 @@ def detect_other_frameworks(root_path: Path):
 
 
 def detect_infra(root_path: Path):
-    """Detect infrastructure configurations: Docker, Compose, K8s, Terraform, Helm, Serverless, Vercel, Netlify."""
+    """Detect infrastructure configurations: Docker, Compose, K8s, Terraform, Helm, Serverless, CI, Vercel, Netlify."""
     root_path = Path(root_path).resolve()
     infra = []
     seen_types = set()
@@ -229,7 +294,7 @@ def detect_infra(root_path: Path):
         name = file_path.name.lower()
         rel_path = str(file_path.relative_to(root_path))
 
-        if name == "dockerfile" or name.startswith("dockerfile."):
+        if name == "dockerfile" or name.startswith("dockerfile.") or name == "containerfile":
             if "Docker" not in seen_types:
                 infra.append({"type": "Docker", "file": rel_path})
                 seen_types.add("Docker")
@@ -257,6 +322,26 @@ def detect_infra(root_path: Path):
             if "Netlify" not in seen_types:
                 infra.append({"type": "Netlify", "file": rel_path})
                 seen_types.add("Netlify")
+        elif ".github" in file_path.parts and "workflows" in file_path.parts and (name.endswith(".yml") or name.endswith(".yaml")):
+            if "GitHub Actions" not in seen_types:
+                infra.append({"type": "GitHub Actions", "file": rel_path})
+                seen_types.add("GitHub Actions")
+        elif name in (".gitlab-ci.yml", ".gitlab-ci.yaml"):
+            if "GitLab CI" not in seen_types:
+                infra.append({"type": "GitLab CI", "file": rel_path})
+                seen_types.add("GitLab CI")
+        elif ".circleci" in file_path.parts:
+            if "CircleCI" not in seen_types:
+                infra.append({"type": "CircleCI", "file": rel_path})
+                seen_types.add("CircleCI")
+        elif name in ("azure-pipelines.yml", "azure-pipelines.yaml"):
+            if "Azure Pipelines" not in seen_types:
+                infra.append({"type": "Azure Pipelines", "file": rel_path})
+                seen_types.add("Azure Pipelines")
+        elif name in ("cloudbuild.yaml", "cloudbuild.yml"):
+            if "Cloud Build" not in seen_types:
+                infra.append({"type": "Cloud Build", "file": rel_path})
+                seen_types.add("Cloud Build")
         elif "k8s" in file_path.parts or "kubernetes" in file_path.parts or name.endswith(".k8s.yaml"):
             if "Kubernetes" not in seen_types:
                 infra.append({"type": "Kubernetes", "file": rel_path})
@@ -274,6 +359,13 @@ DATASTORE_PATTERNS = {
     "Kafka": ["kafka", "kafkajs", "confluent-kafka", "aiokafka", "sarama"],
     "RabbitMQ": ["amqp", "amqplib", "pika", "rabbitmq"],
     "SQS": ["client-sqs", "sqs"],
+    "Elasticsearch": ["elasticsearch", "@elastic/elasticsearch", "opensearch"],
+    "ClickHouse": ["clickhouse", "clickhouse-driver", "@clickhouse/client"],
+    "Cassandra": ["cassandra", "cassandra-driver", "scylladb", "gocql"],
+    "Neo4j": ["neo4j", "neomodel", "py2neo"],
+    "DynamoDB": ["dynamodb", "client-dynamodb"],
+    "CouchDB": ["couchdb", "couchbase"],
+    "CockroachDB": ["cockroach", "cockroachdb"],
 }
 
 
@@ -334,6 +426,8 @@ def infer_commands(root_path: Path, ecosystems: list):
                     pm = "pnpm"
                 elif (root_path / "yarn.lock").exists():
                     pm = "yarn"
+                elif (root_path / "bun.lockb").exists() or (root_path / "bun.lock").exists():
+                    pm = "bun"
 
                 commands["install"] = f"{pm} install"
                 if "build" in scripts:
@@ -402,30 +496,57 @@ def infer_commands(root_path: Path, ecosystems: list):
         commands.setdefault("build", "cargo build")
         commands.setdefault("test", "cargo test")
         commands.setdefault("start", "cargo run")
+    elif any("Deno" in e for e in ecosystems):
+        commands.setdefault("test", "deno test")
+        commands.setdefault("start", "deno run main.ts")
 
     return commands
 
 
 def detect_suspicious_scripts(root_path: Path):
-    """Detect high-risk lifecycle hooks (postinstall, preinstall) or suspicious payload commands."""
+    """Detect high-risk lifecycle hooks (postinstall, preinstall, etc.) or suspicious payload commands."""
     root_path = Path(root_path).resolve()
     risks = []
+    suspicious_patterns = [
+        (r"curl\s+.*?\|\s*(?:ba)?sh", "Piped curl execution"),
+        (r"wget\s+.*?\|\s*(?:ba)?sh", "Piped wget execution"),
+        (r"eval\s*\(", "Eval invocation in script"),
+        (r"base64\s+(?:-d|--decode)", "Base64 payload decoding"),
+    ]
+
     for pkg_json in _common.walk_repo(root_path):
         if pkg_json.name == "package.json":
             try:
                 import json
+                import re
                 data = json.loads(pkg_json.read_text(encoding="utf-8", errors="ignore"))
                 scripts = data.get("scripts", {})
-                for hook in ["postinstall", "preinstall", "install"]:
+                rel = str(pkg_json.relative_to(root_path))
+                lifecycle_hooks = ["postinstall", "preinstall", "install", "preuninstall", "postuninstall", "prepare", "prepublish"]
+
+                for hook in lifecycle_hooks:
                     if hook in scripts:
                         val = str(scripts[hook])
-                        rel = str(pkg_json.relative_to(root_path))
                         risks.append({
                             "file": rel,
                             "hook": hook,
                             "command": val,
                             "warning": f"Suspicious lifecycle hook '{hook}' in {rel}: {val}"
                         })
+
+                # Check all scripts for dangerous payload commands
+                for sname, sval in scripts.items():
+                    val_str = str(sval)
+                    for pat, desc in suspicious_patterns:
+                        if re.search(pat, val_str, re.IGNORECASE):
+                            warning_msg = f"Potentially malicious command in script '{sname}' in {rel}: {val_str} ({desc})"
+                            if not any(r.get("command") == val_str for r in risks):
+                                risks.append({
+                                    "file": rel,
+                                    "hook": sname,
+                                    "command": val_str,
+                                    "warning": warning_msg,
+                                })
             except Exception:
                 pass
     return risks
@@ -458,6 +579,13 @@ def main():
     commands = infer_commands(root_path, ecosystems)
     suspicious_scripts = detect_suspicious_scripts(root_path)
 
+    if ecosystems and frameworks:
+        confidence = "high"
+    elif ecosystems or frameworks or manifests or infra or datastores:
+        confidence = "medium"
+    else:
+        confidence = "low"
+
     data = {
         "root": str(root_path),
         "ecosystems": ecosystems,
@@ -467,7 +595,7 @@ def main():
         "infra": infra,
         "commands": commands,
         "suspicious_scripts": suspicious_scripts,
-        "confidence": "high" if (ecosystems or frameworks) else "medium",
+        "confidence": confidence,
     }
 
     if args.json:

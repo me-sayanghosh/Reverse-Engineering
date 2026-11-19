@@ -18,6 +18,11 @@ Options:
 EOF
 }
 
+if ! command -v git >/dev/null 2>&1; then
+    echo "Error: 'git' command not found in PATH." >&2
+    exit 1
+fi
+
 TARGET=""
 BRANCH=""
 SUBDIR=""
@@ -32,18 +37,34 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         --branch)
+            if [[ $# -lt 2 || "$2" == -* ]]; then
+                echo "Error: Invalid or missing branch argument" >&2
+                exit 1
+            fi
             BRANCH="$2"
             shift 2
             ;;
         --subdir)
+            if [[ $# -lt 2 || "$2" == -* ]]; then
+                echo "Error: Invalid or missing subdir argument" >&2
+                exit 1
+            fi
             SUBDIR="$2"
             shift 2
             ;;
         --out)
+            if [[ $# -lt 2 || "$2" == -* ]]; then
+                echo "Error: Invalid or missing out argument" >&2
+                exit 1
+            fi
             OUT_DIR="$2"
             shift 2
             ;;
         --max-mb)
+            if [[ $# -lt 2 ]] || ! [[ "$2" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+                echo "Error: Invalid or missing --max-mb argument '$2'" >&2
+                exit 1
+            fi
             MAX_MB="$2"
             shift 2
             ;;
@@ -87,15 +108,23 @@ if [[ -d "$TARGET" ]]; then
     TARGET_TYPE="local"
     LOCAL_PATH="$(cd "$TARGET" && pwd)"
     REPO_NAME="$(basename "$LOCAL_PATH")"
-elif [[ "$TARGET" =~ ^https?://github\.com/([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+)$ ]]; then
+elif [[ "$TARGET" =~ ^https?://github\.com/([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+?)((\.git)?/?)$ ]]; then
     TARGET_TYPE="github_https"
     REPO_NAME="${BASH_REMATCH[2]%.git}"
     CLONE_URL="https://github.com/${BASH_REMATCH[1]}/${REPO_NAME}.git"
-elif [[ "$TARGET" =~ ^git@github\.com:([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+)$ ]]; then
+elif [[ "$TARGET" =~ ^git@github\.com:([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+?)((\.git)?/?)$ ]]; then
     TARGET_TYPE="github_ssh"
     REPO_NAME="${BASH_REMATCH[2]%.git}"
     CLONE_URL="git@github.com:${BASH_REMATCH[1]}/${REPO_NAME}.git"
-elif [[ "$TARGET" =~ ^([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+)$ ]]; then
+elif [[ "$TARGET" =~ ^https?://gitlab\.com/([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+?)((\.git)?/?)$ ]]; then
+    TARGET_TYPE="gitlab_https"
+    REPO_NAME="${BASH_REMATCH[2]%.git}"
+    CLONE_URL="https://gitlab.com/${BASH_REMATCH[1]}/${REPO_NAME}.git"
+elif [[ "$TARGET" =~ ^https?://bitbucket\.org/([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+?)((\.git)?/?)$ ]]; then
+    TARGET_TYPE="bitbucket_https"
+    REPO_NAME="${BASH_REMATCH[2]%.git}"
+    CLONE_URL="https://bitbucket.org/${BASH_REMATCH[1]}/${REPO_NAME}.git"
+elif [[ "$TARGET" =~ ^([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+?)((\.git)?/?)$ ]]; then
     TARGET_TYPE="shorthand"
     REPO_NAME="${BASH_REMATCH[2]%.git}"
     CLONE_URL="https://github.com/${BASH_REMATCH[1]}/${REPO_NAME}.git"
@@ -198,7 +227,11 @@ detect_license() {
 import os, sys, glob, re
 
 target_dir = "$target_dir"
-candidates = glob.glob(os.path.join(target_dir, "LICENSE*")) + glob.glob(os.path.join(target_dir, "COPYING*"))
+patterns = ["LICENSE*", "LICENCE*", "COPYING*", "UNLICENSE*", "license*", "licence*", "copying*", "unlicense*"]
+candidates = []
+for pat in patterns:
+    candidates.extend(glob.glob(os.path.join(target_dir, pat)))
+candidates = sorted(list(set(candidates)))
 if not candidates:
     print("none\tnone")
     sys.exit(0)
@@ -207,17 +240,32 @@ lic_file = os.path.basename(candidates[0])
 spdx = "none"
 try:
     with open(candidates[0], "r", encoding="utf-8", errors="ignore") as f:
-        head = "".join([f.readline() for _ in range(30)])
-        if "MIT License" in head or "Permission is hereby granted, free of charge" in head:
+        head = "".join([f.readline() for _ in range(40)])
+        head_lower = head.lower()
+        if "mit license" in head_lower or "permission is hereby granted, free of charge" in head_lower:
             spdx = "MIT"
-        elif "Apache License" in head and "2.0" in head:
+        elif "apache license" in head_lower and "2.0" in head_lower:
             spdx = "Apache-2.0"
-        elif "GNU GENERAL PUBLIC LICENSE" in head or "GNU General Public License" in head:
+        elif "affero general public license" in head_lower:
+            spdx = "AGPL-3.0"
+        elif "lesser general public license" in head_lower:
+            spdx = "LGPL"
+        elif "gnu general public license" in head_lower:
             spdx = "GPL"
-        elif "BSD 3-Clause" in head or "BSD-3-Clause" in head or "Redistribution and use in source and binary forms" in head:
+        elif "bsd 2-clause" in head_lower:
+            spdx = "BSD-2-Clause"
+        elif "bsd 3-clause" in head_lower or "redistribution and use in source and binary forms" in head_lower:
             spdx = "BSD"
-        elif "Mozilla Public License" in head:
+        elif "mozilla public license" in head_lower:
             spdx = "MPL-2.0"
+        elif "isc license" in head_lower or "permission to use, copy, modify, and/or distribute this software" in head_lower:
+            spdx = "ISC"
+        elif "unlicense" in head_lower or "free and unencumbered software released into the public domain" in head_lower:
+            spdx = "Unlicense"
+        elif "creative commons zero" in head_lower or "cc0 1.0" in head_lower:
+            spdx = "CC0-1.0"
+        elif "eclipse public license" in head_lower:
+            spdx = "EPL-2.0"
         else:
             spdx = "Custom"
 except Exception:
@@ -241,20 +289,32 @@ fi
 
 CLONE_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-python3 - << PYEOF
-import json
+META_OUT_DIR="$OUT_DIR" \
+META_URL="${CLONE_URL:-$LOCAL_PATH}" \
+META_SHA="$COMMIT_SHA" \
+META_BRANCH="${BRANCH:-$DETECTED_BRANCH}" \
+META_DATE="$CLONE_DATE" \
+META_LIC_FILE="$LIC_FILE" \
+META_LIC_SPDX="$LIC_SPDX" \
+META_DEF_BRANCH="$DEFAULT_BRANCH" \
+python3 - << 'PYEOF'
+import json, os
+
+out_dir = os.environ.get("META_OUT_DIR", "")
+lic_file = os.environ.get("META_LIC_FILE", "none")
 
 meta = {
-    "url": "${CLONE_URL:-$LOCAL_PATH}",
-    "commit_sha": "$COMMIT_SHA",
-    "branch": "${BRANCH:-$DETECTED_BRANCH}",
-    "clone_date": "$CLONE_DATE",
-    "license_file_detected": "$LIC_FILE" if "$LIC_FILE" != "none" else None,
-    "license_spdx": "$LIC_SPDX",
-    "default_branch": "$DEFAULT_BRANCH"
+    "url": os.environ.get("META_URL", ""),
+    "commit_sha": os.environ.get("META_SHA", "unknown"),
+    "branch": os.environ.get("META_BRANCH", "unknown"),
+    "clone_date": os.environ.get("META_DATE", ""),
+    "license_file_detected": lic_file if lic_file != "none" else None,
+    "license_spdx": os.environ.get("META_LIC_SPDX", "none"),
+    "default_branch": os.environ.get("META_DEF_BRANCH", "unknown"),
 }
 
-with open("$OUT_DIR/repo_meta.json", "w", encoding="utf-8") as f:
+target_path = os.path.join(out_dir, "repo_meta.json")
+with open(target_path, "w", encoding="utf-8") as f:
     json.dump(meta, f, indent=2)
-print("Wrote metadata to $OUT_DIR/repo_meta.json")
+print(f"Wrote metadata to {target_path}")
 PYEOF
