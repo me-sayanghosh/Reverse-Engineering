@@ -105,10 +105,14 @@ def extract_other_routes(root_path: Path):
             for idx, line in enumerate(lines, start=1):
                 # 1. Python (FastAPI, Flask, Django)
                 if ext in (".py", ".pyi"):
+                    combined_py = line
+                    if line.strip().startswith("@"):
+                        combined_py = " ".join(l.strip() for l in lines[idx - 1 : min(len(lines), idx + 4)])
+
                     # FastAPI: @app.get('/path')
                     m_fastapi = re.search(
                         r"""@(?:app|router|api)\.(get|post|put|delete|patch)\s*\(\s*['"]([^'"]+)['"]""",
-                        line,
+                        combined_py,
                     )
                     if m_fastapi:
                         routes.append(
@@ -117,13 +121,13 @@ def extract_other_routes(root_path: Path):
                                 "path": m_fastapi.group(2),
                                 "handler": f"{rel}:{idx}",
                                 "framework": "FastAPI",
-                                "auth_required": "login_required" in line or "Depends(" in line,
+                                "auth_required": "login_required" in combined_py or "Depends(" in combined_py,
                             }
                         )
                         continue
 
                     # Flask: @app.route('/path', methods=['GET', 'POST']) or @bp.route(...)
-                    m_flask = re.search(r"""@(?:[a-zA-Z0-9_]+)\.route\s*\(\s*['"`]([^'"`]+)['"`](?:.*?methods\s*=\s*\[(.*?)\])?""", line)
+                    m_flask = re.search(r"""@(?:[a-zA-Z0-9_]+)\.route\s*\(\s*['"`]([^'"`]+)['"`](?:.*?methods\s*=\s*\[(.*?)\])?""", combined_py)
                     if m_flask:
                         route_path = m_flask.group(1)
                         methods_raw = m_flask.group(2)
@@ -138,7 +142,7 @@ def extract_other_routes(root_path: Path):
                                 "path": route_path,
                                 "handler": f"{rel}:{idx}",
                                 "framework": "Flask",
-                                "auth_required": "login_required" in line,
+                                "auth_required": "login_required" in combined_py,
                             }
                         )
                         continue
