@@ -539,6 +539,18 @@ def parse_cpp_includes(file_path: Path, root_path: Path):
                         "specifier": header,
                     }
                 )
+        # C++20 module imports: import std; or import my_module;
+        for m in re.finditer(r'^\s*import\s+(?:<([^>]+)>|([a-zA-Z0-9_.]+))\s*;', content, re.MULTILINE):
+            mod_target = m.group(1) or m.group(2)
+            imp_type = "stdlib" if mod_target in ("std", "std.compat") or m.group(1) else "internal"
+            edges.append(
+                {
+                    "source": source_rel,
+                    "target": mod_target,
+                    "type": imp_type,
+                    "specifier": mod_target,
+                }
+            )
     except Exception:
         pass
     return edges
