@@ -198,6 +198,11 @@ PYTHON_PKG_TO_FRAMEWORK: dict[str, str] = {
     "scipy": "SciPy",
     "numpy": "NumPy",
     "scrapy": "Scrapy",
+    "gradio": "Gradio",
+    "streamlit": "Streamlit",
+    "langchain": "LangChain",
+    "llama-index": "LlamaIndex",
+    "duckdb": "DuckDB",
 }
 
 
