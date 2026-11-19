@@ -225,6 +225,8 @@ else
             echo "Error: Network failure connecting to remote host." >&2
         elif echo "$CLONE_OUTPUT" | grep -qiE "Remote branch .* not found"; then
             echo "Error: Branch '$BRANCH' not found on remote repository." >&2
+        elif echo "$CLONE_OUTPUT" | grep -qiE "already exists and is not an empty directory"; then
+            echo "Error: Destination directory '$OUT_DIR' already exists and is not empty." >&2
         elif echo "$CLONE_OUTPUT" | grep -qiE "Authentication failed|could not read Username|Repository not found"; then
             echo "Error: Private repository or authentication required for $CLONE_URL." >&2
         else
