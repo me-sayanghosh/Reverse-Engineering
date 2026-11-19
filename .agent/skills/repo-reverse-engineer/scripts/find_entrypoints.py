@@ -2,6 +2,7 @@
 """Locate and rank entrypoints: server bootstraps, CLI commands, route trees, workers, frontend roots."""
 
 import argparse
+import re
 import sys
 from pathlib import Path
 
@@ -165,8 +166,6 @@ def find_manifest_entrypoints(root_path: Path):
     pyproject = root_path / "pyproject.toml"
     if pyproject.exists():
         try:
-            import re
-
             content = pyproject.read_text(encoding="utf-8", errors="ignore")
             # match [project.scripts] or [tool.poetry.scripts]
             in_scripts = False
