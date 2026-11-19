@@ -33,7 +33,19 @@ def get_tree_summary(root_path: Path, max_depth: int = 3):
             d
             for d in dirnames
             if d not in _common.DEFAULT_IGNORED_DIRS
-            and (not d.startswith(".") or d in (".github", ".circleci", ".gitlab", ".azure-pipelines", ".drone"))
+            and (
+                not d.startswith(".")
+                or d in (
+                    ".github",
+                    ".circleci",
+                    ".gitlab",
+                    ".azure-pipelines",
+                    ".drone",
+                    ".buildkite",
+                    ".husky",
+                    ".gitea",
+                )
+            )
         ]
 
         rel = Path(dirpath).relative_to(root_path)
@@ -166,7 +178,19 @@ def detect_monorepo(root_path: Path):
             d
             for d in dirnames
             if d not in _common.DEFAULT_IGNORED_DIRS
-            and (not d.startswith(".") or d in (".github", ".circleci", ".gitlab", ".azure-pipelines", ".drone"))
+            and (
+                not d.startswith(".")
+                or d in (
+                    ".github",
+                    ".circleci",
+                    ".gitlab",
+                    ".azure-pipelines",
+                    ".drone",
+                    ".buildkite",
+                    ".husky",
+                    ".gitea",
+                )
+            )
         ]
         if Path(dirpath) == root_path:
             continue
@@ -211,11 +235,19 @@ def detect_repo_markers(root_path: Path):
     ci_candidates = [
         ".github/workflows",
         ".gitlab-ci.yml",
+        ".gitlab-ci.yaml",
         ".circleci",
         "Jenkinsfile",
         "azure-pipelines.yml",
+        "azure-pipelines.yaml",
         ".travis.yml",
         "bitbucket-pipelines.yml",
+        ".drone.yml",
+        ".drone.yaml",
+        "appveyor.yml",
+        ".appveyor.yml",
+        "cloudbuild.yaml",
+        "cloudbuild.yml",
     ]
     for ci in ci_candidates:
         p = root_path / ci
