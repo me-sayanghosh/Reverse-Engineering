@@ -106,7 +106,10 @@ def read_text_safe(path: str | Path, max_bytes: int = 1024 * 1024) -> str:
             try:
                 return data.decode("utf-16")
             except UnicodeDecodeError:
-                return data.decode("latin-1", errors="ignore")
+                try:
+                    return data.decode("utf-32")
+                except UnicodeDecodeError:
+                    return data.decode("latin-1", errors="ignore")
     except OSError:
         return ""
 
@@ -118,6 +121,13 @@ def is_binary(path: str | Path) -> bool:
             chunk = f.read(1024)
             if not chunk:
                 return False
+            # Check for UTF-32 BOM text files
+            if chunk.startswith((b"\xff\xfe\x00\x00", b"\x00\x00\xfe\xff")):
+                try:
+                    chunk.decode("utf-32")
+                    return False
+                except Exception:
+                    return True
             # Check for UTF-16 BOM text files
             if chunk.startswith((b"\xff\xfe", b"\xfe\xff")):
                 try:
