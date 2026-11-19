@@ -419,6 +419,10 @@ DATASTORE_PATTERNS = {
     "DynamoDB": ["dynamodb", "client-dynamodb"],
     "CouchDB": ["couchdb", "couchbase"],
     "CockroachDB": ["cockroach", "cockroachdb"],
+    "NATS": ["nats", "nats.go", "nats.js", "nats-py"],
+    "Meilisearch": ["meilisearch", "meilisearch-js", "meilisearch-python"],
+    "Supabase": ["@supabase/supabase-js", "supabase-py"],
+    "Firebase": ["firebase", "firebase-admin"],
 }
 
 
