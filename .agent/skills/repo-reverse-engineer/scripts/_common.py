@@ -222,6 +222,12 @@ EXT_TO_LANG: dict[str, str] = {
     ".v": "V",
     ".odin": "Odin",
     ".gleam": "Gleam",
+    ".elm": "Elm",
+    ".cr": "Crystal",
+    ".ml": "OCaml",
+    ".mli": "OCaml",
+    ".re": "ReasonML",
+    ".rei": "ReasonML",
 }
 
 
