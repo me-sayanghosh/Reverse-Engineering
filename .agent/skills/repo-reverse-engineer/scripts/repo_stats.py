@@ -73,6 +73,22 @@ def detect_monorepo(root_path: Path):
         if (root_path / wf).exists():
             signals.append(f"{name} config detected ({wf})")
 
+    # Discover pnpm workspace packages directly from config
+    pnpm_ws = root_path / "pnpm-workspace.yaml"
+    if pnpm_ws.exists():
+        try:
+            content = pnpm_ws.read_text(encoding="utf-8", errors="ignore")
+            import re
+            for m in re.finditer(r"""-\s*['"]?([a-zA-Z0-9_\-\.\*\/]+)['"]?""", content):
+                glob_pat = m.group(1).rstrip("/*")
+                cand_dir = root_path / glob_pat
+                if cand_dir.exists() and cand_dir.is_dir():
+                    for child in cand_dir.iterdir():
+                        if child.is_dir() and not child.name.startswith("."):
+                            packages.append(str(child.relative_to(root_path)))
+        except Exception:
+            pass
+
     # 2. Root manifest checks (package.json workspaces, Cargo.toml [workspace])
     pkg_json = root_path / "package.json"
     if pkg_json.exists():
@@ -185,9 +201,10 @@ def get_git_churn_hints(root_path: Path, top_n: int = 10):
             line = line.strip()
             if line and line not in seen:
                 seen.add(line)
-                recent_files.append(line)
-                if len(recent_files) >= top_n:
-                    break
+                if (root_path / line).exists():
+                    recent_files.append(line)
+                    if len(recent_files) >= top_n:
+                        break
         return recent_files
     except Exception:
         return []
@@ -227,6 +244,27 @@ def count_languages(root_path: Path):
             lang = "Docker"
         elif name == "makefile":
             lang = "Makefile"
+        elif not ext:
+            lang = "Other"
+            try:
+                with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                    first_line = f.readline().strip()
+                if first_line.startswith("#!"):
+                    fl_lower = first_line.lower()
+                    if "python" in fl_lower:
+                        lang = "Python"
+                    elif "node" in fl_lower or "deno" in fl_lower or "bun" in fl_lower:
+                        lang = "JavaScript"
+                    elif any(sh in fl_lower for sh in ["bash", "sh", "zsh"]):
+                        lang = "Shell"
+                    elif "ruby" in fl_lower:
+                        lang = "Ruby"
+                    elif "perl" in fl_lower:
+                        lang = "Perl"
+                    elif "php" in fl_lower:
+                        lang = "PHP"
+            except Exception:
+                pass
         else:
             lang = _common.EXT_TO_LANG.get(ext, "Other")
 

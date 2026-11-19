@@ -42,6 +42,47 @@ def find_manifest_entrypoints(root_path: Path):
                                 }
                             )
 
+                    # exports field
+                    if "exports" in pj:
+                        exp = pj["exports"]
+                        cand_files = []
+                        if isinstance(exp, str):
+                            cand_files.append(exp)
+                        elif isinstance(exp, dict):
+                            for k in [".", "import", "default", "node"]:
+                                if k in exp and isinstance(exp[k], str):
+                                    cand_files.append(exp[k])
+                                elif k in exp and isinstance(exp[k], dict):
+                                    for sub_k in ["import", "default", "node"]:
+                                        if sub_k in exp[k] and isinstance(exp[k][sub_k], str):
+                                            cand_files.append(exp[k][sub_k])
+                        for cf in cand_files:
+                            cf_path = (base_dir / cf).resolve()
+                            if cf_path.exists() and cf_path.is_file():
+                                rel_cf = str(cf_path.relative_to(root_path))
+                                entries.append(
+                                    {
+                                        "path": f"{rel_cf}:1",
+                                        "type": "main",
+                                        "confidence": 1.0,
+                                        "reason": f'Declared in "exports" of {file_path.relative_to(root_path)}',
+                                    }
+                                )
+                                break
+
+                    # module field
+                    if "module" in pj and isinstance(pj["module"], str):
+                        mod_file = (base_dir / pj["module"]).resolve()
+                        if mod_file.exists() and mod_file.is_file():
+                            entries.append(
+                                {
+                                    "path": f"{mod_file.relative_to(root_path)}:1",
+                                    "type": "main",
+                                    "confidence": 1.0,
+                                    "reason": f'Declared as "module" in {file_path.relative_to(root_path)}',
+                                }
+                            )
+
                     # bin field
                     if "bin" in pj:
                         bin_val = pj["bin"]
@@ -89,15 +130,35 @@ def find_manifest_entrypoints(root_path: Path):
             except Exception:
                 pass
 
-    # 2. Python __main__.py or pyproject.toml scripts
+    # 2. Python __main__.py, manage.py, wsgi/asgi, or pyproject.toml scripts
     for file_path in _common.walk_repo(root_path):
-        if file_path.name == "__main__.py":
+        name = file_path.name
+        rel = file_path.relative_to(root_path)
+        if name == "__main__.py":
             entries.append(
                 {
-                    "path": f"{file_path.relative_to(root_path)}:1",
+                    "path": f"{rel}:1",
                     "type": "main",
                     "confidence": 1.0,
                     "reason": "Canonical Python __main__.py module entrypoint",
+                }
+            )
+        elif name == "manage.py":
+            entries.append(
+                {
+                    "path": f"{rel}:1",
+                    "type": "cli",
+                    "confidence": 1.0,
+                    "reason": "Django manage.py CLI and server entrypoint",
+                }
+            )
+        elif name in ("wsgi.py", "asgi.py"):
+            entries.append(
+                {
+                    "path": f"{rel}:1",
+                    "type": "server",
+                    "confidence": 0.95,
+                    "reason": f"Python {name.replace('.py', '').upper()} application server entrypoint",
                 }
             )
 
@@ -187,10 +248,13 @@ def find_manifest_entrypoints(root_path: Path):
 
 BOOTSTRAP_PATTERNS = [
     (r"app\.listen\s*\(", "Express/Node app.listen bootstrap"),
+    (r"fastify\.listen\s*\(", "Fastify server listen bootstrap"),
+    (r"NestFactory\.create\s*\(", "NestJS NestFactory application bootstrap"),
     (r"createServer\s*\(", "Node http.createServer bootstrap"),
     (r"uvicorn\.run\s*\(", "Python uvicorn.run ASGI bootstrap"),
     (r"app\.run\s*\(", "Flask/Python app.run server bootstrap"),
     (r"http\.ListenAndServe\s*\(", "Go http.ListenAndServe server bootstrap"),
+    (r"(?:router|r)\.Run\s*\(", "Go Gin server router.Run bootstrap"),
     (r"@SpringBootApplication", "Spring Boot application bootstrap"),
     (r"HttpServer::new\s*\(", "Rust Actix-web server bootstrap"),
     (r"axum::serve\s*\(", "Rust Axum server bootstrap"),

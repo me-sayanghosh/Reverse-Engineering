@@ -80,10 +80,11 @@ def parse_sql_migrations(root_path: Path):
                     if first_token in ("CONSTRAINT", "PRIMARY", "FOREIGN", "INDEX", "KEY", "UNIQUE", "CHECK"):
                         continue
 
-                    # Column definition: name type ...
-                    if len(col_parts) >= 2:
-                        col_name = col_parts[0].strip('"`\'[]')
-                        col_type = col_parts[1].upper()
+                    # Column definition: name type (handling parameters like DECIMAL(10, 2))
+                    col_match = re.match(r"""^['"`]?(\w+)['"`]?\s+([A-Za-z0-9_]+(?:\s*\([^)]+\))?)""", line)
+                    if col_match:
+                        col_name = col_match.group(1)
+                        col_type = re.sub(r"\s+", "", col_match.group(2)).upper()
                         is_pk = "PRIMARY KEY" in line.upper()
 
                         # In-line REFERENCES other_table(other_col)
@@ -149,15 +150,20 @@ def parse_prisma_and_orm_entities(root_path: Path):
                     body = m.group(2)
                     columns = []
 
+                    composite_pk_match = re.search(r"@@id\s*\(\s*\[(.*?)\]\s*\)", body)
+                    composite_pks = set()
+                    if composite_pk_match:
+                        composite_pks = {f.strip() for f in composite_pk_match.group(1).split(",") if f.strip()}
+
                     for raw_line in body.splitlines():
                         line = raw_line.strip()
-                        if not line or line.startswith("//"):
+                        if not line or line.startswith("//") or line.startswith("@@"):
                             continue
                         parts = line.split()
                         if len(parts) >= 2:
                             f_name = parts[0]
                             f_type = parts[1]
-                            is_pk = "@id" in line
+                            is_pk = "@id" in line or f_name in composite_pks
 
                             # Check relation: e.g. author User @relation(fields: [authorId], references: [id])
                             rel_m = re.search(r"@relation\s*\((.*?)\)", line)
@@ -305,7 +311,13 @@ def parse_mongoose_schemas(root_path: Path):
 
                         # Extract type
                         type_m = re.search(r"""type\s*:\s*([a-zA-Z0-9_.]+)""", f_def)
-                        col_type = type_m.group(1) if type_m else f_def.split()[0].rstrip(",{}")
+                        if type_m:
+                            col_type = type_m.group(1)
+                        elif f_def.strip().startswith("["):
+                            inner_tok = f_def.strip().lstrip("[").split()[0].rstrip("],{}")
+                            col_type = f"Array<{inner_tok}>" if inner_tok else "Array"
+                        else:
+                            col_type = f_def.split()[0].rstrip(",{}")
                         columns.append(
                             {
                                 "name": f_name,
@@ -368,7 +380,7 @@ def parse_python_models(root_path: Path):
 
                     # Parse fields in class body
                     for item in node.body:
-                        # 1. Pydantic style type annotations: name: str
+                        # 1. Type annotated models (Pydantic, SQLAlchemy 2.0 Mapped, Dataclasses)
                         if isinstance(item, ast.AnnAssign) and isinstance(item.target, ast.Name):
                             f_name = item.target.id
                             f_type = "any"
@@ -376,7 +388,26 @@ def parse_python_models(root_path: Path):
                                 f_type = item.annotation.id
                             elif isinstance(item.annotation, ast.Attribute):
                                 f_type = item.annotation.attr
-                            is_pk = f_name == "id"
+                            elif isinstance(item.annotation, ast.Subscript) and hasattr(ast, "unparse"):
+                                f_type = ast.unparse(item.annotation.slice)
+
+                            val_str = ast.unparse(item.value) if (item.value and hasattr(ast, "unparse")) else ""
+                            is_pk = "primary_key=True" in val_str or f_name == "id"
+
+                            # SQLAlchemy 2.0 ForeignKey check
+                            if "ForeignKey" in val_str:
+                                fk_m = re.search(r"""ForeignKey\s*\(\s*['"]([a-zA-Z0-9_.]+)(?:\.[a-zA-Z0-9_]+)?['"]""", val_str)
+                                if fk_m:
+                                    target_model = fk_m.group(1).split(".")[0]
+                                    relations.append(
+                                        {
+                                            "from": model_name,
+                                            "to": target_model,
+                                            "from_column": f_name,
+                                            "type": "foreign_key",
+                                        }
+                                    )
+
                             columns.append({"name": f_name, "type": f_type, "primary_key": is_pk})
 
                         # 2. SQLAlchemy / Django style assignments: col = Column(...)
@@ -522,6 +553,7 @@ def render_mermaid_erd(entities: list, relations: list, max_entities: int = 25) 
     # Cap entities at max_entities
     selected_entities = entities[:max_entities]
     selected_names = {e["name"] for e in selected_entities}
+    name_map = {e["name"]: re.sub(r"[^a-zA-Z0-9_]", "_", e["name"]).strip("_") or "Entity" for e in selected_entities}
 
     # Render relationships for selected entities
     rendered_relations = set()
@@ -529,21 +561,23 @@ def render_mermaid_erd(entities: list, relations: list, max_entities: int = 25) 
         src = rel.get("from")
         tgt = rel.get("to")
         if src in selected_names and tgt in selected_names:
-            rel_key = (src, tgt)
+            safe_src = name_map[src]
+            safe_tgt = name_map[tgt]
+            rel_key = (safe_src, safe_tgt)
             if rel_key not in rendered_relations:
                 rendered_relations.add(rel_key)
                 # Mermaid ERD syntax: A ||--o{ B : "references"
-                lines.append(f'  {src} ||--o{{ {tgt} : "references"')
+                lines.append(f'  {safe_src} ||--o{{ {safe_tgt} : "references"')
 
     # Render entity field blocks
     for ent in selected_entities:
-        name = ent["name"]
+        name = name_map[ent["name"]]
         cols = ent.get("columns", [])
         if cols:
             lines.append(f"  {name} {{")
             for c in cols[:12]:  # cap columns per entity to keep readable
-                c_name = re.sub(r"[^a-zA-Z0-9_]", "_", c["name"])
-                c_type = re.sub(r"[^a-zA-Z0-9_]", "_", c.get("type", "string"))
+                c_name = re.sub(r"[^a-zA-Z0-9_]", "_", c["name"]).strip("_") or "field"
+                c_type = re.sub(r"[^a-zA-Z0-9_]", "_", c.get("type", "string")).strip("_") or "string"
                 pk_marker = " PK" if c.get("primary_key") else ""
                 lines.append(f"    {c_type} {c_name}{pk_marker}")
             lines.append("  }")
