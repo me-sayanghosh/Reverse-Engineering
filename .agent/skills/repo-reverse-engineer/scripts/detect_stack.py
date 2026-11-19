@@ -37,6 +37,15 @@ MANIFEST_TO_ECOSYSTEM: dict[str, str] = {
     "cabal.project": "Haskell",
     "shard.yml": "Crystal",
     "dune-project": "OCaml",
+    "CMakeLists.txt": "C/C++",
+    "build.zig": "Zig",
+    "gleam.toml": "Gleam",
+    "v.mod": "V",
+    "elm.json": "Elm",
+    "MODULE.bazel": "Bazel",
+    "WORKSPACE": "Bazel",
+    "BUILD.bazel": "Bazel",
+    "meson.build": "Meson",
     ".csproj": ".NET/C#",
     ".fsproj": ".NET/F#",
     ".sln": ".NET",
@@ -116,6 +125,18 @@ NODE_PKG_TO_FRAMEWORK: dict[str, str] = {
     "drizzle-orm": "Drizzle ORM",
     "commander": "Commander",
     "yargs": "Yargs",
+    "elysia": "Elysia",
+    "@adonisjs/core": "AdonisJS",
+    "zustand": "Zustand",
+    "jotai": "Jotai",
+    "pinia": "Pinia",
+    "redux": "Redux",
+    "@reduxjs/toolkit": "Redux Toolkit",
+    "turbopack": "Turbopack",
+    "unocss": "UnoCSS",
+    "effector": "Effector",
+    "mobx": "MobX",
+    "lit": "Lit",
 }
 
 
@@ -164,6 +185,12 @@ PYTHON_PKG_TO_FRAMEWORK: dict[str, str] = {
     "peewee": "Peewee",
     "tortoise": "Tortoise-ORM",
     "beanie": "Beanie",
+    "mongoengine": "MongoEngine",
+    "sqlmodel": "SQLModel",
+    "strawberry-graphql": "Strawberry GraphQL",
+    "rq": "RQ",
+    "dramatiq": "Dramatiq",
+    "marshmallow": "Marshmallow",
     "click": "Click",
     "typer": "Typer",
     "polars": "Polars",
@@ -171,6 +198,11 @@ PYTHON_PKG_TO_FRAMEWORK: dict[str, str] = {
     "scipy": "SciPy",
     "numpy": "NumPy",
     "scrapy": "Scrapy",
+    "gradio": "Gradio",
+    "streamlit": "Streamlit",
+    "langchain": "LangChain",
+    "llama-index": "LlamaIndex",
+    "duckdb": "DuckDB",
 }
 
 
@@ -377,6 +409,46 @@ def detect_infra(root_path: Path):
             if "Cloud Build" not in seen_types:
                 infra.append({"type": "Cloud Build", "file": rel_path})
                 seen_types.add("Cloud Build")
+        elif name == "jenkinsfile" or name.startswith("jenkinsfile."):
+            if "Jenkins" not in seen_types:
+                infra.append({"type": "Jenkins", "file": rel_path})
+                seen_types.add("Jenkins")
+        elif name in (".drone.yml", ".drone.yaml"):
+            if "Drone CI" not in seen_types:
+                infra.append({"type": "Drone CI", "file": rel_path})
+                seen_types.add("Drone CI")
+        elif name in ("appveyor.yml", ".appveyor.yml"):
+            if "AppVeyor" not in seen_types:
+                infra.append({"type": "AppVeyor", "file": rel_path})
+                seen_types.add("AppVeyor")
+        elif name in ("bitbucket-pipelines.yml", "bitbucket-pipelines.yaml"):
+            if "Bitbucket Pipelines" not in seen_types:
+                infra.append({"type": "Bitbucket Pipelines", "file": rel_path})
+                seen_types.add("Bitbucket Pipelines")
+        elif name in ("pulumi.yaml", "pulumi.yml"):
+            if "Pulumi" not in seen_types:
+                infra.append({"type": "Pulumi", "file": rel_path})
+                seen_types.add("Pulumi")
+        elif name in ("wrangler.toml", "wrangler.json", "wrangler.jsonc"):
+            if "Cloudflare Workers" not in seen_types:
+                infra.append({"type": "Cloudflare Workers", "file": rel_path})
+                seen_types.add("Cloudflare Workers")
+        elif name == "fly.toml":
+            if "Fly.io" not in seen_types:
+                infra.append({"type": "Fly.io", "file": rel_path})
+                seen_types.add("Fly.io")
+        elif name in ("render.yaml", "render.yml"):
+            if "Render" not in seen_types:
+                infra.append({"type": "Render", "file": rel_path})
+                seen_types.add("Render")
+        elif name in ("ansible.cfg", "playbook.yml", "playbook.yaml", "site.yml", "site.yaml"):
+            if "Ansible" not in seen_types:
+                infra.append({"type": "Ansible", "file": rel_path})
+                seen_types.add("Ansible")
+        elif name == "vagrantfile":
+            if "Vagrant" not in seen_types:
+                infra.append({"type": "Vagrant", "file": rel_path})
+                seen_types.add("Vagrant")
         elif "k8s" in file_path.parts or "kubernetes" in file_path.parts or name.endswith(".k8s.yaml"):
             if "Kubernetes" not in seen_types:
                 infra.append({"type": "Kubernetes", "file": rel_path})
@@ -401,6 +473,14 @@ DATASTORE_PATTERNS = {
     "DynamoDB": ["dynamodb", "client-dynamodb"],
     "CouchDB": ["couchdb", "couchbase"],
     "CockroachDB": ["cockroach", "cockroachdb"],
+    "NATS": ["nats", "nats.go", "nats.js", "nats-py"],
+    "Meilisearch": ["meilisearch", "meilisearch-js", "meilisearch-python"],
+    "Supabase": ["@supabase/supabase-js", "supabase-py"],
+    "Firebase": ["firebase", "firebase-admin"],
+    "Qdrant": ["qdrant-client", "@qdrant/js-client-rest", "qdrant"],
+    "ChromaDB": ["chromadb", "chroma-client"],
+    "Milvus": ["pymilvus", "@zilliz/milvus2-sdk-node"],
+    "Weaviate": ["weaviate-client", "weaviate-ts-client"],
 }
 
 
@@ -519,21 +599,59 @@ def infer_commands(root_path: Path, ecosystems: list):
             break
 
     # Fallback by ecosystem if not already discovered
+    if any("Node" in e or "TypeScript" in e for e in ecosystems):
+        commands.setdefault("install", "npm install")
+        commands.setdefault("test", "npm test")
+        commands.setdefault("start", "npm start")
     if "Python" in ecosystems or any("Python" in e for e in ecosystems):
         commands.setdefault("install", "pip install -r requirements.txt")
         commands.setdefault("test", "pytest")
         commands.setdefault("start", "python main.py")
-    elif "Go" in ecosystems:
+    if "Go" in ecosystems:
         commands.setdefault("build", "go build ./...")
         commands.setdefault("test", "go test ./...")
         commands.setdefault("start", "go run main.go")
-    elif "Rust" in ecosystems:
+    if "Rust" in ecosystems:
         commands.setdefault("build", "cargo build")
         commands.setdefault("test", "cargo test")
         commands.setdefault("start", "cargo run")
-    elif any("Deno" in e for e in ecosystems):
+    if any("Deno" in e for e in ecosystems):
         commands.setdefault("test", "deno test")
         commands.setdefault("start", "deno run main.ts")
+    if "Bun" in ecosystems:
+        commands.setdefault("install", "bun install")
+        commands.setdefault("test", "bun test")
+        commands.setdefault("start", "bun run start")
+    if "Zig" in ecosystems:
+        commands.setdefault("build", "zig build")
+        commands.setdefault("test", "zig test")
+    if "C/C++" in ecosystems:
+        commands.setdefault("build", "cmake -B build && cmake --build build")
+        commands.setdefault("test", "ctest --test-dir build")
+    if any("Maven" in e for e in ecosystems):
+        commands.setdefault("build", "mvn compile")
+        commands.setdefault("test", "mvn test")
+        commands.setdefault("start", "mvn exec:java")
+    if any("Gradle" in e for e in ecosystems):
+        commands.setdefault("build", "./gradlew build")
+        commands.setdefault("test", "./gradlew test")
+        commands.setdefault("start", "./gradlew run")
+    if "Ruby" in ecosystems:
+        commands.setdefault("install", "bundle install")
+        commands.setdefault("test", "bundle exec rspec")
+    if "PHP" in ecosystems:
+        commands.setdefault("install", "composer install")
+        commands.setdefault("test", "composer test")
+    if "Elixir" in ecosystems:
+        commands.setdefault("install", "mix deps.get")
+        commands.setdefault("test", "mix test")
+    if any("Flutter" in e or "Dart" in e for e in ecosystems):
+        commands.setdefault("install", "flutter pub get" if any("Flutter" in e for e in ecosystems) else "dart pub get")
+        commands.setdefault("test", "flutter test" if any("Flutter" in e for e in ecosystems) else "dart test")
+    if any(".NET" in e for e in ecosystems):
+        commands.setdefault("build", "dotnet build")
+        commands.setdefault("test", "dotnet test")
+        commands.setdefault("start", "dotnet run")
 
     return commands
 
@@ -545,8 +663,14 @@ def detect_suspicious_scripts(root_path: Path):
     suspicious_patterns = [
         (r"curl\s+.*?\|\s*(?:ba)?sh", "Piped curl execution"),
         (r"wget\s+.*?\|\s*(?:ba)?sh", "Piped wget execution"),
+        (r"(?:ba)?sh\s+-[c]\s+['\"]?\$\((?:curl|wget)", "Subshell command substitution curl execution"),
+        (r"(?:ba)?sh\s+<\((?:curl|wget)", "Process substitution curl execution"),
         (r"eval\s*\(", "Eval invocation in script"),
         (r"base64\s+(?:-d|--decode)", "Base64 payload decoding"),
+        (r"nc\s+-[el]\s+", "Netcat reverse shell"),
+        (r"/dev/tcp/\d+\.\d+\.\d+\.\d+", "Bash raw TCP socket reverse shell"),
+        (r"powershell\s+.*-(?:enc|encodedcommand)\b", "PowerShell encoded command execution"),
+        (r"python\s+-c\s+['\"].*import\s+(?:socket|pty)", "Python reverse shell payload"),
     ]
 
     for pkg_json in _common.walk_repo(root_path):

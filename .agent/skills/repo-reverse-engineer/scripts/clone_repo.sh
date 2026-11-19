@@ -50,6 +50,9 @@ while [[ $# -gt 0 ]]; do
                 exit 1
             fi
             SUBDIR="$2"
+            SUBDIR="${SUBDIR#./}"
+            SUBDIR="${SUBDIR#/}"
+            SUBDIR="${SUBDIR%/}"
             shift 2
             ;;
         --out)
@@ -116,11 +119,19 @@ elif [[ "$TARGET" =~ ^git@github\.com:([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+?)((\.gi
     TARGET_TYPE="github_ssh"
     REPO_NAME="${BASH_REMATCH[2]%.git}"
     CLONE_URL="git@github.com:${BASH_REMATCH[1]}/${REPO_NAME}.git"
-elif [[ "$TARGET" =~ ^ssh://git@([a-zA-Z0-9_.-]+)(:[0-9]+)?/([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+?)((\.git)?/?)$ ]]; then
+elif [[ "$TARGET" =~ ^git@gitlab\.com:(.+)/([a-zA-Z0-9_.-]+?)((\.git)?/?)$ ]]; then
+    TARGET_TYPE="gitlab_ssh"
+    REPO_NAME="${BASH_REMATCH[2]%.git}"
+    CLONE_URL="git@gitlab.com:${BASH_REMATCH[1]}/${REPO_NAME}.git"
+elif [[ "$TARGET" =~ ^git@bitbucket\.org:([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+?)((\.git)?/?)$ ]]; then
+    TARGET_TYPE="bitbucket_ssh"
+    REPO_NAME="${BASH_REMATCH[2]%.git}"
+    CLONE_URL="git@bitbucket.org:${BASH_REMATCH[1]}/${REPO_NAME}.git"
+elif [[ "$TARGET" =~ ^ssh://git@([a-zA-Z0-9_.-]+)(:[0-9]+)?/(.+)/([a-zA-Z0-9_.-]+?)((\.git)?/?)$ ]]; then
     TARGET_TYPE="git_ssh_url"
     REPO_NAME="${BASH_REMATCH[4]%.git}"
     CLONE_URL="$TARGET"
-elif [[ "$TARGET" =~ ^https?://gitlab\.com/([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+?)((\.git)?/?)$ ]]; then
+elif [[ "$TARGET" =~ ^https?://gitlab\.com/(.+)/([a-zA-Z0-9_.-]+?)((\.git)?/?)$ ]]; then
     TARGET_TYPE="gitlab_https"
     REPO_NAME="${BASH_REMATCH[2]%.git}"
     CLONE_URL="https://gitlab.com/${BASH_REMATCH[1]}/${REPO_NAME}.git"
@@ -128,6 +139,10 @@ elif [[ "$TARGET" =~ ^https?://bitbucket\.org/([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+
     TARGET_TYPE="bitbucket_https"
     REPO_NAME="${BASH_REMATCH[2]%.git}"
     CLONE_URL="https://bitbucket.org/${BASH_REMATCH[1]}/${REPO_NAME}.git"
+elif [[ "$TARGET" =~ ^https?://([a-zA-Z0-9_.-]+)/(?:.+/)?([a-zA-Z0-9_.-]+?)\.git/?$ ]]; then
+    TARGET_TYPE="git_https_url"
+    REPO_NAME="${BASH_REMATCH[2]}"
+    CLONE_URL="$TARGET"
 elif [[ "$TARGET" =~ ^([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+?)((\.git)?/?)$ ]]; then
     TARGET_TYPE="shorthand"
     REPO_NAME="${BASH_REMATCH[2]%.git}"
@@ -151,12 +166,15 @@ fi
 
 check_repo_size() {
     if [[ "$TARGET_TYPE" != "local" ]]; then
-        python3 - << PYEOF
-import sys, urllib.request, json, re
+        CHECK_CLONE_URL="$CLONE_URL" \
+        CHECK_MAX_MB="$MAX_MB" \
+        CHECK_YES="$YES" \
+        python3 - << 'PYEOF'
+import sys, urllib.request, json, re, os
 
-clone_url = "$CLONE_URL"
-max_mb = float("$MAX_MB")
-skip_confirm = int("$YES")
+clone_url = os.environ.get("CHECK_CLONE_URL", "")
+max_mb = float(os.environ.get("CHECK_MAX_MB", "500"))
+skip_confirm = int(os.environ.get("CHECK_YES", "0"))
 
 match = re.search(r"github\.com[:/]([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+?)(?:\.git)?$", clone_url)
 if not match:
@@ -192,12 +210,15 @@ REPO_DIR="$OUT_DIR"
 if [[ "$TARGET_TYPE" == "local" ]]; then
     REPO_DIR="$LOCAL_PATH"
 else
-    CLONE_ARGS=(--depth 1)
+    CLONE_ARGS=(--depth 1 --recurse-submodules --shallow-submodules)
     if [[ -n "$BRANCH" ]]; then
         CLONE_ARGS+=(--branch "$BRANCH")
     fi
     if [[ -n "$SUBDIR" ]]; then
-        CLONE_ARGS+=(--filter=blob:none --sparse)
+        CLONE_ARGS=(--depth 1 --filter=blob:none --sparse)
+        if [[ -n "$BRANCH" ]]; then
+            CLONE_ARGS+=(--branch "$BRANCH")
+        fi
     fi
 
     # Remove empty OUT_DIR if it was created so git clone can populate it
@@ -211,6 +232,8 @@ else
             echo "Error: Network failure connecting to remote host." >&2
         elif echo "$CLONE_OUTPUT" | grep -qiE "Remote branch .* not found"; then
             echo "Error: Branch '$BRANCH' not found on remote repository." >&2
+        elif echo "$CLONE_OUTPUT" | grep -qiE "already exists and is not an empty directory"; then
+            echo "Error: Destination directory '$OUT_DIR' already exists and is not empty." >&2
         elif echo "$CLONE_OUTPUT" | grep -qiE "Authentication failed|could not read Username|Repository not found"; then
             echo "Error: Private repository or authentication required for $CLONE_URL." >&2
         else
@@ -227,10 +250,10 @@ fi
 
 detect_license() {
     local target_dir="$1"
-    python3 - << PYEOF
+    TARGET_DIR="$target_dir" python3 - << 'PYEOF'
 import os, sys, glob, re
 
-target_dir = "$target_dir"
+target_dir = os.environ.get("TARGET_DIR", "")
 patterns = ["LICENSE*", "LICENCE*", "COPYING*", "UNLICENSE*", "license*", "licence*", "copying*", "unlicense*"]
 candidates = []
 for pat in patterns:
@@ -261,7 +284,9 @@ try:
         elif "bsd 3-clause" in head_lower or "redistribution and use in source and binary forms" in head_lower:
             spdx = "BSD"
         elif "mozilla public license" in head_lower:
-            spdx = "MPL-2.0"
+            spdx = "MPL-2.0" if "2.0" in head_lower else "MPL-1.1"
+        elif "wtfpl" in head_lower or "do what the fuck you want to public license" in head_lower:
+            spdx = "WTFPL"
         elif "isc license" in head_lower or "permission to use, copy, modify, and/or distribute this software" in head_lower:
             spdx = "ISC"
         elif "unlicense" in head_lower or "free and unencumbered software released into the public domain" in head_lower:

@@ -31,29 +31,42 @@ def parse_sql_migrations(root_path: Path):
         rel = str(file_path.relative_to(root_path))
         try:
             content = file_path.read_text(encoding="utf-8", errors="ignore")
-            # Match CREATE TABLE statements (handling optional table options like ENGINE=InnoDB)
-            create_table_matches = re.finditer(
-                r"""CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?(?:['"`]?\w+['"`]?\.)?['"`]?(\w+)['"`]?\s*\((.*?)\)(?:\s*[^;]*)?;""",
-                content,
-                re.IGNORECASE | re.DOTALL,
+            # Match CREATE TABLE statements with depth-balanced parentheses to support nested constraints and types
+            create_table_start_pattern = re.compile(
+                r"""CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?(?:['"`]?\w+['"`]?\.)?['"`]?(\w+)['"`]?\s*\(""",
+                re.IGNORECASE,
             )
 
-            for tm in create_table_matches:
+            for tm in create_table_start_pattern.finditer(content):
                 table_name = tm.group(1)
-                body = tm.group(2)
+                start_idx = tm.end()
+                depth = 1
+                i = start_idx
+                while i < len(content) and depth > 0:
+                    if content[i] == "(":
+                        depth += 1
+                    elif content[i] == ")":
+                        depth -= 1
+                    i += 1
+                if depth != 0:
+                    continue
+                body = content[start_idx : i - 1]
                 columns = []
                 fks = []
 
-                # Extract standalone or CONSTRAINT foreign key definitions across body
+                # Extract standalone or CONSTRAINT foreign key definitions across body (supporting composite keys)
                 table_fks = re.finditer(
-                    r"""(?:CONSTRAINT\s+['"`]?\w+['"`]?\s+)?FOREIGN\s+KEY\s*\(['"`]?(\w+)['"`]?\)\s*REFERENCES\s+['"`]?(\w+)['"`]?\s*(?:\(['"`]?(\w+)['"`]?\))?""",
+                    r"""(?:CONSTRAINT\s+['"`]?\w+['"`]?\s+)?FOREIGN\s+KEY\s*\(([^)]+)\)\s*REFERENCES\s+['"`]?(\w+)['"`]?\s*(?:\(([^)]+)\))?""",
                     body,
                     re.IGNORECASE,
                 )
                 for fkm in table_fks:
-                    from_col = fkm.group(1)
+                    from_cols = [c.strip().strip('"`\' ') for c in fkm.group(1).split(",") if c.strip()]
                     to_table = fkm.group(2)
-                    to_col = fkm.group(3) or "id"
+                    raw_to_cols = fkm.group(3)
+                    to_cols = [c.strip().strip('"`\' ') for c in raw_to_cols.split(",") if c.strip()] if raw_to_cols else ["id"]
+                    from_col = from_cols[0] if len(from_cols) == 1 else ", ".join(from_cols)
+                    to_col = to_cols[0] if len(to_cols) == 1 else ", ".join(to_cols)
                     fk_obj = {"from_column": from_col, "target_table": to_table, "target_column": to_col}
                     if fk_obj not in fks:
                         fks.append(fk_obj)
@@ -66,6 +79,15 @@ def parse_sql_migrations(root_path: Path):
                                 "type": "foreign_key",
                             }
                         )
+
+                # Extract table-level primary key definitions: PRIMARY KEY (col1, col2)
+                table_pk_match = re.search(r"""(?:CONSTRAINT\s+['"`]?\w+['"`]?\s+)?PRIMARY\s+KEY\s*\(([^)]+)\)""", body, re.IGNORECASE)
+                table_pks = set()
+                if table_pk_match:
+                    for raw_col in table_pk_match.group(1).split(","):
+                        clean_col = raw_col.strip().strip('"`\'[] ')
+                        if clean_col:
+                            table_pks.add(clean_col)
 
                 for raw_line in body.splitlines():
                     line = raw_line.strip().rstrip(",")
@@ -85,7 +107,13 @@ def parse_sql_migrations(root_path: Path):
                     if col_match:
                         col_name = col_match.group(1)
                         col_type = re.sub(r"\s+", "", col_match.group(2)).upper()
-                        is_pk = "PRIMARY KEY" in line.upper()
+                        is_pk = (
+                            "PRIMARY KEY" in line.upper()
+                            or col_name in table_pks
+                            or "AUTOINCREMENT" in line.upper()
+                            or "AUTO_INCREMENT" in line.upper()
+                            or col_type in ("SERIAL", "BIGSERIAL", "SMALLSERIAL")
+                        )
 
                         # In-line REFERENCES other_table(other_col)
                         inline_fk = re.search(
@@ -206,9 +234,9 @@ def parse_prisma_and_orm_entities(root_path: Path):
                         entity_name = m_entity.group(1)
                         columns = []
                         # Detect columns
-                        for col_m in re.finditer(r"@(Column|PrimaryGeneratedColumn)\s*\([^\)]*\)\s*([a-zA-Z0-9_]+)(?:\s*[:=]\s*([a-zA-Z0-9_]+))?", content):
+                        for col_m in re.finditer(r"@(Column|PrimaryColumn|PrimaryGeneratedColumn|ObjectIdColumn|CreateDateColumn|UpdateDateColumn|DeleteDateColumn)\s*\([^\)]*\)\s*([a-zA-Z0-9_]+)(?:\s*[:=]\s*([a-zA-Z0-9_]+))?", content):
                             col_type = col_m.group(3) or "any"
-                            is_pk = col_m.group(1) == "PrimaryGeneratedColumn"
+                            is_pk = col_m.group(1) in ("PrimaryGeneratedColumn", "PrimaryColumn", "ObjectIdColumn")
                             columns.append({"name": col_m.group(2), "type": col_type, "primary_key": is_pk})
 
                         # Detect relations
@@ -369,7 +397,7 @@ def parse_python_models(root_path: Path):
                             base_names.append(b.attr)
 
                     is_model = any(
-                        b in ("Base", "Model", "BaseModel", "DeclarativeBase")
+                        b in ("Base", "Model", "BaseModel", "DeclarativeBase", "SQLModel", "Document")
                         for b in base_names
                     )
                     if not is_model:
@@ -394,17 +422,42 @@ def parse_python_models(root_path: Path):
                             val_str = ast.unparse(item.value) if (item.value and hasattr(ast, "unparse")) else ""
                             is_pk = "primary_key=True" in val_str or f_name == "id"
 
-                            # SQLAlchemy 2.0 ForeignKey check
-                            if "ForeignKey" in val_str:
-                                fk_m = re.search(r"""ForeignKey\s*\(\s*['"]([a-zA-Z0-9_.]+)(?:\.[a-zA-Z0-9_]+)?['"]""", val_str)
-                                if fk_m:
-                                    target_model = fk_m.group(1).split(".")[0]
+                            # SQLAlchemy 2.0 / SQLModel / Peewee ForeignKey check
+                            if "ForeignKey" in val_str or "foreign_key" in val_str:
+                                fk_m = re.search(r"""(?:ForeignKeyField|ForeignKey|foreign_key)\s*(?:\(\s*|=)\s*['"]?([a-zA-Z0-9_.]+)?['"]?""", val_str)
+                                if fk_m and fk_m.group(1):
+                                    fk_parts = fk_m.group(1).split(".")
+                                    target_model = fk_parts[-1] if fk_parts[-1] and fk_parts[-1][0].isupper() else fk_parts[0]
                                     relations.append(
                                         {
                                             "from": model_name,
                                             "to": target_model,
                                             "from_column": f_name,
                                             "type": "foreign_key",
+                                        }
+                                    )
+
+                            # Relationship / ManyToMany / OneToOne check
+                            rel_check = re.search(r"""(?:relationship|ManyToManyField|OneToOneField)\s*\(\s*['"]?([a-zA-Z0-9_]+)['"]?""", val_str)
+                            if rel_check:
+                                target_model = rel_check.group(1)
+                                relations.append(
+                                    {
+                                        "from": model_name,
+                                        "to": target_model,
+                                        "from_column": f_name,
+                                        "type": "relationship",
+                                    }
+                                )
+                            elif "relationship" in val_str:
+                                m_inner = re.search(r"""(?:list|set|Sequence|Optional)?\[?([a-zA-Z0-9_]+)\]?""", f_type)
+                                if m_inner and m_inner.group(1) not in ("any", "list", "set", "dict", "int", "str"):
+                                    relations.append(
+                                        {
+                                            "from": model_name,
+                                            "to": m_inner.group(1),
+                                            "from_column": f_name,
+                                            "type": "relationship",
                                         }
                                     )
 
@@ -419,15 +472,30 @@ def parse_python_models(root_path: Path):
                                     is_pk = "primary_key=True" in val_str or f_name == "id"
 
                                     # Foreign key check
-                                    fk_m = re.search(r"""ForeignKey\s*\(\s*['"]([a-zA-Z0-9_.]+)(?:\.[a-zA-Z0-9_]+)?['"]""", val_str)
-                                    if fk_m:
-                                        target_model = fk_m.group(1).split(".")[0]
+                                    if "ForeignKey" in val_str or "foreign_key" in val_str:
+                                        fk_m = re.search(r"""(?:ForeignKeyField|ForeignKey|foreign_key)\s*(?:\(\s*|=)\s*['"]?([a-zA-Z0-9_.]+)?['"]?""", val_str)
+                                        if fk_m and fk_m.group(1):
+                                            fk_parts = fk_m.group(1).split(".")
+                                            target_model = fk_parts[-1] if fk_parts[-1] and fk_parts[-1][0].isupper() else fk_parts[0]
+                                            relations.append(
+                                                {
+                                                    "from": model_name,
+                                                    "to": target_model,
+                                                    "from_column": f_name,
+                                                    "type": "foreign_key",
+                                                }
+                                            )
+
+                                    # Relationship / ManyToMany / OneToOne check
+                                    rel_check = re.search(r"""(?:relationship|ManyToManyField|OneToOneField)\s*\(\s*['"]?([a-zA-Z0-9_]+)['"]?""", val_str)
+                                    if rel_check:
+                                        target_model = rel_check.group(1)
                                         relations.append(
                                             {
                                                 "from": model_name,
                                                 "to": target_model,
                                                 "from_column": f_name,
-                                                "type": "foreign_key",
+                                                "type": "relationship",
                                             }
                                         )
 
@@ -439,7 +507,14 @@ def parse_python_models(root_path: Path):
 
                                     columns.append({"name": f_name, "type": col_type, "primary_key": is_pk})
 
-                    source_type = "Pydantic" if "BaseModel" in base_names else "SQLAlchemy/Django"
+                    if "SQLModel" in base_names:
+                        source_type = "SQLModel"
+                    elif "Document" in base_names:
+                        source_type = "Document/Beanie"
+                    elif "BaseModel" in base_names:
+                        source_type = "Pydantic"
+                    else:
+                        source_type = "SQLAlchemy/Django"
                     entities[model_name] = {
                         "name": model_name,
                         "file": rel,
@@ -453,9 +528,10 @@ def parse_python_models(root_path: Path):
 
 
 def parse_other_data_models(root_path: Path):
-    """Parse GORM structs (Go), JPA @Entity (Java), and Diesel/SeaORM (Rust) models."""
+    """Parse GORM structs (Go), JPA @Entity (Java), and Diesel/SeaORM (Rust) models and relations."""
     root_path = root_path.resolve()
     entities = {}
+    relations = []
 
     for file_path in _common.walk_repo(root_path):
         if _common.is_binary(file_path):
@@ -479,6 +555,19 @@ def parse_other_data_models(root_path: Path):
                                 f_type = parts[1]
                                 is_pk = "primaryKey" in line or f_name in ("ID", "Id")
                                 columns.append({"name": f_name, "type": f_type, "primary_key": is_pk})
+                                if (
+                                    f_type not in ("string", "int", "int64", "uint", "uint64", "bool", "float64", "time.Time", "gorm.Model")
+                                    and f_type[0].isupper()
+                                ):
+                                    target_struct = f_type.lstrip("[]*")
+                                    relations.append(
+                                        {
+                                            "from": struct_name,
+                                            "to": target_struct,
+                                            "from_column": f_name,
+                                            "type": "gorm_relation",
+                                        }
+                                    )
                         entities[struct_name] = {
                             "name": struct_name,
                             "file": rel,
@@ -504,6 +593,25 @@ def parse_other_data_models(root_path: Path):
                                 f_name = m_field.group(2)
                                 is_pk = f_name.lower() == "id" or "@Id" in line
                                 columns.append({"name": f_name, "type": f_type, "primary_key": is_pk})
+
+                        # Extract JPA relationships
+                        for rel_m in re.finditer(
+                            r"""@(ManyToOne|OneToMany|OneToOne|ManyToMany)[^;]*?(?:private|protected|public)\s+([a-zA-Z0-9_<>]+)\s+([a-zA-Z0-9_]+)\s*;""",
+                            content,
+                            re.DOTALL,
+                        ):
+                            rel_type = rel_m.group(1)
+                            raw_target = rel_m.group(2)
+                            target_entity = re.sub(r"""^(?:List|Set|Collection)<([a-zA-Z0-9_]+)>$""", r"\1", raw_target)
+                            relations.append(
+                                {
+                                    "from": class_name,
+                                    "to": target_entity,
+                                    "from_column": rel_m.group(3),
+                                    "type": f"jpa_{rel_type}",
+                                }
+                            )
+
                         entities[class_name] = {
                             "name": class_name,
                             "file": rel,
@@ -539,7 +647,7 @@ def parse_other_data_models(root_path: Path):
             except Exception:
                 pass
 
-    return list(entities.values())
+    return list(entities.values()), relations
 
 
 def render_mermaid_erd(entities: list, relations: list, max_entities: int = 25) -> str:
@@ -607,7 +715,7 @@ def main():
     prisma_entities, prisma_relations = parse_prisma_and_orm_entities(root_path)
     mongoose_entities, mongoose_relations = parse_mongoose_schemas(root_path)
     python_entities, python_relations = parse_python_models(root_path)
-    other_entities = parse_other_data_models(root_path)
+    other_entities, other_relations = parse_other_data_models(root_path)
 
     all_entities = (
         sql_entities
@@ -621,6 +729,7 @@ def main():
         + prisma_relations
         + mongoose_relations
         + python_relations
+        + other_relations
     )
 
     data = {

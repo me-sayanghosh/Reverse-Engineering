@@ -32,7 +32,20 @@ def get_tree_summary(root_path: Path, max_depth: int = 3):
         dirnames[:] = [
             d
             for d in dirnames
-            if d not in _common.DEFAULT_IGNORED_DIRS and not d.startswith(".")
+            if d not in _common.DEFAULT_IGNORED_DIRS
+            and (
+                not d.startswith(".")
+                or d in (
+                    ".github",
+                    ".circleci",
+                    ".gitlab",
+                    ".azure-pipelines",
+                    ".drone",
+                    ".buildkite",
+                    ".husky",
+                    ".gitea",
+                )
+            )
         ]
 
         rel = Path(dirpath).relative_to(root_path)
@@ -68,6 +81,8 @@ def detect_monorepo(root_path: Path):
         "nx.json": "Nx",
         "turbo.json": "Turborepo",
         "go.work": "Go workspaces",
+        "MODULE.bazel": "Bazel workspace",
+        "WORKSPACE": "Bazel workspace",
     }
     for wf, name in workspace_files.items():
         if (root_path / wf).exists():
@@ -89,7 +104,7 @@ def detect_monorepo(root_path: Path):
         except Exception:
             pass
 
-    # 2. Root manifest checks (package.json workspaces, Cargo.toml [workspace])
+    # 2. Root manifest checks (package.json workspaces, Cargo.toml [workspace], deno.json workspace)
     pkg_json = root_path / "package.json"
     if pkg_json.exists():
         try:
@@ -98,9 +113,33 @@ def detect_monorepo(root_path: Path):
             with open(pkg_json, "r", encoding="utf-8") as f:
                 pj = json.load(f)
                 if "workspaces" in pj:
-                    signals.append("npm/yarn/pnpm workspaces in package.json")
+                    signals.append("npm/yarn/pnpm/bun workspaces in package.json")
+                    ws = pj["workspaces"]
+                    patterns = ws if isinstance(ws, list) else (ws.get("packages", []) if isinstance(ws, dict) else [])
+                    for pat in patterns:
+                        cand_dir = root_path / pat.rstrip("/*")
+                        if cand_dir.exists() and cand_dir.is_dir():
+                            for child in cand_dir.iterdir():
+                                if child.is_dir() and not child.name.startswith("."):
+                                    packages.append(str(child.relative_to(root_path)))
         except Exception:
             pass
+
+    for dj_name in ["deno.json", "deno.jsonc"]:
+        deno_file = root_path / dj_name
+        if deno_file.exists():
+            try:
+                import json
+                with open(deno_file, "r", encoding="utf-8") as f:
+                    dj = json.load(f)
+                    if "workspace" in dj:
+                        signals.append(f"Deno workspace in {dj_name}")
+                        for mem in dj.get("workspace", []):
+                            cand = root_path / mem.rstrip("/*")
+                            if cand.exists() and cand.is_dir():
+                                packages.append(str(cand.relative_to(root_path)))
+            except Exception:
+                pass
 
     cargo_toml = root_path / "Cargo.toml"
     if cargo_toml.exists():
@@ -138,7 +177,20 @@ def detect_monorepo(root_path: Path):
         dirnames[:] = [
             d
             for d in dirnames
-            if d not in _common.DEFAULT_IGNORED_DIRS and not d.startswith(".")
+            if d not in _common.DEFAULT_IGNORED_DIRS
+            and (
+                not d.startswith(".")
+                or d in (
+                    ".github",
+                    ".circleci",
+                    ".gitlab",
+                    ".azure-pipelines",
+                    ".drone",
+                    ".buildkite",
+                    ".husky",
+                    ".gitea",
+                )
+            )
         ]
         if Path(dirpath) == root_path:
             continue
@@ -183,11 +235,19 @@ def detect_repo_markers(root_path: Path):
     ci_candidates = [
         ".github/workflows",
         ".gitlab-ci.yml",
+        ".gitlab-ci.yaml",
         ".circleci",
         "Jenkinsfile",
         "azure-pipelines.yml",
+        "azure-pipelines.yaml",
         ".travis.yml",
         "bitbucket-pipelines.yml",
+        ".drone.yml",
+        ".drone.yaml",
+        "appveyor.yml",
+        ".appveyor.yml",
+        "cloudbuild.yaml",
+        "cloudbuild.yml",
     ]
     for ci in ci_candidates:
         p = root_path / ci
@@ -253,10 +313,14 @@ def count_languages(root_path: Path):
             continue
         ext = file_path.suffix.lower()
         name = file_path.name.lower()
-        if name == "dockerfile":
+        if name in ("dockerfile", "containerfile"):
             lang = "Docker"
         elif name == "makefile":
             lang = "Makefile"
+        elif name == "cmakelists.txt":
+            lang = "C/C++"
+        elif name in ("gemfile", "rakefile", "podfile", "vagrantfile"):
+            lang = "Ruby"
         elif not ext:
             lang = "Other"
             try:
@@ -276,6 +340,12 @@ def count_languages(root_path: Path):
                         lang = "Perl"
                     elif "php" in fl_lower:
                         lang = "PHP"
+                    elif "julia" in fl_lower:
+                        lang = "Julia"
+                    elif "elixir" in fl_lower:
+                        lang = "Elixir"
+                    elif "lua" in fl_lower:
+                        lang = "Lua"
             except Exception:
                 pass
         else:

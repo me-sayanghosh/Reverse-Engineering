@@ -24,16 +24,23 @@ ENV_PATTERNS = [
     r"""os\.getenv\(['"]([A-Za-z0-9_]+)['"]""",
     r"""System\.getenv\(['"]([A-Za-z0-9_]+)['"]""",
     r"""os\.Getenv\(['"]([A-Za-z0-9_]+)['"]""",
-    r"""os\.LookupEnv\(['"]([A-Za-z0-9_]+)['"]\)""",
+    r"""os\.LookupEnv\(['"]([A-Za-z0-9_]+)['"]""",
     r"""std::env::var\(['"]([A-Za-z0-9_]+)['"]""",
+    r"""std::env::var_os\(['"]([A-Za-z0-9_]+)['"]""",
     r"""ENV\[['"]([A-Za-z0-9_]+)['"]\]""",
-    r"""ENV\.fetch\(['"]([A-Za-z0-9_]+)['"]\)""",
-    r"""Environment\.GetEnvironmentVariable\(['"]([A-Za-z0-9_]+)['"]\)""",
-    r"""getenv\(['"]([A-Za-z0-9_]+)['"]\)""",
+    r"""ENV\.fetch\(['"]([A-Za-z0-9_]+)['"]""",
+    r"""Environment\.GetEnvironmentVariable\(['"]([A-Za-z0-9_]+)['"]""",
+    r"""getenv\(['"]([A-Za-z0-9_]+)['"]""",
     r"""\$_ENV\['([A-Za-z0-9_]+)'\]""",
     r"""\$_ENV\["([A-Za-z0-9_]+)"\]""",
-    r"""System\.getProperty\(['"]([A-Za-z0-9_]+)['"]\)""",
+    r"""System\.getProperty\(['"]([A-Za-z0-9_]+)['"]""",
     r"""os\.environ\.setdefault\(['"]([A-Za-z0-9_]+)['"]""",
+    r"""os\.getenvb\(['"]([A-Za-z0-9_]+)['"]""",
+    r"""c\.env\.([A-Za-z0-9_]+)""",
+    r"""@Value\(['"]\$\{([A-Za-z0-9_.-]+)(?::[^}]*)?\}['"]\)""",
+    r"""viper\.(?:GetString|Get|GetInt|GetBool)\(['"]([A-Za-z0-9_.-]+)['"]\)""",
+    r"""\bconfig\(['"]([A-Za-z0-9_]+)['"]""",
+    r"""\benv(?:\.(?:str|int|bool|list|tuple|float|bytes|json))?\(['"]([A-Za-z0-9_]+)['"]""",
 ]
 
 
@@ -65,6 +72,24 @@ def find_env_vars(root_path: Path):
                                         "occurrences": [],
                                     }
                                 env_vars[var_name]["occurrences"].append(f"{rel}:{idx}")
+            except Exception:
+                pass
+
+        # Check Dockerfile ENV instructions
+        if name == "dockerfile" or name.startswith("dockerfile.") or name == "containerfile":
+            try:
+                with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                    for idx, line in enumerate(f, start=1):
+                        m_env = re.match(r"""^\s*ENV\s+([A-Za-z0-9_]+)[=\s]""", line)
+                        if m_env:
+                            var_name = m_env.group(1)
+                            if var_name not in env_vars:
+                                env_vars[var_name] = {
+                                    "name": var_name,
+                                    "category": categorize_env_var(var_name),
+                                    "occurrences": [],
+                                }
+                            env_vars[var_name]["occurrences"].append(f"{rel}:{idx}")
             except Exception:
                 pass
 
@@ -204,13 +229,19 @@ def find_config_keys(root_path: Path):
 
 SECRET_PATTERNS = [
     (r"\b(AKIA[0-9A-Z]{16})\b", "AWS Access Key ID", 4),
+    (r"\b(AIza[0-9A-Za-z\-_]{35})\b", "Google API Key", 4),
     (r"\b(gh[pousr]_[a-zA-Z0-9_]{36,})\b", "GitHub Personal Access Token", 4),
     (r"\b(github_pat_[a-zA-Z0-9_]{60,})\b", "GitHub Fine-Grained PAT", 11),
+    (r"\b(sk-ant-[a-zA-Z0-9_\-]{32,})\b", "Anthropic API Key", 7),
     (r"\b(sk-(?:proj-|live-|test-)?[a-zA-Z0-9_-]{32,})\b", "OpenAI / AI Secret Key", 5),
     (r"\b(hf_[a-zA-Z0-9]{34,})\b", "Hugging Face Token", 5),
     (r"-----BEGIN (?:[A-Z]+ )?PRIVATE KEY-----", "Private Key Header", 11),
     (r"\b(xox[baprs]-[0-9a-zA-Z]{10,48})\b", "Slack Token", 5),
     (r"\b(sk_(?:live|test)_[0-9a-zA-Z]{24,})\b", "Stripe Secret Key", 8),
+    (r"\b(SG\.[a-zA-Z0-9_\-]{22}\.[a-zA-Z0-9_\-]{43})\b", "SendGrid API Key", 5),
+    (r"\b(glpat-[a-zA-Z0-9_\-]{20,})\b", "GitLab Personal Access Token", 6),
+    (r"\b(npm_[a-zA-Z0-9]{32,})\b", "npm Access Token", 4),
+    (r"\b(pypi-AgEIcHlwaS5vcmc[a-zA-Z0-9_\-]{50,})\b", "PyPI API Token", 9),
     (
         r"""(?i)(?:postgres|postgresql|mysql|mongodb|redis)://[a-zA-Z0-9_.-]+:([a-zA-Z0-9_\-.~!@#$%^&*+=]{4,})@""",
         "Database Connection URI Password",
@@ -258,7 +289,19 @@ def detect_potential_secrets(root_path: Path):
                             # Ignore obvious placeholder templates
                             if any(
                                 ph in raw_val.lower()
-                                for ph in ["your_", "insert_", "<token>", "<secret>", "replace_me"]
+                                for ph in [
+                                    "your_",
+                                    "insert_",
+                                    "<token>",
+                                    "<secret>",
+                                    "replace_me",
+                                    "changeme",
+                                    "dummy",
+                                    "placeholder",
+                                    "sample_key",
+                                    "sample_token",
+                                    "test_secret",
+                                ]
                             ):
                                 continue
                             masked = mask_secret(raw_val, pfx_len)
@@ -283,8 +326,15 @@ def redact_all_secrets_filter(data):
         for pat, _, pfx_len in SECRET_PATTERNS:
             # Replace any unmasked secrets with masked representation
             def repl(match):
-                raw = match.group(1) if match.groups() else match.group(0)
-                return mask_secret(raw, pfx_len)
+                if match.groups() and match.group(1):
+                    raw = match.group(1)
+                    full = match.group(0)
+                    start, end = match.span(1)
+                    m_start, _ = match.span(0)
+                    rel_start = start - m_start
+                    rel_end = end - m_start
+                    return full[:rel_start] + mask_secret(raw, pfx_len) + full[rel_end:]
+                return mask_secret(match.group(0), pfx_len)
 
             cleaned = re.sub(pat, repl, cleaned)
         return cleaned

@@ -2,6 +2,7 @@
 """Locate and rank entrypoints: server bootstraps, CLI commands, route trees, workers, frontend roots."""
 
 import argparse
+import re
 import sys
 from pathlib import Path
 
@@ -161,12 +162,26 @@ def find_manifest_entrypoints(root_path: Path):
                     "reason": f"Python {name.replace('.py', '').upper()} application server entrypoint",
                 }
             )
+        elif file_path.suffix == ".py":
+            try:
+                with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                    for idx, line in enumerate(f, start=1):
+                        if re.search(r"""if\s+__name__\s*==\s*['"]__main__['"]\s*:""", line):
+                            entries.append(
+                                {
+                                    "path": f"{rel}:{idx}",
+                                    "type": "main",
+                                    "confidence": 0.95,
+                                    "reason": "Python __name__ == '__main__' script entrypoint guard",
+                                }
+                            )
+                            break
+            except Exception:
+                pass
 
     pyproject = root_path / "pyproject.toml"
     if pyproject.exists():
         try:
-            import re
-
             content = pyproject.read_text(encoding="utf-8", errors="ignore")
             # match [project.scripts] or [tool.poetry.scripts]
             in_scripts = False
@@ -190,14 +205,24 @@ def find_manifest_entrypoints(root_path: Path):
         except Exception:
             pass
 
-    # 3. Go: cmd/*/main.go or main.go
+    # 3. Go: cmd/**/main.go, main.go, or any package main with func main()
     for file_path in _common.walk_repo(root_path):
         if file_path.suffix == ".go":
             rel = file_path.relative_to(root_path)
             parts = rel.parts
-            if (len(parts) >= 3 and parts[0] == "cmd" and parts[-1] == "main.go") or (
-                len(parts) == 1 and parts[0] == "main.go"
-            ):
+            is_go_entrypoint = (
+                (len(parts) >= 2 and parts[0] == "cmd" and parts[-1] == "main.go")
+                or (len(parts) == 1 and parts[0] == "main.go")
+            )
+            if not is_go_entrypoint:
+                try:
+                    head = file_path.read_text(encoding="utf-8", errors="ignore")
+                    if "package main" in head and re.search(r"func\s+main\s*\(\s*\)", head):
+                        is_go_entrypoint = True
+                except Exception:
+                    pass
+
+            if is_go_entrypoint:
                 entries.append(
                     {
                         "path": f"{rel}:1",
@@ -221,6 +246,17 @@ def find_manifest_entrypoints(root_path: Path):
                         "type": "main",
                         "confidence": 1.0,
                         "reason": "Rust binary crate entrypoint",
+                    }
+                )
+            elif (len(parts) == 2 and parts[0] == "src" and parts[1] == "lib.rs") or (
+                len(parts) == 1 and parts[0] == "lib.rs"
+            ):
+                entries.append(
+                    {
+                        "path": f"{rel}:1",
+                        "type": "main",
+                        "confidence": 1.0,
+                        "reason": "Rust library crate root entrypoint",
                     }
                 )
 
@@ -281,10 +317,14 @@ BOOTSTRAP_PATTERNS = [
     (r"fastify\.listen\s*\(", "Fastify server listen bootstrap"),
     (r"NestFactory\.create\s*\(", "NestJS NestFactory application bootstrap"),
     (r"createServer\s*\(", "Node http.createServer bootstrap"),
+    (r"Bun\.serve\s*\(", "Bun HTTP server Bun.serve bootstrap"),
+    (r"Deno\.serve\s*\(", "Deno HTTP server Deno.serve bootstrap"),
     (r"uvicorn\.run\s*\(", "Python uvicorn.run ASGI bootstrap"),
     (r"app\.run\s*\(", "Flask/Python app.run server bootstrap"),
     (r"http\.ListenAndServe\s*\(", "Go http.ListenAndServe server bootstrap"),
     (r"(?:router|r)\.Run\s*\(", "Go Gin server router.Run bootstrap"),
+    (r"app\.Listen\s*\(", "Go Fiber server app.Listen bootstrap"),
+    (r"e\.Start\s*\(", "Go Echo server e.Start bootstrap"),
     (r"@SpringBootApplication", "Spring Boot application bootstrap"),
     (r"HttpServer::new\s*\(", "Rust Actix-web server bootstrap"),
     (r"axum::serve\s*\(", "Rust Axum server bootstrap"),
@@ -295,7 +335,6 @@ def find_server_bootstraps(root_path: Path):
     """Detect server bootstrap invocations and entrypoint listeners."""
     root_path = Path(root_path).resolve()
     entries = []
-    import re
 
     for file_path in _common.walk_repo(root_path):
         if _common.is_binary(file_path):
@@ -305,6 +344,11 @@ def find_server_bootstraps(root_path: Path):
             ".js",
             ".ts",
             ".mjs",
+            ".cjs",
+            ".jsx",
+            ".tsx",
+            ".mts",
+            ".cts",
             ".py",
             ".go",
             ".java",
@@ -333,6 +377,19 @@ def find_server_bootstraps(root_path: Path):
         except Exception:
             pass
 
+        # Check root or src server.js / server.ts files
+        if file_path.name in ("server.js", "server.ts", "server.mjs", "server.cjs") and len(file_path.relative_to(root_path).parts) <= 2:
+            rel = file_path.relative_to(root_path)
+            if not any(e["path"].startswith(f"{rel}:") for e in entries):
+                entries.append(
+                    {
+                        "path": f"{rel}:1",
+                        "type": "server",
+                        "confidence": 0.88,
+                        "reason": f"Canonical custom {file_path.name} server script",
+                    }
+                )
+
     return entries
 
 
@@ -349,7 +406,6 @@ def find_route_definitions(root_path: Path):
     """Detect HTTP route definitions and aggregate count per file."""
     root_path = Path(root_path).resolve()
     entries = []
-    import re
 
     for file_path in _common.walk_repo(root_path):
         if _common.is_binary(file_path):
@@ -359,6 +415,11 @@ def find_route_definitions(root_path: Path):
             ".js",
             ".ts",
             ".mjs",
+            ".cjs",
+            ".jsx",
+            ".tsx",
+            ".mts",
+            ".cts",
             ".py",
             ".go",
             ".java",
@@ -419,7 +480,6 @@ def find_cli_and_workers(root_path: Path):
     """Detect CLI command parsers and background worker/queue patterns."""
     root_path = Path(root_path).resolve()
     entries = []
-    import re
 
     for file_path in _common.walk_repo(root_path):
         if _common.is_binary(file_path):
@@ -429,6 +489,11 @@ def find_cli_and_workers(root_path: Path):
             ".js",
             ".ts",
             ".mjs",
+            ".cjs",
+            ".jsx",
+            ".tsx",
+            ".mts",
+            ".cts",
             ".py",
             ".go",
             ".java",
@@ -477,8 +542,15 @@ def find_frontend_entrypoints(root_path: Path):
         ("src/App.svelte", "Root Svelte App component"),
         ("app/layout.tsx", "Next.js App Router root layout"),
         ("app/page.tsx", "Next.js App Router home page"),
+        ("src/app/layout.tsx", "Next.js App Router root layout"),
+        ("src/app/page.tsx", "Next.js App Router home page"),
         ("pages/_app.tsx", "Next.js Pages Router custom app"),
         ("pages/index.tsx", "Next.js Pages Router index page"),
+        ("src/pages/_app.tsx", "Next.js Pages Router custom app"),
+        ("src/pages/index.tsx", "Next.js Pages Router index page"),
+        ("src/routes/+page.svelte", "SvelteKit root page route"),
+        ("src/routes/+layout.svelte", "SvelteKit root layout"),
+        ("app.vue", "Nuxt root App component"),
         ("vite.config.ts", "Vite build configuration entrypoint"),
         ("vite.config.js", "Vite build configuration entrypoint"),
     ]
@@ -494,6 +566,24 @@ def find_frontend_entrypoints(root_path: Path):
                     "reason": desc,
                 }
             )
+
+    # Check common monorepo and multi-package frontend directories
+    monorepo_subdirs = ["frontend", "client", "ui", "web", "apps/web", "apps/frontend", "packages/web", "packages/client"]
+    for sdir in monorepo_subdirs:
+        sub_root = root_path / sdir
+        if sub_root.exists() and sub_root.is_dir():
+            for rel_str, desc in frontend_targets:
+                target_file = sub_root / rel_str
+                if target_file.exists():
+                    full_rel = f"{sdir}/{rel_str}"
+                    entries.append(
+                        {
+                            "path": f"{full_rel}:1",
+                            "type": "frontend",
+                            "confidence": 0.85,
+                            "reason": f"{desc} in {sdir}",
+                        }
+                    )
 
     return entries
 

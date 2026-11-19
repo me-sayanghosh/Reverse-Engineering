@@ -50,6 +50,14 @@ DEFAULT_IGNORED_DIRS = {
     ".angular",
     ".svelte-kit",
     ".docusaurus",
+    ".expo",
+    ".parcel-cache",
+    ".nx",
+    ".astro",
+    "cmake-build-debug",
+    "cmake-build-release",
+    ".vs",
+    ".metadata",
 }
 
 LOCKFILES = {
@@ -70,6 +78,12 @@ LOCKFILES = {
     "mix.lock",
     "pubspec.lock",
     "shard.lock",
+    "uv.lock",
+    "deno.lock",
+    "pdm.lock",
+    "pixi.lock",
+    "conda-lock.yml",
+    "gradle.lockfile",
 }
 
 
@@ -82,17 +96,30 @@ def is_too_large(path: str | Path, limit_bytes: int = 1024 * 1024) -> bool:
 
 
 def read_text_safe(path: str | Path, max_bytes: int = 1024 * 1024) -> str:
-    """Safely read text from file up to max_bytes, handling encodings and suppressing errors."""
+    """Safely read text from file up to max_bytes, handling encodings, BOMs, and suppressing errors."""
     try:
         with open(path, "rb") as f:
             data = f.read(max_bytes)
+        if data.startswith((b"\xff\xfe\x00\x00", b"\x00\x00\xfe\xff")):
+            try:
+                return data.decode("utf-32")
+            except UnicodeDecodeError:
+                pass
+        if data.startswith((b"\xff\xfe", b"\xfe\xff")):
+            try:
+                return data.decode("utf-16")
+            except UnicodeDecodeError:
+                pass
         try:
-            return data.decode("utf-8")
+            return data.decode("utf-8-sig")
         except UnicodeDecodeError:
             try:
                 return data.decode("utf-16")
             except UnicodeDecodeError:
-                return data.decode("latin-1", errors="ignore")
+                try:
+                    return data.decode("utf-32")
+                except UnicodeDecodeError:
+                    return data.decode("latin-1", errors="ignore")
     except OSError:
         return ""
 
@@ -104,6 +131,13 @@ def is_binary(path: str | Path) -> bool:
             chunk = f.read(1024)
             if not chunk:
                 return False
+            # Check for UTF-32 BOM text files
+            if chunk.startswith((b"\xff\xfe\x00\x00", b"\x00\x00\xfe\xff")):
+                try:
+                    chunk.decode("utf-32")
+                    return False
+                except Exception:
+                    return True
             # Check for UTF-16 BOM text files
             if chunk.startswith((b"\xff\xfe", b"\xfe\xff")):
                 try:
@@ -208,14 +242,48 @@ EXT_TO_LANG: dict[str, str] = {
     ".v": "V",
     ".odin": "Odin",
     ".gleam": "Gleam",
+    ".elm": "Elm",
+    ".cr": "Crystal",
+    ".ml": "OCaml",
+    ".mli": "OCaml",
+    ".re": "ReasonML",
+    ".rei": "ReasonML",
+    ".cu": "CUDA",
+    ".cuh": "CUDA",
+    ".metal": "Metal",
+    ".glsl": "GLSL",
+    ".vert": "GLSL",
+    ".frag": "GLSL",
+    ".hlsl": "HLSL",
+    ".lisp": "Common Lisp",
+    ".cl": "Common Lisp",
+    ".lsp": "Common Lisp",
+    ".scm": "Scheme",
+    ".ss": "Scheme",
+    ".rkt": "Racket",
+    ".purs": "PureScript",
+    ".edn": "Clojure",
+    ".hrl": "Erlang",
+    ".cbl": "COBOL",
+    ".cob": "COBOL",
+    ".f": "Fortran",
+    ".f90": "Fortran",
+    ".f95": "Fortran",
+    ".f03": "Fortran",
+    ".f08": "Fortran",
+    ".pas": "Pascal",
+    ".pp": "Pascal",
+    ".d": "D",
+    ".vb": "Visual Basic",
 }
 
 
 LOCKFILES_LOWER = {f.lower() for f in LOCKFILES}
 
 
-def is_lockfile(filename: str) -> bool:
-    return filename.lower() in LOCKFILES_LOWER
+def is_lockfile(filename: str | Path) -> bool:
+    name = str(filename).replace("\\", "/").split("/")[-1].lower()
+    return name in LOCKFILES_LOWER
 
 
 def is_minified(filename: str | Path) -> bool:
@@ -224,14 +292,20 @@ def is_minified(filename: str | Path) -> bool:
         name.endswith(".min.js")
         or name.endswith(".min.mjs")
         or name.endswith(".min.cjs")
+        or name.endswith(".min.jsx")
+        or name.endswith(".min.tsx")
         or name.endswith(".min.css")
         or name.endswith(".bundle.js")
         or name.endswith(".bundle.mjs")
         or name.endswith(".bundle.cjs")
+        or name.endswith(".bundle.jsx")
+        or name.endswith(".bundle.tsx")
         or name.endswith(".bundle.css")
         or name.endswith(".chunk.js")
         or name.endswith(".chunk.css")
         or name.endswith(".chunk.mjs")
+        or name.endswith(".chunk.jsx")
+        or name.endswith(".chunk.tsx")
         or name.endswith(".map")
     )
 
@@ -260,12 +334,24 @@ def walk_repo(root: str | Path) -> Generator[Path, None, None]:
         pass
 
     for dirpath, dirnames, filenames in os.walk(root_path, onerror=on_walk_error):
-        # Prune ignored directories in-place (allow .github and .circleci for CI configs)
+        # Prune ignored directories in-place (allow CI configuration dotdirs)
         dirnames[:] = [
             d
             for d in dirnames
             if d not in DEFAULT_IGNORED_DIRS
-            and (not d.startswith(".") or d in (".github", ".circleci"))
+            and (
+                not d.startswith(".")
+                or d in (
+                    ".github",
+                    ".circleci",
+                    ".gitlab",
+                    ".azure-pipelines",
+                    ".drone",
+                    ".buildkite",
+                    ".husky",
+                    ".gitea",
+                )
+            )
         ]
 
         for f in filenames:

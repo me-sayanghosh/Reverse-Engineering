@@ -67,11 +67,20 @@ def resolve_js_ts_target(source_file: Path, specifier: str, root_path: Path):
                 target_path,
                 target_path.with_suffix(".ts"),
                 target_path.with_suffix(".tsx"),
+                target_path.with_suffix(".mts"),
+                target_path.with_suffix(".cts"),
                 target_path.with_suffix(".js"),
                 target_path.with_suffix(".jsx"),
+                target_path.with_suffix(".mjs"),
+                target_path.with_suffix(".cjs"),
                 target_path / "index.ts",
                 target_path / "index.tsx",
+                target_path / "index.mts",
+                target_path / "index.cts",
                 target_path / "index.js",
+                target_path / "index.jsx",
+                target_path / "index.mjs",
+                target_path / "index.cjs",
             ]
             for c in candidates:
                 c_resolved = c.resolve()
@@ -82,6 +91,46 @@ def resolve_js_ts_target(source_file: Path, specifier: str, root_path: Path):
                     except ValueError:
                         pass
         return specifier, "internal"
+
+    # Support @components/foo, @utils/bar, @app/baz path aliases
+    if specifier.startswith("@") and not specifier.startswith("@/") and "/" in specifier:
+        parts = specifier[1:].split("/", 1)
+        alias_prefix = parts[0]
+        sub_path = parts[1] if len(parts) > 1 else ""
+        for base in [
+            root_path / "src" / alias_prefix,
+            root_path / alias_prefix,
+            root_path / "src" / specifier[1:],
+            root_path / specifier[1:],
+        ]:
+            target_path = base / sub_path if sub_path else base
+            candidates = [
+                target_path,
+                target_path.with_suffix(".ts"),
+                target_path.with_suffix(".tsx"),
+                target_path.with_suffix(".mts"),
+                target_path.with_suffix(".cts"),
+                target_path.with_suffix(".js"),
+                target_path.with_suffix(".jsx"),
+                target_path.with_suffix(".mjs"),
+                target_path.with_suffix(".cjs"),
+                target_path / "index.ts",
+                target_path / "index.tsx",
+                target_path / "index.mts",
+                target_path / "index.cts",
+                target_path / "index.js",
+                target_path / "index.jsx",
+                target_path / "index.mjs",
+                target_path / "index.cjs",
+            ]
+            for c in candidates:
+                c_resolved = c.resolve()
+                if c_resolved.exists() and c_resolved.is_file():
+                    try:
+                        rel = c_resolved.relative_to(root_path)
+                        return str(rel), "internal"
+                    except ValueError:
+                        pass
 
     if specifier.startswith("."):
         # Relative file import
@@ -116,6 +165,37 @@ def resolve_js_ts_target(source_file: Path, specifier: str, root_path: Path):
                     pass
         # Unresolved relative
         return specifier, "internal"
+
+    # Check if specifier directly matches an internal path relative to root or src
+    for base in [root_path, root_path / "src"]:
+        target_path = base / specifier
+        candidates = [
+            target_path,
+            target_path.with_suffix(".ts"),
+            target_path.with_suffix(".tsx"),
+            target_path.with_suffix(".mts"),
+            target_path.with_suffix(".cts"),
+            target_path.with_suffix(".js"),
+            target_path.with_suffix(".jsx"),
+            target_path.with_suffix(".mjs"),
+            target_path.with_suffix(".cjs"),
+            target_path / "index.ts",
+            target_path / "index.tsx",
+            target_path / "index.mts",
+            target_path / "index.cts",
+            target_path / "index.js",
+            target_path / "index.jsx",
+            target_path / "index.mjs",
+            target_path / "index.cjs",
+        ]
+        for c in candidates:
+            c_resolved = c.resolve()
+            if c_resolved.exists() and c_resolved.is_file():
+                try:
+                    rel = c_resolved.relative_to(root_path)
+                    return str(rel), "internal"
+                except ValueError:
+                    pass
 
     return specifier, "external"
 
@@ -156,6 +236,31 @@ def parse_js_ts_imports(file_path: Path, root_path: Path):
 import ast
 
 
+def resolve_python_module(mod: str, root_path: Path) -> tuple[str, str]:
+    """Resolve an absolute/top-level Python module specifier to internal, stdlib, or external."""
+    top_pkg = mod.split(".")[0]
+    if hasattr(sys, "stdlib_module_names") and top_pkg in sys.stdlib_module_names:
+        return mod, "stdlib"
+
+    parts = mod.split(".")
+    sub_paths = ["/".join(parts[:i]) for i in range(len(parts), 0, -1)]
+    candidates = []
+    for sp in sub_paths:
+        for prefix in [root_path, root_path / "src", root_path / "lib"]:
+            candidates.append(prefix / f"{sp}.py")
+            candidates.append(prefix / sp)
+            candidates.append(prefix / sp / "__init__.py")
+    for cand in candidates:
+        if cand.exists():
+            try:
+                rel = cand.resolve().relative_to(root_path)
+                return str(rel), "internal"
+            except ValueError:
+                pass
+
+    return mod, "external"
+
+
 def parse_python_imports(file_path: Path, root_path: Path):
     """Use Python AST to parse import and import-from nodes, resolving relative and internal modules."""
     root_path = root_path.resolve()
@@ -167,30 +272,28 @@ def parse_python_imports(file_path: Path, root_path: Path):
         content = file_path.read_text(encoding="utf-8", errors="ignore")
         tree = ast.parse(content, filename=str(file_path))
     except Exception:
+        # Fallback to regex-based import parsing if AST syntax fails (e.g. templates or older python versions)
+        try:
+            for m in re.finditer(r"^\s*import\s+([a-zA-Z0-9_.,\s]+)", content, re.MULTILINE):
+                for item in m.group(1).split(","):
+                    mod = item.strip().split()[0]
+                    if mod:
+                        target_rel, imp_type = resolve_python_module(mod, root_path)
+                        edges.append({"source": source_rel, "target": target_rel, "type": imp_type, "specifier": mod})
+            for m in re.finditer(r"^\s*from\s+([a-zA-Z0-9_.]+)\s+import", content, re.MULTILINE):
+                mod = m.group(1).strip()
+                if mod:
+                    target_rel, imp_type = resolve_python_module(mod, root_path)
+                    edges.append({"source": source_rel, "target": target_rel, "type": imp_type, "specifier": mod})
+        except Exception:
+            pass
         return edges
 
     for node in ast.walk(tree):
         if isinstance(node, ast.Import):
             for alias in node.names:
                 mod = alias.name
-                top_pkg = mod.split(".")[0]
-                target_rel = mod
-                imp_type = "external"
-
-                if hasattr(sys, "stdlib_module_names") and top_pkg in sys.stdlib_module_names:
-                    imp_type = "stdlib"
-                else:
-                    # Check if internal to root or inside src/ / lib/
-                    possible_pkg = root_path / top_pkg
-                    if not possible_pkg.exists() and (root_path / "src" / top_pkg).exists():
-                        possible_pkg = root_path / "src" / top_pkg
-                    elif not possible_pkg.exists() and (root_path / "lib" / top_pkg).exists():
-                        possible_pkg = root_path / "lib" / top_pkg
-
-                    if possible_pkg.exists():
-                        target_rel = str(possible_pkg.relative_to(root_path))
-                        imp_type = "internal"
-
+                target_rel, imp_type = resolve_python_module(mod, root_path)
                 edges.append(
                     {
                         "source": source_rel,
@@ -257,21 +360,7 @@ def parse_python_imports(file_path: Path, root_path: Path):
                 else:
                     target_rel = specifier
             else:
-                top_pkg = mod.split(".")[0]
-                target_rel = mod
-                imp_type = "external"
-                if hasattr(sys, "stdlib_module_names") and top_pkg in sys.stdlib_module_names:
-                    imp_type = "stdlib"
-                else:
-                    possible_pkg = root_path / top_pkg
-                    if not possible_pkg.exists() and (root_path / "src" / top_pkg).exists():
-                        possible_pkg = root_path / "src" / top_pkg
-                    elif not possible_pkg.exists() and (root_path / "lib" / top_pkg).exists():
-                        possible_pkg = root_path / "lib" / top_pkg
-
-                    if possible_pkg.exists():
-                        target_rel = str(possible_pkg.relative_to(root_path))
-                        imp_type = "internal"
+                target_rel, imp_type = resolve_python_module(mod, root_path)
 
             edges.append(
                 {
@@ -297,7 +386,10 @@ def parse_go_imports(file_path: Path, root_path: Path, go_module: str = ""):
     all_imports = list(single_imports)
     for block in block_matches:
         for line in block.splitlines():
-            m = re.search(r'"([^"]+)"', line)
+            clean_l = line.split("//")[0].strip()
+            if not clean_l or clean_l.startswith("/*"):
+                continue
+            m = re.search(r'"([^"]+)"', clean_l)
             if m:
                 all_imports.append(m.group(1))
 
@@ -342,8 +434,8 @@ def parse_rust_imports(file_path: Path, root_path: Path):
     matches = re.findall(r"use\s+([^;]+);", content)
     for m in matches:
         raw = m.strip()
-        if raw.startswith("crate::") or raw.startswith("super::"):
-            clean = raw.replace("crate::", "").replace("super::", "").strip()
+        if raw.startswith("crate::") or raw.startswith("super::") or raw.startswith("self::"):
+            clean = raw.replace("crate::", "").replace("super::", "").replace("self::", "").strip()
             if clean.startswith("{"):
                 for item in clean.strip("{}").split(","):
                     p = item.strip().split("::")[0].strip()
@@ -394,7 +486,7 @@ def parse_java_imports(file_path: Path, root_path: Path, pkg_prefix: str = ""):
     source_rel = str(file_path.resolve().relative_to(root_path))
     content = file_path.read_text(encoding="utf-8", errors="ignore")
 
-    matches = re.findall(r"import\s+([a-zA-Z0-9_.]+);", content)
+    matches = re.findall(r"import\s+(?:static\s+)?([a-zA-Z0-9_.]+)(?:\s+as\s+[a-zA-Z0-9_]+)?\s*;?", content)
     for raw in matches:
         if raw.startswith("java.") or raw.startswith("javax."):
             imp_type = "stdlib"
@@ -447,6 +539,18 @@ def parse_cpp_includes(file_path: Path, root_path: Path):
                         "specifier": header,
                     }
                 )
+        # C++20 module imports: import std; or import my_module;
+        for m in re.finditer(r'^\s*import\s+(?:<([^>]+)>|([a-zA-Z0-9_.]+))\s*;', content, re.MULTILINE):
+            mod_target = m.group(1) or m.group(2)
+            imp_type = "stdlib" if mod_target in ("std", "std.compat") or m.group(1) else "internal"
+            edges.append(
+                {
+                    "source": source_rel,
+                    "target": mod_target,
+                    "type": imp_type,
+                    "specifier": mod_target,
+                }
+            )
     except Exception:
         pass
     return edges
@@ -523,7 +627,7 @@ def collect_all_imports(root_path: Path):
             continue
         ext = file_path.suffix.lower()
 
-        if ext in (".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs"):
+        if ext in (".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".mts", ".cts"):
             all_edges.extend(parse_js_ts_imports(file_path, root_path))
         elif ext in (".py", ".pyi"):
             all_edges.extend(parse_python_imports(file_path, root_path))
@@ -574,7 +678,7 @@ def aggregate_module_edges(edges: list, depth: int = 2):
 
     result_edges = [
         {"source": src, "target": tgt, "weight": weight}
-        for (src, tgt), weight in module_edges.items()
+        for (src, tgt), weight in sorted(module_edges.items(), key=lambda x: (-x[1], x[0][0], x[0][1]))
     ]
     return sorted(list(modules)), result_edges
 
@@ -669,8 +773,19 @@ def render_mermaid_graph(modules: list, edges: list, max_nodes: int = 40) -> str
         lines.append("  Empty[No internal modules detected]")
         return "\n".join(lines)
 
-    # If modules exceed max_nodes, pick top modules and bucket rest into 'other'
-    top_modules = set(modules[: max_nodes - 1]) if len(modules) > max_nodes else set(modules)
+    # If modules exceed max_nodes, rank by connection weight to retain core architectural hubs
+    if len(modules) > max_nodes:
+        conn_count = {m: 0 for m in modules}
+        for e in edges:
+            s, t = e.get("source"), e.get("target")
+            if s in conn_count:
+                conn_count[s] += e.get("weight", 1)
+            if t in conn_count:
+                conn_count[t] += e.get("weight", 1)
+        ranked = sorted(modules, key=lambda m: (-conn_count.get(m, 0), m))
+        top_modules = set(ranked[: max_nodes - 1])
+    else:
+        top_modules = set(modules)
     has_other = len(modules) > len(top_modules)
 
     node_ids = {}

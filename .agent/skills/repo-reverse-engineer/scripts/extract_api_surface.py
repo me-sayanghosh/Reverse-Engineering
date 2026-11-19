@@ -16,7 +16,7 @@ import re
 
 NODE_ROUTE_PATTERNS = [
     # (app|router).get('/path', ...)
-    r"""(?:app|router|fastify|server)\.(get|post|put|delete|patch|options|head)\s*\(\s*['"`]([^'"`]+)['"`]""",
+    r"""(?:app|router|[a-zA-Z0-9_]*router|fastify|server|api|v[0-9]+|route)\.(get|post|put|delete|patch|options|head)\s*\(\s*['"`]([^'"`]+)['"`]""",
     # @Get('/path') in NestJS
     r"""@(Get|Post|Put|Delete|Patch)\s*\(\s*['"`]?([^'"`]*)['"`]?\s*\)""",
 ]
@@ -31,13 +31,42 @@ def extract_node_routes(root_path: Path):
         if _common.is_binary(file_path):
             continue
         ext = file_path.suffix.lower()
-        if ext not in (".js", ".ts", ".mjs", ".cjs"):
+        if ext not in (".js", ".ts", ".mjs", ".cjs", ".jsx", ".tsx", ".mts", ".cts"):
             continue
 
         rel = str(file_path.relative_to(root_path))
         try:
             with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
                 lines = f.readlines()
+
+            # Check Next.js App Router route handlers: app/**/route.(ts|js|mjs)
+            if file_path.name in ("route.ts", "route.js", "route.mjs", "route.cjs"):
+                parts = file_path.parent.parts
+                if "app" in parts:
+                    app_idx = len(parts) - 1 - list(reversed(parts)).index("app")
+                    route_subpath = "/".join(parts[app_idx + 1 :])
+                    inferred_path = f"/{route_subpath}" if route_subpath else "/"
+                    for idx, line in enumerate(lines, start=1):
+                        m_export = re.search(
+                            r"""export\s+(?:async\s+)?(?:function|const)\s+(GET|POST|PUT|DELETE|PATCH|HEAD|OPTIONS)\b""",
+                            line,
+                        )
+                        if m_export:
+                            method = m_export.group(1).upper()
+                            body_window = " ".join(l.strip() for l in lines[idx - 1 : min(len(lines), idx + 15)])
+                            has_auth = any(
+                                tok in body_window
+                                for tok in ["auth", "session", "token", "jwt", "getServerSession", "verify"]
+                            )
+                            routes.append(
+                                {
+                                    "method": method,
+                                    "path": inferred_path,
+                                    "handler": f"{rel}:{idx}",
+                                    "framework": "Next.js App Router",
+                                    "auth_required": has_auth,
+                                }
+                            )
 
             for idx, line in enumerate(lines, start=1):
                 # Check for auth tokens on current line or preceding decorator lines
@@ -53,7 +82,7 @@ def extract_node_routes(root_path: Path):
                 ]
                 combined = line
                 # Look ahead up to 4 lines if method call spans multiple lines
-                if re.search(r"""(?:app|router|fastify|server)\.(?:get|post|put|delete|patch|options|head)\s*\(""", line):
+                if re.search(r"""(?:app|router|[a-zA-Z0-9_]*router|fastify|server|api|v[0-9]+|route)\.(?:get|post|put|delete|patch|options|head)\s*\(""", line):
                     combined = " ".join(l.strip() for l in lines[idx - 1 : min(len(lines), idx + 4)])
 
                 has_auth = any(tok in combined for tok in auth_tokens)
@@ -109,9 +138,9 @@ def extract_other_routes(root_path: Path):
                     if line.strip().startswith("@"):
                         combined_py = " ".join(l.strip() for l in lines[idx - 1 : min(len(lines), idx + 4)])
 
-                    # FastAPI: @app.get('/path')
+                    # FastAPI: @app.get('/path') or @app.websocket('/ws')
                     m_fastapi = re.search(
-                        r"""@(?:app|router|api)\.(get|post|put|delete|patch)\s*\(\s*['"]([^'"]+)['"]""",
+                        r"""@(?:app|router|api)\.(get|post|put|delete|patch|websocket|head|options)\s*\(\s*['"]([^'"]+)['"]""",
                         combined_py,
                     )
                     if m_fastapi:
@@ -121,7 +150,7 @@ def extract_other_routes(root_path: Path):
                                 "path": m_fastapi.group(2),
                                 "handler": f"{rel}:{idx}",
                                 "framework": "FastAPI",
-                                "auth_required": "login_required" in combined_py or "Depends(" in combined_py,
+                                "auth_required": any(tok in combined_py for tok in ["login_required", "Depends(", "Security(", "OAuth2", "HTTPBearer"]),
                             }
                         )
                         continue
@@ -136,13 +165,17 @@ def extract_other_routes(root_path: Path):
                             method_str = "/".join(methods_list).upper() if methods_list else "GET"
                         else:
                             method_str = "GET"
+                        has_flask_auth = any(
+                            tok in combined_py
+                            for tok in ["login_required", "jwt_required", "token_required", "requires_auth", "permission_required", "auth_required"]
+                        )
                         routes.append(
                             {
                                 "method": method_str,
                                 "path": route_path,
                                 "handler": f"{rel}:{idx}",
                                 "framework": "Flask",
-                                "auth_required": "login_required" in combined_py,
+                                "auth_required": has_flask_auth,
                             }
                         )
                         continue
@@ -176,10 +209,10 @@ def extract_other_routes(root_path: Path):
                         )
                         continue
 
-                # 2. Go (Gin, Echo, Chi): r.GET('/path', handler)
+                # 2. Go (Gin, Echo, Chi, net/http): r.GET('/path', handler) or r.Get('/path', handler)
                 elif ext == ".go":
                     m_go = re.search(
-                        r"""(?:r|router|app|g|api)\.(GET|POST|PUT|DELETE|PATCH)\s*\(\s*['"]([^'"]+)['"]""",
+                        r"""(?:r|router|app|g|api|e|srv|server|v[0-9]+)\.(GET|POST|PUT|DELETE|PATCH|Get|Post|Put|Delete|Patch)\s*\(\s*['"]([^'"]+)['"]""",
                         line,
                     )
                     if m_go:
@@ -188,7 +221,23 @@ def extract_other_routes(root_path: Path):
                                 "method": m_go.group(1).upper(),
                                 "path": m_go.group(2),
                                 "handler": f"{rel}:{idx}",
-                                "framework": "Go/Gin/Echo",
+                                "framework": "Go/Gin/Echo/Chi",
+                                "auth_required": False,
+                            }
+                        )
+                        continue
+
+                    m_http = re.search(
+                        r"""(?:http|mux|router|r|srv)\.HandleFunc\s*\(\s*['"]([^'"]+)['"]""",
+                        line,
+                    )
+                    if m_http:
+                        routes.append(
+                            {
+                                "method": "ANY",
+                                "path": m_http.group(1),
+                                "handler": f"{rel}:{idx}",
+                                "framework": "Go/net-http",
                                 "auth_required": False,
                             }
                         )
@@ -228,31 +277,45 @@ def extract_other_routes(root_path: Path):
                         )
                         continue
 
-                # 4. Ruby (Rails): get '/path', to: 'controller#action'
-                elif ext == ".rb" and "routes" in name:
-                    m_rails = re.search(r"""(get|post|put|delete|patch)\s+['"]([^'"]+)['"]""", line)
-                    if m_rails:
-                        routes.append(
-                            {
-                                "method": m_rails.group(1).upper(),
-                                "path": m_rails.group(2),
-                                "handler": f"{rel}:{idx}",
-                                "framework": "Rails",
-                                "auth_required": False,
-                            }
-                        )
-                        continue
+                # 4. Ruby (Rails / Sinatra): get '/path', to: 'controller#action' or get '/path' do
+                elif ext == ".rb":
+                    if "routes" in name:
+                        m_rails = re.search(r"""(get|post|put|delete|patch)\s+['"]([^'"]+)['"]""", line)
+                        if m_rails:
+                            routes.append(
+                                {
+                                    "method": m_rails.group(1).upper(),
+                                    "path": m_rails.group(2),
+                                    "handler": f"{rel}:{idx}",
+                                    "framework": "Rails",
+                                    "auth_required": False,
+                                }
+                            )
+                            continue
+                    else:
+                        m_sinatra = re.search(r"""^\s*(get|post|put|delete|patch)\s+['"]([^'"]+)['"]\s+do""", line)
+                        if m_sinatra:
+                            routes.append(
+                                {
+                                    "method": m_sinatra.group(1).upper(),
+                                    "path": m_sinatra.group(2),
+                                    "handler": f"{rel}:{idx}",
+                                    "framework": "Sinatra",
+                                    "auth_required": False,
+                                }
+                            )
+                            continue
 
-                # 5. Rust (Actix-web / Axum)
+                # 5. Rust (Actix-web / Rocket / Axum)
                 elif ext == ".rs":
-                    m_actix = re.search(r"""#\[(get|post|put|delete|patch)\s*\(\s*["']([^"']+)["']\s*\)\]""", line, re.IGNORECASE)
+                    m_actix = re.search(r"""#\[(get|post|put|delete|patch|head|options)\s*\(\s*["']([^"']+)["'](?:\s*,[^)]*)?\s*\)\]""", line, re.IGNORECASE)
                     if m_actix:
                         routes.append(
                             {
                                 "method": m_actix.group(1).upper(),
                                 "path": m_actix.group(2),
                                 "handler": f"{rel}:{idx}",
-                                "framework": "Rust/Actix",
+                                "framework": "Rust/Actix/Rocket",
                                 "auth_required": False,
                             }
                         )
@@ -263,6 +326,18 @@ def extract_other_routes(root_path: Path):
                             {
                                 "method": m_axum.group(2).upper(),
                                 "path": m_axum.group(1),
+                                "handler": f"{rel}:{idx}",
+                                "framework": "Rust/Axum",
+                                "auth_required": False,
+                            }
+                        )
+                        continue
+                    m_nest = re.search(r"""\.nest\s*\(\s*["']([^"']+)["']\s*,""", line)
+                    if m_nest:
+                        routes.append(
+                            {
+                                "method": "NEST",
+                                "path": m_nest.group(1),
                                 "handler": f"{rel}:{idx}",
                                 "framework": "Rust/Axum",
                                 "auth_required": False,
@@ -320,7 +395,7 @@ def extract_openapi_specs(root_path: Path):
                     for line in content.splitlines():
                         if not line.strip() or line.strip().startswith("#"):
                             continue
-                        m_path = re.match(r"""^(\s*)(?:['"]?)(/[a-zA-Z0-9_{}/.-]+)(?:['"]?):\s*$""", line)
+                        m_path = re.match(r"""^(\s*)(?:['"]?)(/[a-zA-Z0-9_{}/.:~@-]+)(?:['"]?):\s*$""", line)
                         if m_path:
                             curr_path_indent = len(m_path.group(1))
                             curr_path = m_path.group(2)
@@ -422,6 +497,17 @@ def extract_schemas_and_rpc(root_path: Path):
                                         "return_type": "inferred",
                                     }
                                 )
+                        if "socket.on(" in line or "ws.on(" in line:
+                            ws_m = re.search(r"""(?:socket|ws)\.on\s*\(\s*['"]([^'"]+)['"]""", line)
+                            if ws_m and ws_m.group(1) not in ("disconnect", "connect", "connection", "error"):
+                                graphql_ops.append(
+                                    {
+                                        "file": f"{rel}:{idx}",
+                                        "operation": "WebSocket/Socket.IO",
+                                        "name": ws_m.group(1),
+                                        "return_type": "event",
+                                    }
+                                )
             except Exception:
                 pass
 
@@ -445,24 +531,36 @@ def extract_cli_and_exports(root_path: Path):
         if ext in (".py", ".js", ".ts", ".go", ".rs"):
             try:
                 with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
-                    for idx, line in enumerate(f, start=1):
-                        # Commander: .command('foo')
-                        m_cmd = re.search(r"""\.command\s*\(\s*['"]([^'"]+)['"]""", line)
-                        if m_cmd:
-                            cli_commands.append({"file": f"{rel}:{idx}", "command": m_cmd.group(1)})
-                        # Click / Typer: @cli.command('foo') or @app.command()
-                        m_click = re.search(r"""@(?:cli|app)\.command\s*\(\s*(?:['"]([^'"]+)['"])?""", line)
-                        if m_click:
-                            cmd_name = m_click.group(1) or "inferred"
-                            cli_commands.append({"file": f"{rel}:{idx}", "command": cmd_name})
-                        # Cobra: Use: "foo"
-                        m_cobra = re.search(r"""Use:\s*["']([^"'\s]+)""", line)
-                        if m_cobra and ext == ".go":
-                            cli_commands.append({"file": f"{rel}:{idx}", "command": m_cobra.group(1)})
-                        # Python argparse: add_parser("build")
-                        m_argp = re.search(r"""add_parser\s*\(\s*['"]([^'"]+)['"]""", line)
-                        if m_argp and ext == ".py":
-                            cli_commands.append({"file": f"{rel}:{idx}", "command": m_argp.group(1)})
+                    file_lines = f.readlines()
+                for idx, line in enumerate(file_lines, start=1):
+                    # Commander: .command('foo [arg]')
+                    m_cmd = re.search(r"""\.command\s*\(\s*['"]([^'"]+)['"]""", line)
+                    if m_cmd:
+                        cmd_word = m_cmd.group(1).strip().split()[0]
+                        cli_commands.append({"file": f"{rel}:{idx}", "command": cmd_word})
+                    # Click / Typer: @cli.command('foo'), @click.command(), or @app.command()
+                    m_click = re.search(
+                        r"""@(?:cli|app|click|main|[a-zA-Z0-9_]*cli)\.(?:command|group)\s*(?:\(\s*['"]?([^'")\s]*)['"]?)?""",
+                        line,
+                    )
+                    if m_click:
+                        cmd_name = m_click.group(1) or ""
+                        if not cmd_name:
+                            for next_idx in range(idx, min(len(file_lines), idx + 3)):
+                                m_fn = re.search(r"""def\s+([a-zA-Z0-9_]+)\s*\(""", file_lines[next_idx])
+                                if m_fn:
+                                    cmd_name = m_fn.group(1).replace("_", "-")
+                                    break
+                        cmd_name = cmd_name or "inferred"
+                        cli_commands.append({"file": f"{rel}:{idx}", "command": cmd_name})
+                    # Cobra: Use: "foo"
+                    m_cobra = re.search(r"""Use:\s*["']([^"'\s]+)""", line)
+                    if m_cobra and ext == ".go":
+                        cli_commands.append({"file": f"{rel}:{idx}", "command": m_cobra.group(1)})
+                    # Python argparse: add_parser("build")
+                    m_argp = re.search(r"""add_parser\s*\(\s*['"]([^'"]+)['"]""", line)
+                    if m_argp and ext == ".py":
+                        cli_commands.append({"file": f"{rel}:{idx}", "command": m_argp.group(1)})
             except Exception:
                 pass
 
