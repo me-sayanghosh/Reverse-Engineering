@@ -67,11 +67,20 @@ def resolve_js_ts_target(source_file: Path, specifier: str, root_path: Path):
                 target_path,
                 target_path.with_suffix(".ts"),
                 target_path.with_suffix(".tsx"),
+                target_path.with_suffix(".mts"),
+                target_path.with_suffix(".cts"),
                 target_path.with_suffix(".js"),
                 target_path.with_suffix(".jsx"),
+                target_path.with_suffix(".mjs"),
+                target_path.with_suffix(".cjs"),
                 target_path / "index.ts",
                 target_path / "index.tsx",
+                target_path / "index.mts",
+                target_path / "index.cts",
                 target_path / "index.js",
+                target_path / "index.jsx",
+                target_path / "index.mjs",
+                target_path / "index.cjs",
             ]
             for c in candidates:
                 c_resolved = c.resolve()
