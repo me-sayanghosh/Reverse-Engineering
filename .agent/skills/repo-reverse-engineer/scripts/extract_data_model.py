@@ -509,9 +509,10 @@ def parse_python_models(root_path: Path):
 
 
 def parse_other_data_models(root_path: Path):
-    """Parse GORM structs (Go), JPA @Entity (Java), and Diesel/SeaORM (Rust) models."""
+    """Parse GORM structs (Go), JPA @Entity (Java), and Diesel/SeaORM (Rust) models and relations."""
     root_path = root_path.resolve()
     entities = {}
+    relations = []
 
     for file_path in _common.walk_repo(root_path):
         if _common.is_binary(file_path):
@@ -560,6 +561,25 @@ def parse_other_data_models(root_path: Path):
                                 f_name = m_field.group(2)
                                 is_pk = f_name.lower() == "id" or "@Id" in line
                                 columns.append({"name": f_name, "type": f_type, "primary_key": is_pk})
+
+                        # Extract JPA relationships
+                        for rel_m in re.finditer(
+                            r"""@(ManyToOne|OneToMany|OneToOne|ManyToMany)[^;]*?(?:private|protected|public)\s+([a-zA-Z0-9_<>]+)\s+([a-zA-Z0-9_]+)\s*;""",
+                            content,
+                            re.DOTALL,
+                        ):
+                            rel_type = rel_m.group(1)
+                            raw_target = rel_m.group(2)
+                            target_entity = re.sub(r"""^(?:List|Set|Collection)<([a-zA-Z0-9_]+)>$""", r"\1", raw_target)
+                            relations.append(
+                                {
+                                    "from": class_name,
+                                    "to": target_entity,
+                                    "from_column": rel_m.group(3),
+                                    "type": f"jpa_{rel_type}",
+                                }
+                            )
+
                         entities[class_name] = {
                             "name": class_name,
                             "file": rel,
@@ -595,7 +615,7 @@ def parse_other_data_models(root_path: Path):
             except Exception:
                 pass
 
-    return list(entities.values())
+    return list(entities.values()), relations
 
 
 def render_mermaid_erd(entities: list, relations: list, max_entities: int = 25) -> str:
@@ -663,7 +683,7 @@ def main():
     prisma_entities, prisma_relations = parse_prisma_and_orm_entities(root_path)
     mongoose_entities, mongoose_relations = parse_mongoose_schemas(root_path)
     python_entities, python_relations = parse_python_models(root_path)
-    other_entities = parse_other_data_models(root_path)
+    other_entities, other_relations = parse_other_data_models(root_path)
 
     all_entities = (
         sql_entities
@@ -677,6 +697,7 @@ def main():
         + prisma_relations
         + mongoose_relations
         + python_relations
+        + other_relations
     )
 
     data = {
