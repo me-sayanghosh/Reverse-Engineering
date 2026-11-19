@@ -361,7 +361,7 @@ def extract_schemas_and_rpc(root_path: Path):
                     service_name = s_match.group(1)
                     body = s_match.group(2)
                     for rpc_m in re.finditer(
-                        r"rpc\s+([a-zA-Z0-9_]+)\s*\(\s*([a-zA-Z0-9_.]+)\s*\)\s*returns\s*\(\s*([a-zA-Z0-9_.]+)\s*\)",
+                        r"rpc\s+([a-zA-Z0-9_]+)\s*\(\s*(?:stream\s+)?([a-zA-Z0-9_.]+)\s*\)\s*returns\s*\(\s*(?:stream\s+)?([a-zA-Z0-9_.]+)\s*\)",
                         body,
                     ):
                         rpc_name = rpc_m.group(1)
