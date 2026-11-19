@@ -432,6 +432,10 @@ def extract_cli_and_exports(root_path: Path):
                         m_cobra = re.search(r"""Use:\s*["']([^"'\s]+)""", line)
                         if m_cobra and ext == ".go":
                             cli_commands.append({"file": f"{rel}:{idx}", "command": m_cobra.group(1)})
+                        # Python argparse: add_parser("build")
+                        m_argp = re.search(r"""add_parser\s*\(\s*['"]([^'"]+)['"]""", line)
+                        if m_argp and ext == ".py":
+                            cli_commands.append({"file": f"{rel}:{idx}", "command": m_argp.group(1)})
             except Exception:
                 pass
 
