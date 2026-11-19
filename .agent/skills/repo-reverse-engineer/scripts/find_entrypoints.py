@@ -248,10 +248,13 @@ def find_manifest_entrypoints(root_path: Path):
 
 BOOTSTRAP_PATTERNS = [
     (r"app\.listen\s*\(", "Express/Node app.listen bootstrap"),
+    (r"fastify\.listen\s*\(", "Fastify server listen bootstrap"),
+    (r"NestFactory\.create\s*\(", "NestJS NestFactory application bootstrap"),
     (r"createServer\s*\(", "Node http.createServer bootstrap"),
     (r"uvicorn\.run\s*\(", "Python uvicorn.run ASGI bootstrap"),
     (r"app\.run\s*\(", "Flask/Python app.run server bootstrap"),
     (r"http\.ListenAndServe\s*\(", "Go http.ListenAndServe server bootstrap"),
+    (r"(?:router|r)\.Run\s*\(", "Go Gin server router.Run bootstrap"),
     (r"@SpringBootApplication", "Spring Boot application bootstrap"),
     (r"HttpServer::new\s*\(", "Rust Actix-web server bootstrap"),
     (r"axum::serve\s*\(", "Rust Axum server bootstrap"),
