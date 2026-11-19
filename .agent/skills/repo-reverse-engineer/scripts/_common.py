@@ -100,6 +100,16 @@ def read_text_safe(path: str | Path, max_bytes: int = 1024 * 1024) -> str:
     try:
         with open(path, "rb") as f:
             data = f.read(max_bytes)
+        if data.startswith((b"\xff\xfe\x00\x00", b"\x00\x00\xfe\xff")):
+            try:
+                return data.decode("utf-32")
+            except UnicodeDecodeError:
+                pass
+        if data.startswith((b"\xff\xfe", b"\xfe\xff")):
+            try:
+                return data.decode("utf-16")
+            except UnicodeDecodeError:
+                pass
         try:
             return data.decode("utf-8-sig")
         except UnicodeDecodeError:
