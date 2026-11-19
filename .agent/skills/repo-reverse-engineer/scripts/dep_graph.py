@@ -685,8 +685,19 @@ def render_mermaid_graph(modules: list, edges: list, max_nodes: int = 40) -> str
         lines.append("  Empty[No internal modules detected]")
         return "\n".join(lines)
 
-    # If modules exceed max_nodes, pick top modules and bucket rest into 'other'
-    top_modules = set(modules[: max_nodes - 1]) if len(modules) > max_nodes else set(modules)
+    # If modules exceed max_nodes, rank by connection weight to retain core architectural hubs
+    if len(modules) > max_nodes:
+        conn_count = {m: 0 for m in modules}
+        for e in edges:
+            s, t = e.get("source"), e.get("target")
+            if s in conn_count:
+                conn_count[s] += e.get("weight", 1)
+            if t in conn_count:
+                conn_count[t] += e.get("weight", 1)
+        ranked = sorted(modules, key=lambda m: (conn_count.get(m, 0), m), reverse=True)
+        top_modules = set(ranked[: max_nodes - 1])
+    else:
+        top_modules = set(modules)
     has_other = len(modules) > len(top_modules)
 
     node_ids = {}
