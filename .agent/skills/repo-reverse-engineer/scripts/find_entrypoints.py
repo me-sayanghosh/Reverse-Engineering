@@ -233,6 +233,17 @@ def find_manifest_entrypoints(root_path: Path):
                         "reason": "Rust binary crate entrypoint",
                     }
                 )
+            elif (len(parts) == 2 and parts[0] == "src" and parts[1] == "lib.rs") or (
+                len(parts) == 1 and parts[0] == "lib.rs"
+            ):
+                entries.append(
+                    {
+                        "path": f"{rel}:1",
+                        "type": "main",
+                        "confidence": 1.0,
+                        "reason": "Rust library crate root entrypoint",
+                    }
+                )
 
     # 5. Java Main methods
     for file_path in _common.walk_repo(root_path):
