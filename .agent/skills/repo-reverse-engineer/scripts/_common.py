@@ -222,8 +222,9 @@ EXT_TO_LANG: dict[str, str] = {
 LOCKFILES_LOWER = {f.lower() for f in LOCKFILES}
 
 
-def is_lockfile(filename: str) -> bool:
-    return filename.lower() in LOCKFILES_LOWER
+def is_lockfile(filename: str | Path) -> bool:
+    name = str(filename).replace("\\", "/").split("/")[-1].lower()
+    return name in LOCKFILES_LOWER
 
 
 def is_minified(filename: str | Path) -> bool:
