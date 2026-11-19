@@ -73,6 +73,24 @@ def find_env_vars(root_path: Path):
             except Exception:
                 pass
 
+        # Check Dockerfile ENV instructions
+        if name == "dockerfile" or name.startswith("dockerfile.") or name == "containerfile":
+            try:
+                with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                    for idx, line in enumerate(f, start=1):
+                        m_env = re.match(r"""^\s*ENV\s+([A-Za-z0-9_]+)[=\s]""", line)
+                        if m_env:
+                            var_name = m_env.group(1)
+                            if var_name not in env_vars:
+                                env_vars[var_name] = {
+                                    "name": var_name,
+                                    "category": categorize_env_var(var_name),
+                                    "occurrences": [],
+                                }
+                            env_vars[var_name]["occurrences"].append(f"{rel}:{idx}")
+            except Exception:
+                pass
+
         # Check source code invocations
         try:
             with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
