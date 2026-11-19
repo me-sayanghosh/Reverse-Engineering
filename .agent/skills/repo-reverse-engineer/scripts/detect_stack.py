@@ -426,6 +426,8 @@ def infer_commands(root_path: Path, ecosystems: list):
                     pm = "pnpm"
                 elif (root_path / "yarn.lock").exists():
                     pm = "yarn"
+                elif (root_path / "bun.lockb").exists() or (root_path / "bun.lock").exists():
+                    pm = "bun"
 
                 commands["install"] = f"{pm} install"
                 if "build" in scripts:
@@ -494,6 +496,9 @@ def infer_commands(root_path: Path, ecosystems: list):
         commands.setdefault("build", "cargo build")
         commands.setdefault("test", "cargo test")
         commands.setdefault("start", "cargo run")
+    elif any("Deno" in e for e in ecosystems):
+        commands.setdefault("test", "deno test")
+        commands.setdefault("start", "deno run main.ts")
 
     return commands
 
