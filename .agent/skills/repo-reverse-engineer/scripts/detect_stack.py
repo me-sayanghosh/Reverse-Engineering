@@ -206,6 +206,12 @@ OTHER_FRAMEWORKS_MAP = {
         "github.com/gin-gonic/gin": "Gin",
         "github.com/labstack/echo": "Echo",
         "github.com/gofiber/fiber": "Fiber",
+        "github.com/go-chi/chi": "Chi",
+        "github.com/gorilla/mux": "Gorilla Mux",
+        "github.com/spf13/cobra": "Cobra",
+        "gorm.io/gorm": "GORM",
+        "github.com/jmoiron/sqlx": "Sqlx",
+        "entgo.io/ent": "Ent",
         "google.golang.org/grpc": "gRPC",
     },
     # Rust (Cargo.toml)
@@ -214,6 +220,14 @@ OTHER_FRAMEWORKS_MAP = {
         "axum": "Axum",
         "tokio": "Tokio",
         "rocket": "Rocket",
+        "warp": "Warp",
+        "poem": "Poem",
+        "diesel": "Diesel",
+        "sea-orm": "SeaORM",
+        "sqlx": "SQLx",
+        "clap": "Clap",
+        "serde": "Serde",
+        "tonic": "Tonic (gRPC)",
     },
     # Ruby (Gemfile)
     "Gemfile": {
