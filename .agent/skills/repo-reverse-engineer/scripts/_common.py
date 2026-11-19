@@ -82,18 +82,33 @@ def is_too_large(path: str | Path, limit_bytes: int = 1024 * 1024) -> bool:
 
 
 def is_binary(path: str | Path) -> bool:
-    """Return True if file appears to be binary based on null bytes or decoding."""
+    """Return True if file appears to be binary based on null bytes, encoding, or control characters."""
     try:
         with open(path, "rb") as f:
             chunk = f.read(1024)
+            if not chunk:
+                return False
+            # Check for UTF-16 BOM text files
+            if chunk.startswith((b"\xff\xfe", b"\xfe\xff")):
+                try:
+                    chunk.decode("utf-16")
+                    return False
+                except Exception:
+                    return True
             if b"\x00" in chunk:
                 return True
             # Try decoding as utf-8, handling split multi-byte characters at chunk boundary
             import codecs
-            decoder = codecs.getincrementaldecoder("utf-8")(errors="strict")
-            decoder.decode(chunk, final=False)
-            return False
-    except (UnicodeDecodeError, OSError):
+            try:
+                decoder = codecs.getincrementaldecoder("utf-8")(errors="strict")
+                decoder.decode(chunk, final=False)
+                return False
+            except UnicodeDecodeError:
+                # Heuristic for non-UTF8 single-byte text files (e.g. Latin-1 / Windows-1252)
+                control_chars = bytearray({7, 8, 9, 10, 12, 13, 27} | set(range(0x20, 0x100)) - {0x7f})
+                non_text = chunk.translate(None, control_chars)
+                return (len(non_text) / len(chunk)) > 0.30
+    except OSError:
         return True
 
 
