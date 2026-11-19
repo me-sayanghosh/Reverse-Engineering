@@ -78,6 +78,12 @@ LOCKFILES = {
     "mix.lock",
     "pubspec.lock",
     "shard.lock",
+    "uv.lock",
+    "deno.lock",
+    "pdm.lock",
+    "pixi.lock",
+    "conda-lock.yml",
+    "gradle.lockfile",
 }
 
 
