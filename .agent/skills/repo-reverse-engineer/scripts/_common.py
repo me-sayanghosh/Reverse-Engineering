@@ -50,6 +50,14 @@ DEFAULT_IGNORED_DIRS = {
     ".angular",
     ".svelte-kit",
     ".docusaurus",
+    ".expo",
+    ".parcel-cache",
+    ".nx",
+    ".astro",
+    "cmake-build-debug",
+    "cmake-build-release",
+    ".vs",
+    ".metadata",
 }
 
 LOCKFILES = {
