@@ -541,6 +541,10 @@ def infer_commands(root_path: Path, ecosystems: list):
             break
 
     # Fallback by ecosystem if not already discovered
+    if any("Node" in e or "TypeScript" in e for e in ecosystems):
+        commands.setdefault("install", "npm install")
+        commands.setdefault("test", "npm test")
+        commands.setdefault("start", "npm start")
     if "Python" in ecosystems or any("Python" in e for e in ecosystems):
         commands.setdefault("install", "pip install -r requirements.txt")
         commands.setdefault("test", "pytest")
