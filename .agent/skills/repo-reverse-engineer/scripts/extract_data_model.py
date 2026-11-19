@@ -44,20 +44,19 @@ def parse_sql_migrations(root_path: Path):
                 columns = []
                 fks = []
 
-                for raw_line in body.splitlines():
-                    line = raw_line.strip().rstrip(",")
-                    if not line or line.startswith("--") or line.startswith("/*"):
-                        continue
-
-                    # Check standalone FOREIGN KEY (col) REFERENCES other_table(other_col)
-                    fk_match = re.search(
-                        r"""FOREIGN\s+KEY\s*\(['"`]?(\w+)['"`]?\)\s*REFERENCES\s+['"`]?(\w+)['"`]?\s*\(['"`]?(\w+)['"`]?\)""",
-                        line,
-                        re.IGNORECASE,
-                    )
-                    if fk_match:
-                        from_col, to_table, to_col = fk_match.groups()
-                        fks.append({"from_column": from_col, "target_table": to_table, "target_column": to_col})
+                # Extract standalone or CONSTRAINT foreign key definitions across body
+                table_fks = re.finditer(
+                    r"""(?:CONSTRAINT\s+['"`]?\w+['"`]?\s+)?FOREIGN\s+KEY\s*\(['"`]?(\w+)['"`]?\)\s*REFERENCES\s+['"`]?(\w+)['"`]?\s*(?:\(['"`]?(\w+)['"`]?\))?""",
+                    body,
+                    re.IGNORECASE,
+                )
+                for fkm in table_fks:
+                    from_col = fkm.group(1)
+                    to_table = fkm.group(2)
+                    to_col = fkm.group(3) or "id"
+                    fk_obj = {"from_column": from_col, "target_table": to_table, "target_column": to_col}
+                    if fk_obj not in fks:
+                        fks.append(fk_obj)
                         relations.append(
                             {
                                 "from": table_name,
@@ -67,9 +66,13 @@ def parse_sql_migrations(root_path: Path):
                                 "type": "foreign_key",
                             }
                         )
+
+                for raw_line in body.splitlines():
+                    line = raw_line.strip().rstrip(",")
+                    if not line or line.startswith("--") or line.startswith("/*"):
                         continue
 
-                    # Check table-level constraint keywords
+                    # Skip constraint lines already parsed above
                     col_parts = line.split()
                     if not col_parts:
                         continue

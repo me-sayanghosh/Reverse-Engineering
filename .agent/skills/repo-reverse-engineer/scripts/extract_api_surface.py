@@ -57,11 +57,19 @@ def extract_node_routes(root_path: Path):
                     if prev_line.startswith("@") and any(tok in prev_line for tok in auth_tokens):
                         has_auth = True
 
+                combined = line
+                # Look ahead up to 4 lines if method call spans multiple lines
+                if re.search(r"""(?:app|router|fastify|server)\.(?:get|post|put|delete|patch|options|head)\s*\(""", line):
+                    combined = " ".join(l.strip() for l in lines[idx - 1 : min(len(lines), idx + 4)])
+
                 for pat in NODE_ROUTE_PATTERNS:
-                    m = re.search(pat, line)
+                    m = re.search(pat, combined)
                     if m:
                         method = m.group(1).upper()
                         route_path = m.group(2) if m.group(2) else "/"
+                        # Ignore non-path patterns (e.g. variable identifiers without slash)
+                        if not route_path.startswith("/") and not route_path.startswith("*"):
+                            continue
                         routes.append(
                             {
                                 "method": method,
@@ -97,10 +105,14 @@ def extract_other_routes(root_path: Path):
             for idx, line in enumerate(lines, start=1):
                 # 1. Python (FastAPI, Flask, Django)
                 if ext in (".py", ".pyi"):
+                    combined_py = line
+                    if line.strip().startswith("@"):
+                        combined_py = " ".join(l.strip() for l in lines[idx - 1 : min(len(lines), idx + 4)])
+
                     # FastAPI: @app.get('/path')
                     m_fastapi = re.search(
                         r"""@(?:app|router|api)\.(get|post|put|delete|patch)\s*\(\s*['"]([^'"]+)['"]""",
-                        line,
+                        combined_py,
                     )
                     if m_fastapi:
                         routes.append(
@@ -109,13 +121,13 @@ def extract_other_routes(root_path: Path):
                                 "path": m_fastapi.group(2),
                                 "handler": f"{rel}:{idx}",
                                 "framework": "FastAPI",
-                                "auth_required": "login_required" in line or "Depends(" in line,
+                                "auth_required": "login_required" in combined_py or "Depends(" in combined_py,
                             }
                         )
                         continue
 
                     # Flask: @app.route('/path', methods=['GET', 'POST']) or @bp.route(...)
-                    m_flask = re.search(r"""@(?:[a-zA-Z0-9_]+)\.route\s*\(\s*['"`]([^'"`]+)['"`](?:.*?methods\s*=\s*\[(.*?)\])?""", line)
+                    m_flask = re.search(r"""@(?:[a-zA-Z0-9_]+)\.route\s*\(\s*['"`]([^'"`]+)['"`](?:.*?methods\s*=\s*\[(.*?)\])?""", combined_py)
                     if m_flask:
                         route_path = m_flask.group(1)
                         methods_raw = m_flask.group(2)
@@ -130,20 +142,35 @@ def extract_other_routes(root_path: Path):
                                 "path": route_path,
                                 "handler": f"{rel}:{idx}",
                                 "framework": "Flask",
-                                "auth_required": "login_required" in line,
+                                "auth_required": "login_required" in combined_py,
                             }
                         )
                         continue
 
-                    # Django: path('users/', views.user_list)
-                    m_django = re.search(r"""path\s*\(\s*['"]([^'"]+)['"]""", line)
+                    # Django: path('users/', views.user_list) or re_path(r'^users/', ...)
+                    m_django = re.search(r"""(?:path|re_path)\s*\(\s*r?['"]([^'"]+)['"]""", line)
                     if m_django and "urls" in name:
+                        clean_p = m_django.group(1).lstrip("^/").rstrip("$")
                         routes.append(
                             {
                                 "method": "ANY",
-                                "path": f"/{m_django.group(1).lstrip('/')}",
+                                "path": f"/{clean_p}",
                                 "handler": f"{rel}:{idx}",
                                 "framework": "Django",
+                                "auth_required": False,
+                            }
+                        )
+                        continue
+
+                    # Django REST Framework router.register('users', UserViewSet)
+                    m_drf = re.search(r"""router\.register\s*\(\s*r?['"]([^'"]+)['"]""", line)
+                    if m_drf:
+                        routes.append(
+                            {
+                                "method": "CRUD",
+                                "path": f"/{m_drf.group(1).strip('/')}",
+                                "handler": f"{rel}:{idx}",
+                                "framework": "Django/DRF",
                                 "auth_required": False,
                             }
                         )
@@ -167,7 +194,7 @@ def extract_other_routes(root_path: Path):
                         )
                         continue
 
-                # 3. Java/Kotlin (Spring): @GetMapping('/path')
+                # 3. Java/Kotlin (Spring): @GetMapping('/path') or @RequestMapping
                 elif ext in (".java", ".kt"):
                     m_spring = re.search(
                         r"""@(Get|Post|Put|Delete|Patch)Mapping\s*\(\s*(?:(?:value|path)\s*=\s*)?['"]?([^'")]*)['"]?\s*\)""",
@@ -178,6 +205,22 @@ def extract_other_routes(root_path: Path):
                             {
                                 "method": m_spring.group(1).upper(),
                                 "path": m_spring.group(2) or "/",
+                                "handler": f"{rel}:{idx}",
+                                "framework": "Spring",
+                                "auth_required": "@PreAuthorize" in line or "@Secured" in line,
+                            }
+                        )
+                        continue
+
+                    m_req_map = re.search(
+                        r"""@RequestMapping\s*\(\s*(?:(?:value|path)\s*=\s*)?['"]?([^'",)]*)['"]?(?:.*method\s*=\s*(?:RequestMethod\.)?([A-Z]+))?""",
+                        line,
+                    )
+                    if m_req_map:
+                        routes.append(
+                            {
+                                "method": m_req_map.group(2) or "ANY",
+                                "path": m_req_map.group(1) or "/",
                                 "handler": f"{rel}:{idx}",
                                 "framework": "Spring",
                                 "auth_required": "@PreAuthorize" in line or "@Secured" in line,
@@ -243,26 +286,31 @@ def extract_openapi_specs(root_path: Path):
                                         }
                                     )
                 else:
-                    # YAML parsing via regex
+                    # YAML parsing with indentation tracking
                     content = file_path.read_text(encoding="utf-8", errors="ignore")
                     curr_path = None
+                    curr_path_indent = -1
                     for line in content.splitlines():
-                        # Match path line: e.g. "  /users:" or "  '/users':"
-                        m_path = re.match(r"""^\s{2}['"]?(/[a-zA-Z0-9_{}/.-]+)['"]?:\s*$""", line)
+                        if not line.strip() or line.strip().startswith("#"):
+                            continue
+                        m_path = re.match(r"""^(\s*)(?:['"]?)(/[a-zA-Z0-9_{}/.-]+)(?:['"]?):\s*$""", line)
                         if m_path:
-                            curr_path = m_path.group(1)
+                            curr_path_indent = len(m_path.group(1))
+                            curr_path = m_path.group(2)
                             continue
                         if curr_path:
-                            m_method = re.match(r"""^\s{4}(get|post|put|delete|patch|options):\s*$""", line)
-                            if m_method:
+                            m_method = re.match(r"""^(\s+)(get|post|put|delete|patch|options|head):\s*$""", line, re.IGNORECASE)
+                            if m_method and len(m_method.group(1)) > curr_path_indent:
                                 endpoints.append(
                                     {
                                         "spec_file": rel,
                                         "path": curr_path,
-                                        "method": m_method.group(1).upper(),
+                                        "method": m_method.group(2).upper(),
                                         "summary": "",
                                     }
                                 )
+                            elif len(line) - len(line.lstrip()) <= curr_path_indent:
+                                curr_path = None
             except Exception:
                 pass
 
@@ -285,8 +333,8 @@ def extract_schemas_and_rpc(root_path: Path):
         if ext in (".graphql", ".gql"):
             try:
                 content = file_path.read_text(encoding="utf-8", errors="ignore")
-                # Find queries and mutations
-                for m in re.finditer(r"(?:type\s+(Query|Mutation|Subscription)\s*\{([^}]+)\})", content):
+                # Find queries and mutations (including extend type)
+                for m in re.finditer(r"(?:(?:extend\s+)?type\s+(Query|Mutation|Subscription)\s*\{([^}]+)\})", content):
                     op_type = m.group(1)
                     body = m.group(2)
                     for line in body.splitlines():
@@ -313,7 +361,7 @@ def extract_schemas_and_rpc(root_path: Path):
                     service_name = s_match.group(1)
                     body = s_match.group(2)
                     for rpc_m in re.finditer(
-                        r"rpc\s+([a-zA-Z0-9_]+)\s*\(\s*([a-zA-Z0-9_.]+)\s*\)\s*returns\s*\(\s*([a-zA-Z0-9_.]+)\s*\)",
+                        r"rpc\s+([a-zA-Z0-9_]+)\s*\(\s*(?:stream\s+)?([a-zA-Z0-9_.]+)\s*\)\s*returns\s*\(\s*(?:stream\s+)?([a-zA-Z0-9_.]+)\s*\)",
                         body,
                     ):
                         rpc_name = rpc_m.group(1)
@@ -384,6 +432,10 @@ def extract_cli_and_exports(root_path: Path):
                         m_cobra = re.search(r"""Use:\s*["']([^"'\s]+)""", line)
                         if m_cobra and ext == ".go":
                             cli_commands.append({"file": f"{rel}:{idx}", "command": m_cobra.group(1)})
+                        # Python argparse: add_parser("build")
+                        m_argp = re.search(r"""add_parser\s*\(\s*['"]([^'"]+)['"]""", line)
+                        if m_argp and ext == ".py":
+                            cli_commands.append({"file": f"{rel}:{idx}", "command": m_argp.group(1)})
             except Exception:
                 pass
 

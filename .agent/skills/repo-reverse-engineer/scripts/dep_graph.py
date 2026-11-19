@@ -156,8 +156,13 @@ def parse_python_imports(file_path: Path, root_path: Path):
                 if hasattr(sys, "stdlib_module_names") and top_pkg in sys.stdlib_module_names:
                     imp_type = "stdlib"
                 else:
-                    # Check if internal to root
+                    # Check if internal to root or inside src/ / lib/
                     possible_pkg = root_path / top_pkg
+                    if not possible_pkg.exists() and (root_path / "src" / top_pkg).exists():
+                        possible_pkg = root_path / "src" / top_pkg
+                    elif not possible_pkg.exists() and (root_path / "lib" / top_pkg).exists():
+                        possible_pkg = root_path / "lib" / top_pkg
+
                     if possible_pkg.exists():
                         target_rel = str(possible_pkg.relative_to(root_path))
                         imp_type = "internal"
@@ -235,6 +240,11 @@ def parse_python_imports(file_path: Path, root_path: Path):
                     imp_type = "stdlib"
                 else:
                     possible_pkg = root_path / top_pkg
+                    if not possible_pkg.exists() and (root_path / "src" / top_pkg).exists():
+                        possible_pkg = root_path / "src" / top_pkg
+                    elif not possible_pkg.exists() and (root_path / "lib" / top_pkg).exists():
+                        possible_pkg = root_path / "lib" / top_pkg
+
                     if possible_pkg.exists():
                         target_rel = str(possible_pkg.relative_to(root_path))
                         imp_type = "internal"
@@ -309,8 +319,21 @@ def parse_rust_imports(file_path: Path, root_path: Path):
     for m in matches:
         raw = m.strip()
         if raw.startswith("crate::") or raw.startswith("super::"):
-            # Internal
-            sub = raw.replace("crate::", "").replace("super::", "").split("::")[0]
+            clean = raw.replace("crate::", "").replace("super::", "").strip()
+            if clean.startswith("{"):
+                for item in clean.strip("{}").split(","):
+                    p = item.strip().split("::")[0].strip()
+                    if p:
+                        edges.append(
+                            {
+                                "source": source_rel,
+                                "target": f"src/{p}",
+                                "type": "internal",
+                                "specifier": raw,
+                            }
+                        )
+                continue
+            sub = clean.split("::")[0].strip("{}").strip()
             edges.append(
                 {
                     "source": source_rel,
@@ -319,7 +342,7 @@ def parse_rust_imports(file_path: Path, root_path: Path):
                     "specifier": raw,
                 }
             )
-        elif raw.startswith("std::") or raw.startswith("core::"):
+        elif raw.startswith("std::") or raw.startswith("core::") or raw.startswith("alloc::"):
             edges.append(
                 {
                     "source": source_rel,
@@ -329,10 +352,11 @@ def parse_rust_imports(file_path: Path, root_path: Path):
                 }
             )
         else:
+            crate_name = raw.split("::")[0].strip("{}").strip()
             edges.append(
                 {
                     "source": source_rel,
-                    "target": raw.split("::")[0],
+                    "target": crate_name,
                     "type": "external",
                     "specifier": raw,
                 }
@@ -362,6 +386,45 @@ def parse_java_imports(file_path: Path, root_path: Path, pkg_prefix: str = ""):
                 "specifier": raw,
             }
         )
+    return edges
+
+
+def parse_cpp_includes(file_path: Path, root_path: Path):
+    """Parse C/C++ #include directives and resolve local headers."""
+    edges = []
+    source_rel = str(file_path.resolve().relative_to(root_path))
+    try:
+        content = file_path.read_text(encoding="utf-8", errors="ignore")
+        for m in re.finditer(r'#include\s+([<"])([^>"]+)[>"]', content):
+            quote_type = m.group(1)
+            header = m.group(2)
+            if quote_type == '"':
+                cand = file_path.parent / header
+                rel_target = header
+                if cand.exists():
+                    try:
+                        rel_target = str(cand.resolve().relative_to(root_path))
+                    except ValueError:
+                        pass
+                edges.append(
+                    {
+                        "source": source_rel,
+                        "target": rel_target,
+                        "type": "internal",
+                        "specifier": header,
+                    }
+                )
+            else:
+                edges.append(
+                    {
+                        "source": source_rel,
+                        "target": header,
+                        "type": "stdlib",
+                        "specifier": header,
+                    }
+                )
+    except Exception:
+        pass
     return edges
 
 
@@ -400,6 +463,8 @@ def collect_all_imports(root_path: Path):
             all_edges.extend(parse_rust_imports(file_path, root_path))
         elif ext in (".java", ".kt"):
             all_edges.extend(parse_java_imports(file_path, root_path))
+        elif ext in (".c", ".h", ".cpp", ".cc", ".cxx", ".hpp"):
+            all_edges.extend(parse_cpp_includes(file_path, root_path))
 
     return all_edges
 
@@ -477,7 +542,16 @@ def compute_centrality_and_cycles(modules: list, edges: list):
         visited[m] = 0
 
     cycles = []
+    seen_cycle_tuples = set()
     path = []
+
+    def normalize_cycle(nodes: list) -> tuple:
+        cycle = nodes[:-1] if len(nodes) > 1 and nodes[0] == nodes[-1] else nodes
+        if not cycle:
+            return ()
+        min_idx = cycle.index(min(cycle))
+        rotated = cycle[min_idx:] + cycle[:min_idx]
+        return tuple(rotated + [rotated[0]])
 
     def dfs(curr):
         visited[curr] = 1
@@ -488,7 +562,10 @@ def compute_centrality_and_cycles(modules: list, edges: list):
                 # Cycle found!
                 cycle_start_idx = path.index(neighbor)
                 cycle_path = path[cycle_start_idx:] + [neighbor]
-                cycles.append(cycle_path)
+                norm = normalize_cycle(cycle_path)
+                if norm not in seen_cycle_tuples:
+                    seen_cycle_tuples.add(norm)
+                    cycles.append(list(norm))
             elif visited.get(neighbor) == 0:
                 dfs(neighbor)
 
@@ -575,8 +652,9 @@ def main():
     if not root_path.exists():
         _common.die(f"Repository root does not exist: {root_path}")
 
+    depth = max(1, args.depth)
     all_edges = collect_all_imports(root_path)
-    modules, module_edges = aggregate_module_edges(all_edges, depth=args.depth)
+    modules, module_edges = aggregate_module_edges(all_edges, depth=depth)
     centrality, cycles = compute_centrality_and_cycles(modules, module_edges)
 
     data = {
