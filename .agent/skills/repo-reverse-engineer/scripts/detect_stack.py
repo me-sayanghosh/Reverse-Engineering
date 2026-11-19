@@ -121,6 +121,13 @@ NODE_PKG_TO_FRAMEWORK: dict[str, str] = {
     "drizzle-orm": "Drizzle ORM",
     "commander": "Commander",
     "yargs": "Yargs",
+    "elysia": "Elysia",
+    "@adonisjs/core": "AdonisJS",
+    "zustand": "Zustand",
+    "jotai": "Jotai",
+    "pinia": "Pinia",
+    "redux": "Redux",
+    "@reduxjs/toolkit": "Redux Toolkit",
 }
 
 
