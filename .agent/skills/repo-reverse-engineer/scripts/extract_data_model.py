@@ -107,7 +107,13 @@ def parse_sql_migrations(root_path: Path):
                     if col_match:
                         col_name = col_match.group(1)
                         col_type = re.sub(r"\s+", "", col_match.group(2)).upper()
-                        is_pk = "PRIMARY KEY" in line.upper() or col_name in table_pks
+                        is_pk = (
+                            "PRIMARY KEY" in line.upper()
+                            or col_name in table_pks
+                            or "AUTOINCREMENT" in line.upper()
+                            or "AUTO_INCREMENT" in line.upper()
+                            or col_type in ("SERIAL", "BIGSERIAL", "SMALLSERIAL")
+                        )
 
                         # In-line REFERENCES other_table(other_col)
                         inline_fk = re.search(
