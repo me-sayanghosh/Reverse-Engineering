@@ -34,6 +34,21 @@ NODE_STDLIB = {
     "perf_hooks",
     "worker_threads",
     "assert",
+    "test",
+    "wasi",
+    "diagnostics_channel",
+    "async_hooks",
+    "v8",
+    "vm",
+    "string_decoder",
+    "timers",
+    "tls",
+    "dgram",
+    "dns",
+    "punycode",
+    "constants",
+    "inspector",
+    "trace_events",
 }
 
 
