@@ -200,7 +200,16 @@ SECRET_PATTERNS = [
 
 def mask_secret(secret_str: str, prefix_len: int = 4) -> str:
     """Return strictly redacted/masked string (e.g. AKIA****). Never leaks middle or suffix bytes."""
-    prefix = secret_str[:prefix_len] if len(secret_str) >= prefix_len else secret_str[:2]
+    if not secret_str:
+        return "****"
+    if len(secret_str) <= 2:
+        prefix = ""
+    elif len(secret_str) <= 4:
+        prefix = secret_str[:1]
+    else:
+        # Cap prefix to at most prefix_len or one-third of secret length
+        actual_len = min(prefix_len, max(1, len(secret_str) // 3))
+        prefix = secret_str[:actual_len]
     return f"{prefix}****"
 
 
