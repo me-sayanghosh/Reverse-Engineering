@@ -132,6 +132,11 @@ NODE_PKG_TO_FRAMEWORK: dict[str, str] = {
     "pinia": "Pinia",
     "redux": "Redux",
     "@reduxjs/toolkit": "Redux Toolkit",
+    "turbopack": "Turbopack",
+    "unocss": "UnoCSS",
+    "effector": "Effector",
+    "mobx": "MobX",
+    "lit": "Lit",
 }
 
 
