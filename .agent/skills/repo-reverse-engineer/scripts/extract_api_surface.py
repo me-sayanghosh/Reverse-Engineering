@@ -484,6 +484,17 @@ def extract_schemas_and_rpc(root_path: Path):
                                         "return_type": "inferred",
                                     }
                                 )
+                        if "socket.on(" in line or "ws.on(" in line:
+                            ws_m = re.search(r"""(?:socket|ws)\.on\s*\(\s*['"]([^'"]+)['"]""", line)
+                            if ws_m and ws_m.group(1) not in ("disconnect", "connect", "connection", "error"):
+                                graphql_ops.append(
+                                    {
+                                        "file": f"{rel}:{idx}",
+                                        "operation": "WebSocket/Socket.IO",
+                                        "name": ws_m.group(1),
+                                        "return_type": "event",
+                                    }
+                                )
             except Exception:
                 pass
 
