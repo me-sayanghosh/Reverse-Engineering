@@ -415,6 +415,18 @@ def detect_infra(root_path: Path):
             if "Pulumi" not in seen_types:
                 infra.append({"type": "Pulumi", "file": rel_path})
                 seen_types.add("Pulumi")
+        elif name in ("wrangler.toml", "wrangler.json", "wrangler.jsonc"):
+            if "Cloudflare Workers" not in seen_types:
+                infra.append({"type": "Cloudflare Workers", "file": rel_path})
+                seen_types.add("Cloudflare Workers")
+        elif name == "fly.toml":
+            if "Fly.io" not in seen_types:
+                infra.append({"type": "Fly.io", "file": rel_path})
+                seen_types.add("Fly.io")
+        elif name in ("render.yaml", "render.yml"):
+            if "Render" not in seen_types:
+                infra.append({"type": "Render", "file": rel_path})
+                seen_types.add("Render")
         elif "k8s" in file_path.parts or "kubernetes" in file_path.parts or name.endswith(".k8s.yaml"):
             if "Kubernetes" not in seen_types:
                 infra.append({"type": "Kubernetes", "file": rel_path})
