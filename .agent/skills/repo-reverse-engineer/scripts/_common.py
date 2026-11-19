@@ -260,12 +260,12 @@ def walk_repo(root: str | Path) -> Generator[Path, None, None]:
         pass
 
     for dirpath, dirnames, filenames in os.walk(root_path, onerror=on_walk_error):
-        # Prune ignored directories in-place (allow .github and .circleci for CI configs)
+        # Prune ignored directories in-place (allow CI configuration dotdirs)
         dirnames[:] = [
             d
             for d in dirnames
             if d not in DEFAULT_IGNORED_DIRS
-            and (not d.startswith(".") or d in (".github", ".circleci"))
+            and (not d.startswith(".") or d in (".github", ".circleci", ".gitlab", ".azure-pipelines"))
         ]
 
         for f in filenames:
