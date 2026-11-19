@@ -156,6 +156,44 @@ def parse_js_ts_imports(file_path: Path, root_path: Path):
 import ast
 
 
+def resolve_python_module(mod: str, root_path: Path) -> tuple[str, str]:
+    """Resolve an absolute/top-level Python module specifier to internal, stdlib, or external."""
+    top_pkg = mod.split(".")[0]
+    if hasattr(sys, "stdlib_module_names") and top_pkg in sys.stdlib_module_names:
+        return mod, "stdlib"
+
+    mod_path_str = mod.replace(".", "/")
+    candidates = [
+        root_path / f"{mod_path_str}.py",
+        root_path / mod_path_str,
+        root_path / mod_path_str / "__init__.py",
+        root_path / "src" / f"{mod_path_str}.py",
+        root_path / "src" / mod_path_str,
+        root_path / "src" / mod_path_str / "__init__.py",
+        root_path / "lib" / f"{mod_path_str}.py",
+        root_path / "lib" / mod_path_str,
+        root_path / "lib" / mod_path_str / "__init__.py",
+        root_path / f"{top_pkg}.py",
+        root_path / top_pkg,
+        root_path / top_pkg / "__init__.py",
+        root_path / "src" / f"{top_pkg}.py",
+        root_path / "src" / top_pkg,
+        root_path / "src" / top_pkg / "__init__.py",
+        root_path / "lib" / f"{top_pkg}.py",
+        root_path / "lib" / top_pkg,
+        root_path / "lib" / top_pkg / "__init__.py",
+    ]
+    for cand in candidates:
+        if cand.exists():
+            try:
+                rel = cand.resolve().relative_to(root_path)
+                return str(rel), "internal"
+            except ValueError:
+                pass
+
+    return mod, "external"
+
+
 def parse_python_imports(file_path: Path, root_path: Path):
     """Use Python AST to parse import and import-from nodes, resolving relative and internal modules."""
     root_path = root_path.resolve()
@@ -173,24 +211,7 @@ def parse_python_imports(file_path: Path, root_path: Path):
         if isinstance(node, ast.Import):
             for alias in node.names:
                 mod = alias.name
-                top_pkg = mod.split(".")[0]
-                target_rel = mod
-                imp_type = "external"
-
-                if hasattr(sys, "stdlib_module_names") and top_pkg in sys.stdlib_module_names:
-                    imp_type = "stdlib"
-                else:
-                    # Check if internal to root or inside src/ / lib/
-                    possible_pkg = root_path / top_pkg
-                    if not possible_pkg.exists() and (root_path / "src" / top_pkg).exists():
-                        possible_pkg = root_path / "src" / top_pkg
-                    elif not possible_pkg.exists() and (root_path / "lib" / top_pkg).exists():
-                        possible_pkg = root_path / "lib" / top_pkg
-
-                    if possible_pkg.exists():
-                        target_rel = str(possible_pkg.relative_to(root_path))
-                        imp_type = "internal"
-
+                target_rel, imp_type = resolve_python_module(mod, root_path)
                 edges.append(
                     {
                         "source": source_rel,
@@ -257,21 +278,7 @@ def parse_python_imports(file_path: Path, root_path: Path):
                 else:
                     target_rel = specifier
             else:
-                top_pkg = mod.split(".")[0]
-                target_rel = mod
-                imp_type = "external"
-                if hasattr(sys, "stdlib_module_names") and top_pkg in sys.stdlib_module_names:
-                    imp_type = "stdlib"
-                else:
-                    possible_pkg = root_path / top_pkg
-                    if not possible_pkg.exists() and (root_path / "src" / top_pkg).exists():
-                        possible_pkg = root_path / "src" / top_pkg
-                    elif not possible_pkg.exists() and (root_path / "lib" / top_pkg).exists():
-                        possible_pkg = root_path / "lib" / top_pkg
-
-                    if possible_pkg.exists():
-                        target_rel = str(possible_pkg.relative_to(root_path))
-                        imp_type = "internal"
+                target_rel, imp_type = resolve_python_module(mod, root_path)
 
             edges.append(
                 {
