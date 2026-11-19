@@ -227,6 +227,27 @@ def count_languages(root_path: Path):
             lang = "Docker"
         elif name == "makefile":
             lang = "Makefile"
+        elif not ext:
+            lang = "Other"
+            try:
+                with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                    first_line = f.readline().strip()
+                if first_line.startswith("#!"):
+                    fl_lower = first_line.lower()
+                    if "python" in fl_lower:
+                        lang = "Python"
+                    elif "node" in fl_lower or "deno" in fl_lower or "bun" in fl_lower:
+                        lang = "JavaScript"
+                    elif any(sh in fl_lower for sh in ["bash", "sh", "zsh"]):
+                        lang = "Shell"
+                    elif "ruby" in fl_lower:
+                        lang = "Ruby"
+                    elif "perl" in fl_lower:
+                        lang = "Perl"
+                    elif "php" in fl_lower:
+                        lang = "PHP"
+            except Exception:
+                pass
         else:
             lang = _common.EXT_TO_LANG.get(ext, "Other")
 
