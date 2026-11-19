@@ -67,6 +67,15 @@ def parse_sql_migrations(root_path: Path):
                             }
                         )
 
+                # Extract table-level primary key definitions: PRIMARY KEY (col1, col2)
+                table_pk_match = re.search(r"""(?:CONSTRAINT\s+['"`]?\w+['"`]?\s+)?PRIMARY\s+KEY\s*\(([^)]+)\)""", body, re.IGNORECASE)
+                table_pks = set()
+                if table_pk_match:
+                    for raw_col in table_pk_match.group(1).split(","):
+                        clean_col = raw_col.strip().strip('"`\'[] ')
+                        if clean_col:
+                            table_pks.add(clean_col)
+
                 for raw_line in body.splitlines():
                     line = raw_line.strip().rstrip(",")
                     if not line or line.startswith("--") or line.startswith("/*"):
@@ -85,7 +94,7 @@ def parse_sql_migrations(root_path: Path):
                     if col_match:
                         col_name = col_match.group(1)
                         col_type = re.sub(r"\s+", "", col_match.group(2)).upper()
-                        is_pk = "PRIMARY KEY" in line.upper()
+                        is_pk = "PRIMARY KEY" in line.upper() or col_name in table_pks
 
                         # In-line REFERENCES other_table(other_col)
                         inline_fk = re.search(
