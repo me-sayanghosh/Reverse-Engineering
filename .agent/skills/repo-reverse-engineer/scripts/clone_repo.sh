@@ -151,12 +151,15 @@ fi
 
 check_repo_size() {
     if [[ "$TARGET_TYPE" != "local" ]]; then
-        python3 - << PYEOF
-import sys, urllib.request, json, re
+        CHECK_CLONE_URL="$CLONE_URL" \
+        CHECK_MAX_MB="$MAX_MB" \
+        CHECK_YES="$YES" \
+        python3 - << 'PYEOF'
+import sys, urllib.request, json, re, os
 
-clone_url = "$CLONE_URL"
-max_mb = float("$MAX_MB")
-skip_confirm = int("$YES")
+clone_url = os.environ.get("CHECK_CLONE_URL", "")
+max_mb = float(os.environ.get("CHECK_MAX_MB", "500"))
+skip_confirm = int(os.environ.get("CHECK_YES", "0"))
 
 match = re.search(r"github\.com[:/]([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+?)(?:\.git)?$", clone_url)
 if not match:
@@ -227,10 +230,10 @@ fi
 
 detect_license() {
     local target_dir="$1"
-    python3 - << PYEOF
+    TARGET_DIR="$target_dir" python3 - << 'PYEOF'
 import os, sys, glob, re
 
-target_dir = "$target_dir"
+target_dir = os.environ.get("TARGET_DIR", "")
 patterns = ["LICENSE*", "LICENCE*", "COPYING*", "UNLICENSE*", "license*", "licence*", "copying*", "unlicense*"]
 candidates = []
 for pat in patterns:
