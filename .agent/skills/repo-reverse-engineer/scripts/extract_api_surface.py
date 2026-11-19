@@ -507,24 +507,35 @@ def extract_cli_and_exports(root_path: Path):
         if ext in (".py", ".js", ".ts", ".go", ".rs"):
             try:
                 with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
-                    for idx, line in enumerate(f, start=1):
-                        # Commander: .command('foo')
-                        m_cmd = re.search(r"""\.command\s*\(\s*['"]([^'"]+)['"]""", line)
-                        if m_cmd:
-                            cli_commands.append({"file": f"{rel}:{idx}", "command": m_cmd.group(1)})
-                        # Click / Typer: @cli.command('foo') or @app.command()
-                        m_click = re.search(r"""@(?:cli|app)\.command\s*\(\s*(?:['"]([^'"]+)['"])?""", line)
-                        if m_click:
-                            cmd_name = m_click.group(1) or "inferred"
-                            cli_commands.append({"file": f"{rel}:{idx}", "command": cmd_name})
-                        # Cobra: Use: "foo"
-                        m_cobra = re.search(r"""Use:\s*["']([^"'\s]+)""", line)
-                        if m_cobra and ext == ".go":
-                            cli_commands.append({"file": f"{rel}:{idx}", "command": m_cobra.group(1)})
-                        # Python argparse: add_parser("build")
-                        m_argp = re.search(r"""add_parser\s*\(\s*['"]([^'"]+)['"]""", line)
-                        if m_argp and ext == ".py":
-                            cli_commands.append({"file": f"{rel}:{idx}", "command": m_argp.group(1)})
+                    file_lines = f.readlines()
+                for idx, line in enumerate(file_lines, start=1):
+                    # Commander: .command('foo')
+                    m_cmd = re.search(r"""\.command\s*\(\s*['"]([^'"]+)['"]""", line)
+                    if m_cmd:
+                        cli_commands.append({"file": f"{rel}:{idx}", "command": m_cmd.group(1)})
+                    # Click / Typer: @cli.command('foo'), @click.command(), or @app.command()
+                    m_click = re.search(
+                        r"""@(?:cli|app|click|main|[a-zA-Z0-9_]*cli)\.(?:command|group)\s*(?:\(\s*['"]?([^'")\s]*)['"]?)?""",
+                        line,
+                    )
+                    if m_click:
+                        cmd_name = m_click.group(1) or ""
+                        if not cmd_name:
+                            for next_idx in range(idx, min(len(file_lines), idx + 3)):
+                                m_fn = re.search(r"""def\s+([a-zA-Z0-9_]+)\s*\(""", file_lines[next_idx])
+                                if m_fn:
+                                    cmd_name = m_fn.group(1).replace("_", "-")
+                                    break
+                        cmd_name = cmd_name or "inferred"
+                        cli_commands.append({"file": f"{rel}:{idx}", "command": cmd_name})
+                    # Cobra: Use: "foo"
+                    m_cobra = re.search(r"""Use:\s*["']([^"'\s]+)""", line)
+                    if m_cobra and ext == ".go":
+                        cli_commands.append({"file": f"{rel}:{idx}", "command": m_cobra.group(1)})
+                    # Python argparse: add_parser("build")
+                    m_argp = re.search(r"""add_parser\s*\(\s*['"]([^'"]+)['"]""", line)
+                    if m_argp and ext == ".py":
+                        cli_commands.append({"file": f"{rel}:{idx}", "command": m_argp.group(1)})
             except Exception:
                 pass
 
