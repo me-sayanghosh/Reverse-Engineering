@@ -190,14 +190,24 @@ def find_manifest_entrypoints(root_path: Path):
         except Exception:
             pass
 
-    # 3. Go: cmd/*/main.go or main.go
+    # 3. Go: cmd/**/main.go, main.go, or any package main with func main()
     for file_path in _common.walk_repo(root_path):
         if file_path.suffix == ".go":
             rel = file_path.relative_to(root_path)
             parts = rel.parts
-            if (len(parts) >= 3 and parts[0] == "cmd" and parts[-1] == "main.go") or (
-                len(parts) == 1 and parts[0] == "main.go"
-            ):
+            is_go_entrypoint = (
+                (len(parts) >= 2 and parts[0] == "cmd" and parts[-1] == "main.go")
+                or (len(parts) == 1 and parts[0] == "main.go")
+            )
+            if not is_go_entrypoint:
+                try:
+                    head = file_path.read_text(encoding="utf-8", errors="ignore")
+                    if "package main" in head and re.search(r"func\s+main\s*\(\s*\)", head):
+                        is_go_entrypoint = True
+                except Exception:
+                    pass
+
+            if is_go_entrypoint:
                 entries.append(
                     {
                         "path": f"{rel}:1",
