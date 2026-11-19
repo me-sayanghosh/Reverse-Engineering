@@ -319,8 +319,21 @@ def parse_rust_imports(file_path: Path, root_path: Path):
     for m in matches:
         raw = m.strip()
         if raw.startswith("crate::") or raw.startswith("super::"):
-            # Internal
-            sub = raw.replace("crate::", "").replace("super::", "").split("::")[0]
+            clean = raw.replace("crate::", "").replace("super::", "").strip()
+            if clean.startswith("{"):
+                for item in clean.strip("{}").split(","):
+                    p = item.strip().split("::")[0].strip()
+                    if p:
+                        edges.append(
+                            {
+                                "source": source_rel,
+                                "target": f"src/{p}",
+                                "type": "internal",
+                                "specifier": raw,
+                            }
+                        )
+                continue
+            sub = clean.split("::")[0].strip("{}").strip()
             edges.append(
                 {
                     "source": source_rel,
@@ -329,7 +342,7 @@ def parse_rust_imports(file_path: Path, root_path: Path):
                     "specifier": raw,
                 }
             )
-        elif raw.startswith("std::") or raw.startswith("core::"):
+        elif raw.startswith("std::") or raw.startswith("core::") or raw.startswith("alloc::"):
             edges.append(
                 {
                     "source": source_rel,
@@ -339,10 +352,11 @@ def parse_rust_imports(file_path: Path, root_path: Path):
                 }
             )
         else:
+            crate_name = raw.split("::")[0].strip("{}").strip()
             edges.append(
                 {
                     "source": source_rel,
-                    "target": raw.split("::")[0],
+                    "target": crate_name,
                     "type": "external",
                     "specifier": raw,
                 }
