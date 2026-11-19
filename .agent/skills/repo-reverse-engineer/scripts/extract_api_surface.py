@@ -53,8 +53,9 @@ def extract_node_routes(root_path: Path):
                         )
                         if m_export:
                             method = m_export.group(1).upper()
+                            body_window = " ".join(l.strip() for l in lines[idx - 1 : min(len(lines), idx + 15)])
                             has_auth = any(
-                                tok in line
+                                tok in body_window
                                 for tok in ["auth", "session", "token", "jwt", "getServerSession", "verify"]
                             )
                             routes.append(
