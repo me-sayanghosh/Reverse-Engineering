@@ -315,7 +315,6 @@ def find_server_bootstraps(root_path: Path):
     """Detect server bootstrap invocations and entrypoint listeners."""
     root_path = Path(root_path).resolve()
     entries = []
-    import re
 
     for file_path in _common.walk_repo(root_path):
         if _common.is_binary(file_path):
@@ -374,7 +373,6 @@ def find_route_definitions(root_path: Path):
     """Detect HTTP route definitions and aggregate count per file."""
     root_path = Path(root_path).resolve()
     entries = []
-    import re
 
     for file_path in _common.walk_repo(root_path):
         if _common.is_binary(file_path):
@@ -449,7 +447,6 @@ def find_cli_and_workers(root_path: Path):
     """Detect CLI command parsers and background worker/queue patterns."""
     root_path = Path(root_path).resolve()
     entries = []
-    import re
 
     for file_path in _common.walk_repo(root_path):
         if _common.is_binary(file_path):
