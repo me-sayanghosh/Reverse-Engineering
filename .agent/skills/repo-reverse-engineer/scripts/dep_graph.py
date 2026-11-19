@@ -92,6 +92,46 @@ def resolve_js_ts_target(source_file: Path, specifier: str, root_path: Path):
                         pass
         return specifier, "internal"
 
+    # Support @components/foo, @utils/bar, @app/baz path aliases
+    if specifier.startswith("@") and not specifier.startswith("@/") and "/" in specifier:
+        parts = specifier[1:].split("/", 1)
+        alias_prefix = parts[0]
+        sub_path = parts[1] if len(parts) > 1 else ""
+        for base in [
+            root_path / "src" / alias_prefix,
+            root_path / alias_prefix,
+            root_path / "src" / specifier[1:],
+            root_path / specifier[1:],
+        ]:
+            target_path = base / sub_path if sub_path else base
+            candidates = [
+                target_path,
+                target_path.with_suffix(".ts"),
+                target_path.with_suffix(".tsx"),
+                target_path.with_suffix(".mts"),
+                target_path.with_suffix(".cts"),
+                target_path.with_suffix(".js"),
+                target_path.with_suffix(".jsx"),
+                target_path.with_suffix(".mjs"),
+                target_path.with_suffix(".cjs"),
+                target_path / "index.ts",
+                target_path / "index.tsx",
+                target_path / "index.mts",
+                target_path / "index.cts",
+                target_path / "index.js",
+                target_path / "index.jsx",
+                target_path / "index.mjs",
+                target_path / "index.cjs",
+            ]
+            for c in candidates:
+                c_resolved = c.resolve()
+                if c_resolved.exists() and c_resolved.is_file():
+                    try:
+                        rel = c_resolved.relative_to(root_path)
+                        return str(rel), "internal"
+                    except ValueError:
+                        pass
+
     if specifier.startswith("."):
         # Relative file import
         base = source_file.parent
