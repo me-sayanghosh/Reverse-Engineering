@@ -504,25 +504,49 @@ def infer_commands(root_path: Path, ecosystems: list):
 
 
 def detect_suspicious_scripts(root_path: Path):
-    """Detect high-risk lifecycle hooks (postinstall, preinstall) or suspicious payload commands."""
+    """Detect high-risk lifecycle hooks (postinstall, preinstall, etc.) or suspicious payload commands."""
     root_path = Path(root_path).resolve()
     risks = []
+    suspicious_patterns = [
+        (r"curl\s+.*?\|\s*(?:ba)?sh", "Piped curl execution"),
+        (r"wget\s+.*?\|\s*(?:ba)?sh", "Piped wget execution"),
+        (r"eval\s*\(", "Eval invocation in script"),
+        (r"base64\s+(?:-d|--decode)", "Base64 payload decoding"),
+    ]
+
     for pkg_json in _common.walk_repo(root_path):
         if pkg_json.name == "package.json":
             try:
                 import json
+                import re
                 data = json.loads(pkg_json.read_text(encoding="utf-8", errors="ignore"))
                 scripts = data.get("scripts", {})
-                for hook in ["postinstall", "preinstall", "install"]:
+                rel = str(pkg_json.relative_to(root_path))
+                lifecycle_hooks = ["postinstall", "preinstall", "install", "preuninstall", "postuninstall", "prepare", "prepublish"]
+
+                for hook in lifecycle_hooks:
                     if hook in scripts:
                         val = str(scripts[hook])
-                        rel = str(pkg_json.relative_to(root_path))
                         risks.append({
                             "file": rel,
                             "hook": hook,
                             "command": val,
                             "warning": f"Suspicious lifecycle hook '{hook}' in {rel}: {val}"
                         })
+
+                # Check all scripts for dangerous payload commands
+                for sname, sval in scripts.items():
+                    val_str = str(sval)
+                    for pat, desc in suspicious_patterns:
+                        if re.search(pat, val_str, re.IGNORECASE):
+                            warning_msg = f"Potentially malicious command in script '{sname}' in {rel}: {val_str} ({desc})"
+                            if not any(r.get("command") == val_str for r in risks):
+                                risks.append({
+                                    "file": rel,
+                                    "hook": sname,
+                                    "command": val_str,
+                                    "warning": warning_msg,
+                                })
             except Exception:
                 pass
     return risks
