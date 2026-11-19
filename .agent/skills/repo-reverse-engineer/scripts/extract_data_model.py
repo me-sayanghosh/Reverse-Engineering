@@ -54,16 +54,19 @@ def parse_sql_migrations(root_path: Path):
                 columns = []
                 fks = []
 
-                # Extract standalone or CONSTRAINT foreign key definitions across body
+                # Extract standalone or CONSTRAINT foreign key definitions across body (supporting composite keys)
                 table_fks = re.finditer(
-                    r"""(?:CONSTRAINT\s+['"`]?\w+['"`]?\s+)?FOREIGN\s+KEY\s*\(['"`]?(\w+)['"`]?\)\s*REFERENCES\s+['"`]?(\w+)['"`]?\s*(?:\(['"`]?(\w+)['"`]?\))?""",
+                    r"""(?:CONSTRAINT\s+['"`]?\w+['"`]?\s+)?FOREIGN\s+KEY\s*\(([^)]+)\)\s*REFERENCES\s+['"`]?(\w+)['"`]?\s*(?:\(([^)]+)\))?""",
                     body,
                     re.IGNORECASE,
                 )
                 for fkm in table_fks:
-                    from_col = fkm.group(1)
+                    from_cols = [c.strip().strip('"`\' ') for c in fkm.group(1).split(",") if c.strip()]
                     to_table = fkm.group(2)
-                    to_col = fkm.group(3) or "id"
+                    raw_to_cols = fkm.group(3)
+                    to_cols = [c.strip().strip('"`\' ') for c in raw_to_cols.split(",") if c.strip()] if raw_to_cols else ["id"]
+                    from_col = from_cols[0] if len(from_cols) == 1 else ", ".join(from_cols)
+                    to_col = to_cols[0] if len(to_cols) == 1 else ", ".join(to_cols)
                     fk_obj = {"from_column": from_col, "target_table": to_table, "target_column": to_col}
                     if fk_obj not in fks:
                         fks.append(fk_obj)
