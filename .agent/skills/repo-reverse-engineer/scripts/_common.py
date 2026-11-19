@@ -54,9 +54,11 @@ DEFAULT_IGNORED_DIRS = {
 
 LOCKFILES = {
     "package-lock.json",
+    "npm-shrinkwrap.json",
     "yarn.lock",
     "pnpm-lock.yaml",
     "Cargo.lock",
+    "Cargo.lock.dist",
     "poetry.lock",
     "Pipfile.lock",
     "composer.lock",
@@ -64,6 +66,10 @@ LOCKFILES = {
     "go.sum",
     "flake.lock",
     "bun.lockb",
+    "bun.lock",
+    "mix.lock",
+    "pubspec.lock",
+    "shard.lock",
 }
 
 
