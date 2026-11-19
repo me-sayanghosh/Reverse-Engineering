@@ -210,12 +210,15 @@ REPO_DIR="$OUT_DIR"
 if [[ "$TARGET_TYPE" == "local" ]]; then
     REPO_DIR="$LOCAL_PATH"
 else
-    CLONE_ARGS=(--depth 1)
+    CLONE_ARGS=(--depth 1 --recurse-submodules --shallow-submodules)
     if [[ -n "$BRANCH" ]]; then
         CLONE_ARGS+=(--branch "$BRANCH")
     fi
     if [[ -n "$SUBDIR" ]]; then
-        CLONE_ARGS+=(--filter=blob:none --sparse)
+        CLONE_ARGS=(--depth 1 --filter=blob:none --sparse)
+        if [[ -n "$BRANCH" ]]; then
+            CLONE_ARGS+=(--branch "$BRANCH")
+        fi
     fi
 
     # Remove empty OUT_DIR if it was created so git clone can populate it
