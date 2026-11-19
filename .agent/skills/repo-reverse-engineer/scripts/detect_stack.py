@@ -146,6 +146,8 @@ PYTHON_PKG_TO_FRAMEWORK: dict[str, str] = {
     "django": "Django",
     "flask": "Flask",
     "fastapi": "FastAPI",
+    "starlette": "Starlette",
+    "litestar": "Litestar",
     "sqlalchemy": "SQLAlchemy",
     "celery": "Celery",
     "pydantic": "Pydantic",
@@ -156,18 +158,34 @@ PYTHON_PKG_TO_FRAMEWORK: dict[str, str] = {
     "tornado": "Tornado",
     "sanic": "Sanic",
     "aiohttp": "aiohttp",
+    "gunicorn": "Gunicorn",
+    "uvicorn": "Uvicorn",
+    "alembic": "Alembic",
+    "peewee": "Peewee",
+    "tortoise": "Tortoise-ORM",
+    "beanie": "Beanie",
+    "click": "Click",
+    "typer": "Typer",
+    "polars": "Polars",
+    "pandas": "Pandas",
+    "scipy": "SciPy",
+    "numpy": "NumPy",
+    "scrapy": "Scrapy",
 }
 
 
 def detect_python_frameworks(root_path: Path):
-    """Parse requirements.txt, pyproject.toml, Pipfile for known Python frameworks."""
+    """Parse requirements.txt, pyproject.toml, Pipfile, setup.py, setup.cfg for known Python frameworks."""
     root_path = Path(root_path).resolve()
     frameworks = set()
     import re
 
     for file_path in _common.walk_repo(root_path):
         name = file_path.name.lower()
-        if name.startswith("requirements") and name.endswith(".txt") or name in ("pyproject.toml", "pipfile", "setup.cfg"):
+        if (
+            (name.startswith("requirements") and name.endswith(".txt"))
+            or name in ("pyproject.toml", "pipfile", "setup.cfg", "setup.py")
+        ):
             try:
                 with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
                     content = f.read().lower()
