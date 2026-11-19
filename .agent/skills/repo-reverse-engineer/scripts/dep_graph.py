@@ -486,7 +486,7 @@ def parse_java_imports(file_path: Path, root_path: Path, pkg_prefix: str = ""):
     source_rel = str(file_path.resolve().relative_to(root_path))
     content = file_path.read_text(encoding="utf-8", errors="ignore")
 
-    matches = re.findall(r"import\s+([a-zA-Z0-9_.]+);", content)
+    matches = re.findall(r"import\s+(?:static\s+)?([a-zA-Z0-9_.]+)(?:\s+as\s+[a-zA-Z0-9_]+)?\s*;?", content)
     for raw in matches:
         if raw.startswith("java.") or raw.startswith("javax."):
             imp_type = "stdlib"
