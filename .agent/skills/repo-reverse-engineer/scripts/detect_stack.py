@@ -556,6 +556,16 @@ def infer_commands(root_path: Path, ecosystems: list):
     elif any("Deno" in e for e in ecosystems):
         commands.setdefault("test", "deno test")
         commands.setdefault("start", "deno run main.ts")
+    elif "Bun" in ecosystems:
+        commands.setdefault("install", "bun install")
+        commands.setdefault("test", "bun test")
+        commands.setdefault("start", "bun run start")
+    elif "Zig" in ecosystems:
+        commands.setdefault("build", "zig build")
+        commands.setdefault("test", "zig test")
+    elif "C/C++" in ecosystems:
+        commands.setdefault("build", "cmake -B build && cmake --build build")
+        commands.setdefault("test", "ctest --test-dir build")
 
     return commands
 
