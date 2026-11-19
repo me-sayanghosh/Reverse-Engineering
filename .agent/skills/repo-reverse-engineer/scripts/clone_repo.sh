@@ -50,6 +50,9 @@ while [[ $# -gt 0 ]]; do
                 exit 1
             fi
             SUBDIR="$2"
+            SUBDIR="${SUBDIR#./}"
+            SUBDIR="${SUBDIR#/}"
+            SUBDIR="${SUBDIR%/}"
             shift 2
             ;;
         --out)
