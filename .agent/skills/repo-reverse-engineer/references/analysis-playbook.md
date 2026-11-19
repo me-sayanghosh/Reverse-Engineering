@@ -4,7 +4,7 @@ Guidance on where to look first, common patterns, and architecture pitfalls acro
 
 ## 1. Node/TypeScript Ecosystem
 
-- **Where to look first (Entrypoints)**: Inspect `package.json` for `"main"`, `"bin"`, and `"scripts.start"`. Common entry files include `src/index.ts`, `src/server.ts`, `src/main.ts`, or `src/app.ts`.
+- **Where to look first (Entrypoints)**: Inspect `package.json` for `"main"`, `"bin"`, `"exports"`, and `"scripts.start"`. Check lockfiles (`pnpm-lock.yaml`, `bun.lockb`, `yarn.lock`). Common entry files include `src/index.ts`, `src/server.ts`, `src/main.ts`, or `src/app.ts`.
 - **Routing & Controllers**: Locate router instances (`express.Router()`, Fastify plugins, NestJS `@Controller()` decorators). Check `src/routes/`, `src/controllers/`, or `src/api/`.
 - **State Management & DI**: For backends, look for dependency injection containers (NestJS modules, InversifyJS, TSyringe). For frontends, inspect Redux Toolkit slices, Zustand stores, or React Context providers.
 - **Database Layer**: Check for Prisma (`prisma/schema.prisma`), TypeORM (`src/entities/`), Mongoose (`src/models/`), Drizzle (`drizzle/schema.ts`), or raw Knex/Kysely migrations.
