@@ -81,6 +81,22 @@ def is_too_large(path: str | Path, limit_bytes: int = 1024 * 1024) -> bool:
         return True
 
 
+def read_text_safe(path: str | Path, max_bytes: int = 1024 * 1024) -> str:
+    """Safely read text from file up to max_bytes, handling encodings and suppressing errors."""
+    try:
+        with open(path, "rb") as f:
+            data = f.read(max_bytes)
+        try:
+            return data.decode("utf-8")
+        except UnicodeDecodeError:
+            try:
+                return data.decode("utf-16")
+            except UnicodeDecodeError:
+                return data.decode("latin-1", errors="ignore")
+    except OSError:
+        return ""
+
+
 def is_binary(path: str | Path) -> bool:
     """Return True if file appears to be binary based on null bytes, encoding, or control characters."""
     try:
