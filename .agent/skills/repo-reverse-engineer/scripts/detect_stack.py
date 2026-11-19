@@ -545,25 +545,25 @@ def infer_commands(root_path: Path, ecosystems: list):
         commands.setdefault("install", "pip install -r requirements.txt")
         commands.setdefault("test", "pytest")
         commands.setdefault("start", "python main.py")
-    elif "Go" in ecosystems:
+    if "Go" in ecosystems:
         commands.setdefault("build", "go build ./...")
         commands.setdefault("test", "go test ./...")
         commands.setdefault("start", "go run main.go")
-    elif "Rust" in ecosystems:
+    if "Rust" in ecosystems:
         commands.setdefault("build", "cargo build")
         commands.setdefault("test", "cargo test")
         commands.setdefault("start", "cargo run")
-    elif any("Deno" in e for e in ecosystems):
+    if any("Deno" in e for e in ecosystems):
         commands.setdefault("test", "deno test")
         commands.setdefault("start", "deno run main.ts")
-    elif "Bun" in ecosystems:
+    if "Bun" in ecosystems:
         commands.setdefault("install", "bun install")
         commands.setdefault("test", "bun test")
         commands.setdefault("start", "bun run start")
-    elif "Zig" in ecosystems:
+    if "Zig" in ecosystems:
         commands.setdefault("build", "zig build")
         commands.setdefault("test", "zig test")
-    elif "C/C++" in ecosystems:
+    if "C/C++" in ecosystems:
         commands.setdefault("build", "cmake -B build && cmake --build build")
         commands.setdefault("test", "ctest --test-dir build")
 
